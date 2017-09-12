@@ -1,11 +1,16 @@
 buildscript {
+    ext {
+        grailsVersion = project.grailsVersion
+    }
     repositories {
         mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
+        maven {
+            url "https://repo.grails.org/grails/core"
+        }
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
+        classpath "org.grails.plugins:hibernate5:${gormVersion - ".RELEASE"}"
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.2"
     }
 }
@@ -13,12 +18,12 @@ buildscript {
 version "0.1"
 group "moniday"
 
-apply plugin:"eclipse"
-apply plugin:"idea"
-apply plugin:"war"
-apply plugin:"org.grails.grails-web"
-apply plugin:"asset-pipeline"
-apply plugin:"org.grails.grails-gsp"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "war"
+apply plugin: "org.grails.grails-web"
+apply plugin: "asset-pipeline"
+apply plugin: "org.grails.grails-gsp"
 
 repositories {
     mavenLocal()
@@ -53,17 +58,31 @@ dependencies {
     runtime "org.apache.tomcat:tomcat-jdbc"
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.2"
     testCompile "org.grails:grails-gorm-testing-support"
-    testCompile "org.grails.plugins:geb"
+
     testCompile "org.grails:grails-web-testing-support"
-    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
-    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+
+    compile fileTree(dir: 'lib', include: '*.jar')
+
+    compile "org.grails.plugins:geb"
+    compile "io.github.bonigarcia:webdrivermanager:1.4.9"
+    compile "org.seleniumhq.selenium:selenium-java:3.4.0"
+    compile("com.codeborne:phantomjsdriver:1.4.3") {
+        transitive = false
+    }
+    compile("org.seleniumhq.selenium:selenium-chrome-driver:3.4.0")
+
+    compile 'mysql:mysql-connector-java:5.1.36'
+    compile 'org.grails.plugins:quartz:2.0.9'
+//    compile 'org.grails.plugins:spring-security-core:3.0.3'
+    runtime 'org.grails.plugins:database-migration:2.0.0.RC4'
+    compile 'org.grails.plugins:mongodb:6.1.3'
+    compile 'com.google.firebase:firebase-admin:5.3.0'
 }
 
 bootRun {
     jvmArgs('-Dspring.output.ansi.enabled=always')
     addResources = true
 }
-
 
 assets {
     minifyJs = true
