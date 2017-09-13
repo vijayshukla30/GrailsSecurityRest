@@ -33,11 +33,6 @@
     <div class="container">
         <div class="navbar-header">
             <a href="${createLink(uri: '/')}" class="navbar-brand">Moniday</a>
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
         </div>
 
         <div class="navbar-collapse collapse" id="navbar-main">

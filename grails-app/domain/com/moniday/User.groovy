@@ -1,8 +1,9 @@
 package com.moniday
 
+import com.moniday.command.UserCO
+import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
-import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
 @EqualsAndHashCode(includes = 'username')
@@ -10,11 +11,11 @@ import grails.compiler.GrailsCompileStatic
 class User implements Serializable {
 
     private static final long serialVersionUID = 1
-
+    String uniqueId = UUID.randomUUID().toString()
     String username
     String password
     String fireBaseUserId
-    
+
     boolean enabled = true
     boolean accountExpired
     boolean accountLocked
@@ -29,9 +30,19 @@ class User implements Serializable {
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true, email: true
+        fireBaseUserId nullable: true, blank: false, unique: true
     }
 
     static mapping = {
         password column: '`password`'
+    }
+
+    User() {
+
+    }
+
+    User(UserCO userCO) {
+        this.username = userCO.username
+        this.password = userCO.password
     }
 }

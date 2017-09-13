@@ -2,82 +2,84 @@
 <html>
 <head>
     <meta name="layout" content="theme"/>
-    <title>Welcome to Grails</title>
+    <title>Welcome to Moniday</title>
 
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
 </head>
 
 <body>
-<content tag="nav">
-    <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-           aria-expanded="false">Application Status <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            <li><a href="#">Environment: ${grails.util.Environment.current.name}</a></li>
-            <li><a href="#">App profile: ${grailsApplication.config.grails?.profile}</a></li>
-            <li><a href="#">App version:
-                <g:meta name="info.app.version"/></a>
-            </li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Grails version:
-                <g:meta name="info.app.grailsVersion"/></a>
-            </li>
-            <li><a href="#">Groovy version: ${GroovySystem.getVersion()}</a></li>
-            <li><a href="#">JVM version: ${System.getProperty('java.version')}</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Reloading active: ${grails.util.Environment.reloadingAgentEnabled}</a></li>
-        </ul>
-    </li>
-    <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-           aria-expanded="false">Artefacts <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            <li><a href="#">Controllers: ${grailsApplication.controllerClasses.size()}</a></li>
-            <li><a href="#">Domains: ${grailsApplication.domainClasses.size()}</a></li>
-            <li><a href="#">Services: ${grailsApplication.serviceClasses.size()}</a></li>
-            <li><a href="#">Tag Libraries: ${grailsApplication.tagLibClasses.size()}</a></li>
-        </ul>
-    </li>
-    <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-           aria-expanded="false">Installed Plugins <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            <g:each var="plugin" in="${applicationContext.getBean('pluginManager').allPlugins}">
-                <li><a href="#">${plugin.name} - ${plugin.version}</a></li>
-            </g:each>
-        </ul>
-    </li>
-</content>
+<div class="bs-docs-section clearfix">
+    <div class="row">
+        <div class="col-lg-3"></div>
 
-<div class="svg" role="presentation">
-    <div class="grails-logo-container">
-        <asset:image src="grails-cupsonly-logo-white.svg" class="grails-logo"/>
+        <div class="col-lg-6">
+            <div class="well bs-component">
+                <form action="${postUrl ?: '/login/authenticate'}" class="form-horizontal" method="POST" id="loginForm"
+                      autocomplete="off">
+                    <fieldset>
+                        <legend>
+                            <g:message code="user.login.form"/>
+                        </legend>
+
+                        <div class="form-group">
+                            <label for="username" class="col-lg-2 control-label">
+                                <g:message code="user.email"/>
+                            </label>
+
+                            <div class="col-lg-10">
+                                <input type="email" class="form-control" id="username" name="username"
+                                       placeholder="${message(code: 'user.email')}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="col-lg-2 control-label">
+                                <g:message code="user.password"/>
+                            </label>
+
+                            <div class="col-lg-10">
+                                <input type="password" class="form-control" id="password" name="password"
+                                       placeholder="${message(code: 'user.password')}">
+
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox">
+                                        <g:message code="user.login.checkbox"/>
+                                    </label>
+                                </div>
+                                <g:link controller="public" action="forgetPassword">
+                                    <g:message code="user.forgot.password"/>
+                                </g:link>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2">
+                                <div class="col-lg-4">
+                                    <button type="reset" class="btn btn-default">
+                                        <g:message code="form.reset"/>
+                                    </button>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <g:submitButton name="login" value="${message(code: 'user.login')}"
+                                                    class="btn btn-success"/>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <g:link controller="public" action="register" class="btn btn-primary">
+                                        <g:message code="user.register"/>
+                                    </g:link>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-3"></div>
     </div>
 </div>
-
-<div id="content" role="main">
-    <section class="row colset-2-its">
-        <h1>Welcome to Grails</h1>
-
-        <p>
-            Congratulations, you have successfully started your first Grails application! At the moment
-            this is the default page, feel free to modify it to either redirect to a controller or display
-            whatever content you may choose. Below is a list of controllers that are currently deployed in
-            this application, click on each to execute its default action:
-        </p>
-
-        <div id="controllers" role="navigation">
-            <h2>Available Controllers:</h2>
-            <ul>
-                <g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName }}">
-                    <li class="controller">
-                        <g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link>
-                    </li>
-                </g:each>
-            </ul>
-        </div>
-    </section>
-</div>
-
 </body>
 </html>

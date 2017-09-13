@@ -1,4 +1,4 @@
-package com.moniday
+package com.moniday.command
 
 class AccountDetailCO {
     BankCO bank

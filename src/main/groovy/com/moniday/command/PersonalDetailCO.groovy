@@ -1,4 +1,4 @@
-package com.moniday
+package com.moniday.command
 
 import com.moniday.enums.CountryOfResidence
 import com.moniday.enums.Currency

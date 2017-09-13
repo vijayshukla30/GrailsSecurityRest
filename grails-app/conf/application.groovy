@@ -48,6 +48,13 @@ environments {
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.moniday.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.moniday.UserRole'
 grails.plugin.springsecurity.authority.className = 'com.moniday.Role'
+
+grails.plugin.springsecurity.logout.postOnly = false
+grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/account/'
+grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/?login_error=1'
+grails.plugin.springsecurity.auth.loginFormUrl = '/index.gsp'
+grails.plugin.springsecurity.logout.afterLogoutUrl = '/account/logout/'
+
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         [pattern: '/', access: ['permitAll']],
         [pattern: '/error', access: ['permitAll']],
