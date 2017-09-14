@@ -7,6 +7,8 @@ import grails.plugin.springsecurity.annotation.Secured
 @Secured(['permitAll'])
 class PublicController {
 
+    def fireBaseService
+
     def register() {
         render(view: 'register', model: [userCO: new UserCO()])
     }
@@ -26,6 +28,6 @@ class PublicController {
     }
 
     def forgetPassword() {
-
+        render fireBaseService.serviceMethod()
     }
 }
