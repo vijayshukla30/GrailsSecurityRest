@@ -8,23 +8,23 @@ import grails.plugin.springsecurity.annotation.Secured
 class PublicController {
 
     def fireBaseService
+    def springSecurityService
+    def accountService
 
     def register() {
         render(view: 'register', model: [userCO: new UserCO()])
     }
 
     def saveRegisterUser(UserCO userCO) {
-        println(userCO.properties)
-        User user = new User(userCO)
-        user.fireBaseUserId = "1"
-        if (user.validate()) {
-            user.save(flush: true)
-        } else {
-            user.errors.allErrors.each {
-                println(it)
+        if (userCO.validate()) {
+            User user = accountService.saveUser(userCO)
+            if (user) {
+                fireBaseService.createUser(user, userCO.password)
+                springSecurityService.reauthenticate(userCO.username)
+                redirect(controller: "account", action: 'personalDetail', params: [uniqueId: user.uniqueId])
             }
         }
-        redirect(controller: "account", action: 'personalDetail', params: [uniqueId: user.uniqueId])
+        render "FAILED"
     }
 
     def forgetPassword() {

@@ -14,7 +14,6 @@ class User implements Serializable {
     String uniqueId = UUID.randomUUID().toString()
     String username
     String password
-    String fireBaseUserId
 
     boolean enabled = true
     boolean accountExpired
@@ -30,7 +29,6 @@ class User implements Serializable {
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true, email: true
-        fireBaseUserId nullable: true, blank: false, unique: true
     }
 
     static mapping = {

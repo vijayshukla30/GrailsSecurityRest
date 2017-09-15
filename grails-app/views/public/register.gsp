@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="theme"/>
-    <title>Welcome to Moniday</title>
+    <title>Moniday</title>
 
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
 </head>
@@ -14,7 +14,8 @@
 
         <div class="col-lg-6">
             <div class="well bs-component">
-                <g:form controller="public" action="saveRegisterUser" class="form-horizontal" method="POST">
+                <form action="${createLink(controller: 'public', action: 'saveRegisterUser')}" class="form-horizontal"
+                      method="POST" id="userRegistration">
                     <fieldset>
                         <legend>
                             <g:message code="user.register.form"/>
@@ -65,12 +66,48 @@
                             </div>
                         </div>
                     </fieldset>
-                </g:form>
+                </form>
             </div>
         </div>
 
         <div class="col-lg-3"></div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $("#userRegistration").validate({
+            rules: {
+                username: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 5
+                },
+                confirmPassword: {
+                    required: true,
+                    minlength: 5,
+                    equalTo: '#password'
+                }
+            },
+            messages: {
+                username: {
+                    required: "Username is required",
+                    email: "Please enter valid email"
+                },
+                password: {
+                    required: "Password is required",
+                    minlength: 'Password should not be less than 5 length'
+                },
+                confirmPassword: {
+                    required: "Password is required",
+                    minlength: 'Password should not be less than 5 length',
+                    equalTo: "Confirm Password not match with Password"
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>

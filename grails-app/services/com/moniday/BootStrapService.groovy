@@ -1,13 +1,14 @@
 package com.moniday
 
+import com.moniday.enums.Authority
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class BootStrapService {
 
-    static final String roleAdmin = 'ROLE_ADMIN'
-    static final String roleSubAdmin = 'ROLE_SUB_ADMIN'
-    static final String roleUser = 'ROLE_USER'
+    static final String roleAdmin = Authority.ROLE_ADMIN.value()
+    static final String roleSubAdmin = Authority.ROLE_SUB_ADMIN.value()
+    static final String roleUser = Authority.ROLE_USER.value()
 
     def createRole() {
         if (!Role.findByAuthority(roleAdmin)) {
@@ -25,7 +26,7 @@ class BootStrapService {
         Role role = Role.findOrCreateByAuthority(roleAdmin)
         User user = User.findByUsername("admin@moniday.com")
         if (!user) {
-            user = new User(username: 'system@moniday.com', password: '123@moniday', fireBaseUserId: '******').save(flush: true)
+            user = new User(username: 'system@moniday.com', password: '123@moniday').save(flush: true)
             UserRole.create(user, role)
         }
     }
@@ -34,7 +35,7 @@ class BootStrapService {
         Role role = Role.findOrCreateByAuthority(roleSubAdmin)
         User user = User.findByUsername("admin@moniday.com")
         if (!user) {
-            user = new User(username: 'admin@moniday.com', password: 'moniday@123', fireBaseUserId: '*****').save(flush: true)
+            user = new User(username: 'admin@moniday.com', password: 'moniday@123').save(flush: true)
             UserRole.create(user, role)
         }
     }

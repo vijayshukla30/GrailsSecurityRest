@@ -8,6 +8,7 @@
 //= require jquery/jquery-2.1.3.js
 //= require notify/notify.js
 //= require bootstrap/bootstrap.min.js
+//= require jquery/jquery.validate.min.js
 //= require custom.js
 //= require_tree .
 //= require_self
