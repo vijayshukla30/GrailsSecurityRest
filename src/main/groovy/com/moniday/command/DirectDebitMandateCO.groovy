@@ -1,6 +1,6 @@
 package com.moniday.command
 
-import com.moniday.enums.CountryOfResidence
+import com.moniday.enums.Country
 
 class DirectDebitMandateCO {
     String owner
@@ -8,7 +8,7 @@ class DirectDebitMandateCO {
     String city
     String region
     String postCode
-    CountryOfResidence countryOfResidence
+    Country countryOfResidence
     String IBAN
     String BIC
     static constraints = {

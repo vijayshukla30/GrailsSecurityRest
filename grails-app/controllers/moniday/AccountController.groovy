@@ -1,12 +1,17 @@
 package moniday
 
+import com.moniday.User
+import com.moniday.command.PersonalDetailCO
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(['IS_FULLY_AUTHENTICATED'])
+@Secured(['ROLE_ADMIN', 'ROLE_USER', "ROLE_SUB_ADMIN"])
 class AccountController {
 
+    def springSecurityService
+
     def index() {
-        render "login"
+        User user = springSecurityService.currentUser as User
+        render(view: 'index', model: [user: user])
     }
 
     def logout() {
@@ -15,7 +20,8 @@ class AccountController {
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def personalDetail(String uniqueId) {
-        render uniqueId
+        println uniqueId
+        render(view: 'personalDetail', model: [uniqueId: uniqueId, personalDetailCO: new PersonalDetailCO()])
     }
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])

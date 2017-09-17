@@ -7,7 +7,6 @@ import grails.plugin.springsecurity.annotation.Secured
 @Secured(['permitAll'])
 class PublicController {
 
-    def fireBaseService
     def springSecurityService
     def accountService
 
@@ -19,7 +18,6 @@ class PublicController {
         if (userCO.validate()) {
             User user = accountService.saveUser(userCO)
             if (user) {
-                fireBaseService.createUser(user, userCO.password)
                 springSecurityService.reauthenticate(userCO.username)
                 redirect(controller: "account", action: 'personalDetail', params: [uniqueId: user.uniqueId])
             }
@@ -28,6 +26,6 @@ class PublicController {
     }
 
     def forgetPassword() {
-        render fireBaseService.serviceMethod()
+        render "Password has been changed"
     }
 }

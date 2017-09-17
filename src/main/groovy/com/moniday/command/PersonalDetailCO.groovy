@@ -1,6 +1,6 @@
 package com.moniday.command
 
-import com.moniday.enums.CountryOfResidence
+import com.moniday.enums.Country
 import com.moniday.enums.Currency
 import com.moniday.enums.Nationality
 
@@ -10,7 +10,7 @@ class PersonalDetailCO {
     Date dob
     Long age
     Nationality nationality
-    CountryOfResidence countryOfResidence
+    Country countryOfResidence
     Currency currency
     static constraints = {
     }

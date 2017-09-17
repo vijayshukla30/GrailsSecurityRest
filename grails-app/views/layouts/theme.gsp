@@ -36,6 +36,7 @@
         </div>
 
         <div class="navbar-collapse collapse" id="navbar-main">
+            <g:render template="/layouts/navigation" model="[user: user]"/>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="http://builtwithbootstrap.com/" target="_blank">Built With Bootstrap</a></li>
                 <li><a href="https://wrapbootstrap.com/?ref=bsw" target="_blank">WrapBootstrap</a></li>

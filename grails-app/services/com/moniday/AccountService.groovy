@@ -5,9 +5,15 @@ import com.moniday.enums.Authority
 import grails.gorm.transactions.Transactional
 
 class AccountService {
+    def fireBaseService
+
     @Transactional
     User saveUser(UserCO userCO) {
         User user = new User(userCO)
+        if (userCO.validate()) {
+            user.firebaseId = fireBaseService.createUser(userCO)
+        }
+
         if (user.validate()) {
             user.save(flush: true)
             assignRole(user)

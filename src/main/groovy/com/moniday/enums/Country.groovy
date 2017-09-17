@@ -1,11 +1,11 @@
 package com.moniday.enums
 
-enum Currency {
+enum Country {
     FRANCE('France'), LONDON('London'), INDIA('India')
 
     private final String value
 
-    Currency(String value) {
+    Country(String value) {
         this.value = value
     }
 

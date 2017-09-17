@@ -8,25 +8,26 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.tasks.Task
 import com.moniday.User as Owner
+import com.moniday.command.UserCO
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class FireBaseService {
 
-    def serviceMethod() {
+    String createUser(UserCO userCO) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-        DatabaseReference userRef = ref.child("users")
-        Map<String, User> data = [:]
-
-        data.put("vijay", new User("Vijay", "Shukla"))
-        data.put("ABCDE", new User("ABCDE", "FGHIJ"))
-
-        println(data)
+        DatabaseReference userRef = ref.child("users").push()
+        User user = new User(userCO.username, userCO.password)
         println("*****************************************************")
-        userRef.setValue(data)
+        userRef.setValue(user)
+        String fireBaseKey = userRef.key
+        println("******************")
+        println(fireBaseKey)
+        println("******************")
+        return fireBaseKey
     }
 
-    def createUser(Owner owner, String password) {
+    def registerUser(Owner owner, String password) {
         CreateRequest createRequest = new CreateRequest()
         createRequest.uid = owner.uniqueId
         createRequest.email = owner?.username
