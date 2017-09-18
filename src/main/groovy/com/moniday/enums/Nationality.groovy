@@ -1,7 +1,8 @@
 package com.moniday.enums
 
 enum Nationality {
-    FRANCE('France'), LONDON('London'), INDIA('India')
+    INDIA('India'),
+    UK('UK')
 
     private final String value
 
@@ -9,7 +10,7 @@ enum Nationality {
         this.value = value
     }
 
-    public String value() {
+    public String getValue() {
         return value
     }
 
@@ -17,7 +18,11 @@ enum Nationality {
         return name()
     }
 
+    String toString() {
+        return value
+    }
+
     public static list() {
-        [FRANCE, LONDON, INDIA]
+        [INDIA, UK]
     }
 }

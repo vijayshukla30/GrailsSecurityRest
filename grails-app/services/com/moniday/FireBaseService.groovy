@@ -1,6 +1,7 @@
 package com.moniday
 
-import com.User
+import com.firebase.PersonalDetail
+import com.firebase.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
 import com.google.firebase.auth.UserRecord.CreateRequest as CreateRequest
@@ -8,6 +9,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.tasks.Task
 import com.moniday.User as Owner
+import com.moniday.command.PersonalDetailCO
 import com.moniday.command.UserCO
 import grails.gorm.transactions.Transactional
 
@@ -25,6 +27,20 @@ class FireBaseService {
         println(fireBaseKey)
         println("******************")
         return fireBaseKey
+    }
+
+    def savePersonalDetail(PersonalDetailCO personalDetailCO, String fireBaseId) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+        PersonalDetail personalDetail = new PersonalDetail()
+        personalDetail.setFirstName(personalDetailCO.firstName)
+        personalDetail.setLastName(personalDetailCO.lastName)
+        personalDetail.setDateOfBirth(personalDetailCO.dateOfBirth)
+        personalDetail.setAge(personalDetailCO.age)
+        personalDetail.setNationality(personalDetailCO.nationality.value)
+        personalDetail.setCountryOfResidence(personalDetailCO.country.value)
+        personalDetail.setCurrency(personalDetailCO.currency.value)
+        DatabaseReference personRef = ref.child("users/$fireBaseId/personalDetail")
+        personRef.setValue(personalDetail)
     }
 
     def registerUser(Owner owner, String password) {

@@ -1,6 +1,6 @@
 package com.moniday.firebase
 
-import com.User
+import com.firebase.User
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseCredentials

@@ -14,6 +14,7 @@ class UrlMappings {
         "/register"(controller: 'public', action: 'register')
         '/reset-password'(controller: 'public', action: 'forgetPassword')
         "/user/$uniqueId/personal-detail"(controller: 'account', action: 'personalDetail')
+        "/user/$uniqueId/personal-detail/savePersonalDetail"(controller: 'account', action: 'savePersonalDetail')
         "/user/$uniqueId/account-detail"(controller: 'account', action: 'accountDetail')
 
         "500"(view: '/error')

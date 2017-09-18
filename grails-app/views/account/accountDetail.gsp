@@ -16,8 +16,8 @@
             <div class="well bs-component">
                 <form action="${createLink(controller: 'account', action: 'savePersonalDetail')}"
                       class="form-horizontal" method="POST" id="personalDetail">
+                    <g:hiddenField name="uniqueId" value="${uniqueId}"/>
                     <fieldset>
-                        <g:hiddenField name="uniqueId" value="${uniqueId}"/>
                         <legend>
                             <g:message code="user.person.detail"/>
                         </legend>

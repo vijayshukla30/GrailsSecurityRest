@@ -1,7 +1,8 @@
 package com.moniday.enums
 
 enum Currency {
-    FRANCE('France'), LONDON('London'), INDIA('India')
+    GBP('GBP'),
+    EUR('EUR')
 
     private final String value
 
@@ -9,15 +10,17 @@ enum Currency {
         this.value = value
     }
 
-    public String value() {
+    public String getValue() {
         return value
     }
 
     public String getKey() {
         return name()
     }
-
+    String toString() {
+        return value
+    }
     public static list() {
-        [FRANCE, LONDON, INDIA]
+        [GBP, EUR]
     }
 }

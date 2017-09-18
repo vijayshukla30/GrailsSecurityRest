@@ -52,7 +52,7 @@ grails.plugin.springsecurity.authority.className = 'com.moniday.Role'
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/account/index'
 grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/?login_error=1'
-grails.plugin.springsecurity.auth.loginFormUrl = '/index.gsp'
+grails.plugin.springsecurity.auth.loginFormUrl = '/'
 grails.plugin.springsecurity.logout.afterLogoutUrl = '/account/logout/'
 
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
