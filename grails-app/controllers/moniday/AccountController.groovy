@@ -40,11 +40,6 @@ class AccountController {
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def savePersonalDetail(PersonalDetailCO personalDetailCO) {
-        println(params)
-        println(params.dob_month)
-        println(params.dob_year)
-        println(params.dob_day)
-        println(params.uniqueId)
         User user = User.findByUniqueId(params.uniqueId)
         LocalDate dobDate = LocalDate.of(params.dob_year as int, AppUtil.getMonth(params.dob_month), params.dob_day as int)
         LocalDate todayDate = LocalDate.now()
@@ -67,13 +62,31 @@ class AccountController {
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def accountDetail(String uniqueId) {
+        if (!uniqueId) {
+            User user = springSecurityService.currentUser as User
+            uniqueId = user.uniqueId
+        }
         println uniqueId
-        render(view: '', model: [uniqueId: uniqueId, accountDetail: new AccountDetailCO()])
+        if (uniqueId) {
+            render(view: 'accountDetail', model: [uniqueId: uniqueId, accountDetail: new AccountDetailCO()])
+        }
     }
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
-    def saveAccountDetail() {
-
+    def saveAccountDetail(AccountDetailCO accountDetailCO) {
+        println(accountDetailCO.properties)
+        User user = User.findByUniqueId(params.uniqueId)
+        boolean validAccountDetail = accountDetailCO?.validate()
+        if (user && validAccountDetail) {
+            fireBaseService.saveAccountDetail(accountDetailCO, user?.firebaseId)
+        } else if (!user) {
+            render "Invalid User"
+        } else {
+            accountDetailCO.errors.allErrors.each {
+                println(it)
+            }
+            render "Accountt Detail is not valid"
+        }
     }
 
 }

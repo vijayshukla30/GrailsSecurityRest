@@ -14,81 +14,44 @@
 
         <div class="col-lg-6">
             <div class="well bs-component">
-                <form action="${createLink(controller: 'account', action: 'savePersonalDetail')}"
+                <form action="${createLink(controller: 'account', action: 'saveAccountDetail')}"
                       class="form-horizontal" method="POST" id="personalDetail">
                     <g:hiddenField name="uniqueId" value="${uniqueId}"/>
                     <fieldset>
                         <legend>
-                            <g:message code="user.person.detail"/>
+                            <g:message code="user.account.detail"/>
                         </legend>
 
                         <div class="form-group">
-                            <label for="firstName" class="col-lg-3 control-label">
-                                <g:message code="user.person.detail.first.name"/>
+                            <label for="bankName" class="col-lg-3 control-label">
+                                <g:message code="user.account.bank.name"/>
                             </label>
 
                             <div class="col-lg-9">
-                                <input type="text" class="form-control" id="firstName" name="firstName"
-                                       placeholder="${message(code: 'user.person.detail.first.name')}">
+                                <input type="text" class="form-control" id="bankName" name="bankName"
+                                       placeholder="${message(code: 'user.account.bank.name')}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="lastName" class="col-lg-3 control-label">
-                                <g:message code="user.person.detail.last.name"/>
+                            <label for="bankUsername" class="col-lg-3 control-label">
+                                <g:message code="user.account.bank.username"/>
                             </label>
 
                             <div class="col-lg-9">
-                                <input type="text" class="form-control" id="lastName" name="lastName"
-                                       placeholder="${message(code: 'user.person.detail.last.name')}">
+                                <input type="text" class="form-control" id="bankUsername" name="bankUsername"
+                                       placeholder="${message(code: 'user.account.bank.username')}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="dob" class="col-lg-3 control-label">
-                                <g:message code="user.person.detail.dob"/>
+                            <label for="bankPassword" class="col-lg-3 control-label">
+                                <g:message code="user.account.bank.password"/>
                             </label>
 
                             <div class="col-lg-9">
-                                <g:datePicker name="dob" value="${new Date()}"
-                                              precision="day" relativeYears="[-18..-50]"
-                                              noSelection="${["null": "--Select Year--"]}"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="nationality" class="col-lg-3 control-label">
-                                <g:message code="user.person.detail.nationality"/>
-                            </label>
-
-                            <div class="col-lg-9">
-                                <g:select class="form-control" from="${Nationality.list()}" name="nationality" value=""
-                                          noSelection="${["null": "--Select Nationality--"]}" optionKey="key"
-                                          optionValue="value"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="country" class="col-lg-3 control-label">
-                                <g:message code="user.person.detail.country"/>
-                            </label>
-
-                            <div class="col-lg-9">
-                                <g:select class="form-control" from="${Country.list()}" name="country" value=""
-                                          noSelection="${["null": "--Select Nationality--"]}" optionKey="key"
-                                          optionValue="value"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="currency" class="col-lg-3 control-label">
-                                <g:message code="user.person.detail.currency"/>
-                            </label>
-
-                            <div class="col-lg-9">
-                                <g:select class="form-control" from="${Currency.list()}" name="currency" value=""
-                                          noSelection="${["null": "--Select Nationality--"]}" optionKey="key"
-                                          optionValue="value"/>
+                                <input type="password" class="form-control" id="bankPassword" name="bankPassword"
+                                       placeholder="${message(code: 'user.account.bank.password')}">
                             </div>
                         </div>
 

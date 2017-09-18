@@ -1,8 +1,9 @@
 package com.moniday.command
 
 import com.moniday.enums.Country
+import grails.validation.Validateable
 
-class DirectDebitMandateCO {
+class DirectDebitMandateCO implements Validateable {
     String owner
     String addressLine1
     String city

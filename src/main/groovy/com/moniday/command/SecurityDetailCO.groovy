@@ -1,6 +1,8 @@
 package com.moniday.command
 
-class SecurityDetailCO {
+import grails.validation.Validateable
+
+class SecurityDetailCO implements Validateable {
     String question
     String answer
 
