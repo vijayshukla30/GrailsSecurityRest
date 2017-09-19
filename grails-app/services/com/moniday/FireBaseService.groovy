@@ -12,6 +12,7 @@ import com.google.firebase.tasks.Task
 import com.moniday.User as Owner
 import com.moniday.command.AccountDetailCO
 import com.moniday.command.PersonalDetailCO
+import com.moniday.command.SecurityDetailCO
 import com.moniday.command.UserCO
 import grails.gorm.transactions.Transactional
 
@@ -50,6 +51,28 @@ class FireBaseService {
         Account account = new Account(accountDetailCO.bankName, accountDetailCO.bankUsername, accountDetailCO.bankPassword)
         DatabaseReference accountRef = ref.child("users/$fireBaseId/accountDetail")
         accountRef.setValue(account)
+    }
+
+    def saveSecurityDetail(def question, def answer, String fireBaseId) {
+        List<String> questions = (question as List)
+        List<String> answers = (answer as List)
+        List<SecurityDetailCO> securityDetailCOS = []
+        int size = answers.size()
+
+        (0..(size - 1)).each {
+            SecurityDetailCO securityDetailCO = new SecurityDetailCO(answer: answers[it], question: questions[it])
+            if (securityDetailCO.validate()) {
+                securityDetailCOS.add(securityDetailCO)
+            }
+        }
+
+        Map<String, String> data = [:]
+        securityDetailCOS.each {
+            data."${it.question}" = "${it.answer}"
+        }
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+        DatabaseReference securityRef = ref.child("users/$fireBaseId/accountDetail")
+        securityRef.setValue(data)
     }
 
     def registerUser(Owner owner, String password) {

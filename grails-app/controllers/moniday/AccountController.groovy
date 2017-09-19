@@ -4,6 +4,7 @@ import com.moniday.AppUtil
 import com.moniday.User
 import com.moniday.command.AccountDetailCO
 import com.moniday.command.PersonalDetailCO
+import com.moniday.command.SecurityDetailCO
 import grails.plugin.springsecurity.annotation.Secured
 
 import java.time.LocalDate
@@ -14,7 +15,6 @@ import java.time.ZoneId
 class AccountController {
 
     def springSecurityService
-    def accountService
     def fireBaseService
 
     def index() {
@@ -74,11 +74,11 @@ class AccountController {
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def saveAccountDetail(AccountDetailCO accountDetailCO) {
-        println(accountDetailCO.properties)
         User user = User.findByUniqueId(params.uniqueId)
         boolean validAccountDetail = accountDetailCO?.validate()
         if (user && validAccountDetail) {
             fireBaseService.saveAccountDetail(accountDetailCO, user?.firebaseId)
+            redirect(action: 'securityDetail', params: [uniqueId: params.uniqueId])
         } else if (!user) {
             render "Invalid User"
         } else {
@@ -89,4 +89,27 @@ class AccountController {
         }
     }
 
+    @Secured(['ROLE_ADMIN', 'ROLE_USER'])
+    def securityDetail(String uniqueId) {
+        if (!uniqueId) {
+            User user = springSecurityService.currentUser as User
+            uniqueId = user.uniqueId
+        }
+        println uniqueId
+        if (uniqueId) {
+            render(view: 'securityDetail', model: [uniqueId: uniqueId, securityDetail: new SecurityDetailCO()])
+        }
+    }
+
+    @Secured(['ROLE_ADMIN', 'ROLE_USER'])
+    def saveSecurityDetail() {
+        println params
+        User user = User.findByUniqueId(params.uniqueId)
+        if (user) {
+            fireBaseService.saveSecurityDetail(params.question, params.answer, user?.firebaseId)
+            render "Security Details has been updated"
+        } else {
+            render "//////"
+        }
+    }
 }
