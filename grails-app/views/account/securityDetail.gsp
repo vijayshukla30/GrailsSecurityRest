@@ -10,7 +10,7 @@
 <body>
 <div class="bs-docs-section clearfix">
     <form action="${createLink(controller: 'account', action: 'saveSecurityDetail')}"
-          class="form-horizontal" method="POST" id="personalDetail">
+          class="form-horizontal" method="POST" id="securityDetail">
         <div class="question-container">
             <div class="row">
                 <div class="col-lg-2"></div>
@@ -80,39 +80,21 @@
 </div>
 <script>
     $(document).ready(function () {
-        $("#personalDetail").validate({
+        $("#securityDetail").validate({
             rules: {
-                firstName: {
+                question: {
                     required: true
                 },
-                lastName: {
-                    required: true
-                },
-                nationality: {
-                    required: true
-                },
-                country: {
-                    required: true
-                },
-                currency: {
+                answer: {
                     required: true
                 }
             },
             messages: {
-                firstName: {
-                    required: "FirstName is required"
+                question: {
+                    required: "Question is required"
                 },
-                lastName: {
-                    required: "LastName is required"
-                },
-                nationality: {
-                    required: "Nationality is required"
-                },
-                country: {
-                    required: "Country is required"
-                },
-                currency: {
-                    required: "Currency is required"
+                answer: {
+                    required: "Answer is required"
                 }
             }
         });

@@ -75,7 +75,7 @@
 
                             <div class="col-lg-9">
                                 <g:select class="form-control" from="${Country.list()}" name="country" value=""
-                                          noSelection="${["null": "--Select Nationality--"]}" optionKey="key"
+                                          noSelection="${["null": "--Select Country--"]}" optionKey="key"
                                           optionValue="value"/>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
 
                             <div class="col-lg-9">
                                 <g:select class="form-control" from="${Currency.list()}" name="currency" value=""
-                                          noSelection="${["null": "--Select Nationality--"]}" optionKey="key"
+                                          noSelection="${["null": "--Select Currency--"]}" optionKey="key"
                                           optionValue="value"/>
                             </div>
                         </div>

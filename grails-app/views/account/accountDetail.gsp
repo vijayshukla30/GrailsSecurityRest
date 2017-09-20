@@ -77,44 +77,28 @@
     $(document).ready(function () {
         $("#personalDetail").validate({
             rules: {
-                firstName: {
+                bankName: {
                     required: true
                 },
-                lastName: {
+                bankUsername: {
                     required: true
                 },
-                nationality: {
-                    required: true
-                },
-                country: {
-                    required: true
-                },
-                currency: {
+                bankPassword: {
                     required: true
                 }
             },
             messages: {
-                firstName: {
-                    required: "FirstName is required"
+                bankName: {
+                    required: "Bank Name is required"
                 },
-                lastName: {
-                    required: "LastName is required"
+                bankUsername: {
+                    required: "Bank Username is required"
                 },
-                nationality: {
-                    required: "Nationality is required"
-                },
-                country: {
-                    required: "Country is required"
-                },
-                currency: {
-                    required: "Currency is required"
+                bankPassword: {
+                    required: "Bank Password is required"
                 }
             }
         });
-
-        $("#dob_day").addClass('form-control').css('width', "80px").css('display', 'inline');
-        $("#dob_month").addClass('form-control').css('width', "140px").css('display', 'inline');
-        $("#dob_year").addClass('form-control').css('width', "150px").css('display', 'inline');
     });
 </script>
 </body>

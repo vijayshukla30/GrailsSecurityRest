@@ -3,6 +3,7 @@ package moniday
 import com.moniday.AppUtil
 import com.moniday.User
 import com.moniday.command.AccountDetailCO
+import com.moniday.command.DirectDebitMandateCO
 import com.moniday.command.PersonalDetailCO
 import com.moniday.command.SecurityDetailCO
 import grails.plugin.springsecurity.annotation.Secured
@@ -66,7 +67,6 @@ class AccountController {
             User user = springSecurityService.currentUser as User
             uniqueId = user.uniqueId
         }
-        println uniqueId
         if (uniqueId) {
             render(view: 'accountDetail', model: [uniqueId: uniqueId, accountDetail: new AccountDetailCO()])
         }
@@ -103,13 +103,39 @@ class AccountController {
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def saveSecurityDetail() {
-        println params
         User user = User.findByUniqueId(params.uniqueId)
         if (user) {
             fireBaseService.saveSecurityDetail(params.question, params.answer, user?.firebaseId)
-            render "Security Details has been updated"
+            redirect(action: 'debitMandateDetail', params: [uniqueId: params.uniqueId])
         } else {
             render "//////"
+        }
+    }
+
+    def debitMandateDetail(String uniqueId) {
+        if (!uniqueId) {
+            User user = springSecurityService.currentUser as User
+            uniqueId = user.uniqueId
+        }
+        println uniqueId
+        if (uniqueId) {
+            render(view: 'debitMandateDetail', model: [uniqueId: uniqueId, debitMandateDetail: new DirectDebitMandateCO()])
+        }
+    }
+
+    def saveDebitMandateDetail(DirectDebitMandateCO debitMandateCO) {
+        User user = User.findByUniqueId(params.uniqueId)
+        boolean validDebitDetail = debitMandateCO?.validate()
+        if (user && validDebitDetail) {
+            fireBaseService.saveDirectDebitMandateDetail(debitMandateCO, user?.firebaseId)
+            render "Direct Debit Information hase been saved"
+        } else if (!user) {
+            render "Invalid User"
+        } else {
+            debitMandateCO.errors.allErrors.each {
+                println(it)
+            }
+            render "Accountt Detail is not valid"
         }
     }
 }

@@ -9,9 +9,16 @@ class DirectDebitMandateCO implements Validateable {
     String city
     String region
     String postCode
-    Country countryOfResidence
-    String IBAN
-    String BIC
+    Country country
+    String iban
+    String bic
     static constraints = {
+        owner nullable: false, blank: false
+        addressLine1 nullable: false, blank: false
+        city nullable: false, blank: false
+        region nullable: false, blank: false
+        postCode nullable: false, blank: false
+        iban nullable: false, blank: false
+        bic nullable: false, blank: false
     }
 }
