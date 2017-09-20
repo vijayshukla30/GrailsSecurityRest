@@ -68,10 +68,11 @@ class FireBaseService {
 
         Map<String, String> data = [:]
         securityDetailCOS.each {
-            data."${it.question}" = "${it.answer}"
+            data.put("" + it.question, "" + it.answer)
         }
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-        DatabaseReference securityRef = ref.child("users/$fireBaseId/accountDetail")
+        DatabaseReference securityRef = ref.child("users/$fireBaseId/accountDetail/securityDetail")
+        println(data)
         securityRef.setValue(data)
     }
 
