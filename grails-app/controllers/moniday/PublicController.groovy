@@ -9,6 +9,7 @@ class PublicController {
 
     def springSecurityService
     def accountService
+    def scrapService
 
     def register() {
         render(view: 'register', model: [userCO: new UserCO()])
@@ -26,6 +27,7 @@ class PublicController {
     }
 
     def forgetPassword() {
+        scrapService.scrapBank()
         render "Password has been changed"
     }
 }
