@@ -13,6 +13,14 @@ environments {
             logSql = false
             password = "nextdefault"
         }
+        grails {
+            mangopay {
+                mangopayUrl = "https://dashboard.sandbox.mangopay.com/"
+                clientId = "moniday-ltd"
+                email = "d.rmascio@gmail.com"
+                password = "Azerty0334!"
+            }
+        }
     }
     test {
         dataSource {
@@ -21,6 +29,14 @@ environments {
             username = "root"
             logSql = false
             password = "nextdefault"
+        }
+        grails {
+            moniday {
+                monidayUrl = "https://dashboard.sandbox.mangopay.com/"
+                clientId = "moniday-ltd"
+                email = "d.rmascio@gmail.com"
+                password = "Azerty0334!"
+            }
         }
     }
     production {
@@ -76,4 +92,3 @@ grails.plugin.springsecurity.filterChain.chainMap = [
         [pattern: '/**/favicon.ico', filters: 'none'],
         [pattern: '/**', filters: 'JOINED_FILTERS']
 ]
-

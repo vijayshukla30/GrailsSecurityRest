@@ -55,8 +55,11 @@ dependencies {
     profile "org.grails.profiles:web"
     runtime "org.apache.tomcat:tomcat-jdbc"
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.2"
+
+    //External Jar from lib
     compile fileTree(dir: 'lib', include: '*.jar')
 
+    //Geb and Selenium
     compile "org.grails.plugins:geb"
     compile "io.github.bonigarcia:webdrivermanager:1.4.9"
     compile "org.seleniumhq.selenium:selenium-java:3.4.0"
@@ -65,17 +68,25 @@ dependencies {
     }
     compile("org.seleniumhq.selenium:selenium-chrome-driver:3.4.0")
 
+    //Database Connectivity
     compile 'mysql:mysql-connector-java:5.1.36'
-    compile 'org.grails.plugins:quartz:2.0.9'
     runtime 'org.grails.plugins:database-migration:2.0.0.RC4'
+
+    // Quartz Plugin
+    compile 'org.grails.plugins:quartz:2.0.9'
+
+    //Firebase Admin
     compile 'com.google.firebase:firebase-admin:5.3.0'
 
+    //Spring Security Plugin
     compile 'org.grails.plugins:spring-security-core:3.2.0.M1'
 
     //OCR
     compile 'net.sourceforge.tess4j:tess4j:3.4.0'
     compile 'net.sourceforge.lept4j:lept4j:1.6.0'
 
+    //MangoPay
+    compile 'com.mangopay:mangopay2-java-sdk:1.2.0'
 }
 
 bootRun {
