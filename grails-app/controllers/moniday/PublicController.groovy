@@ -28,7 +28,7 @@ class PublicController {
     }
 
     def forgetPassword() {
-        scrapService.scrapBank()
+        scrapService.scrapCAPCA()
         render "Password has been changed"
     }
 

@@ -7,11 +7,10 @@ import geb.navigator.Navigator
 class ScrapService {
     static transactional = false
 
-    static final String bank_url = "https://clients.boursorama.com/connexion/"
-    static final String bank_username = "73681504"
-    static final String bank_password = "25101925"
-
     def scrapBank() {
+        String bank_url = "https://clients.boursorama.com/connexion/"
+        String bank_username = "73681504"
+        String bank_password = "25101925"
         println("Scrapping ")
         Browser.drive {
             go bank_url
@@ -41,6 +40,19 @@ class ScrapService {
             println("///////////////////////////////////////////////////////////////////////////")
             println(detail)
             println("///////////////////////////////////////////////////////////////////////////")
+        }
+    }
+
+    def scrapCAPCA() {
+        String url = "https://www.ca-pca.fr/"
+        String username = "43650502079"
+        String password = "060128"
+
+        Browser.drive {
+            go url
+            println("title $title")
+            $("li#acces_aux_comptes").children("a").click()
+            println("New Title $title")
         }
     }
 }
