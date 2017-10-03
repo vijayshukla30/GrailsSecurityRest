@@ -2,6 +2,7 @@ package com.moniday
 
 import com.moniday.ocr.OCRUtill
 import geb.Browser
+import geb.module.TextInput
 import geb.navigator.Navigator
 
 class ScrapService {
@@ -44,15 +45,33 @@ class ScrapService {
     }
 
     def scrapCAPCA() {
-        String url = "https://www.ca-pca.fr/"
+        String url = "https://www.pca-g3-enligne.credit-agricole.fr/stb/entreeBam"
         String username = "43650502079"
         String password = "060128"
 
         Browser.drive {
             go url
             println("title $title")
-            $("li#acces_aux_comptes").children("a").click()
+            def liElement = $("li#acces_aux_comptes")
+            def hrefElement = liElement.children("a")
+            hrefElement.click()
             println("New Title $title")
+            def usernameField = $(name: "CCPTE").module(TextInput)
+            usernameField.text = username
+
+            password.each { String pass ->
+                println "pass " + pass
+                $("table#pave-saisie-code tr td").each {
+                    def pasStr = it.text()
+                    pasStr = pasStr.replaceAll("\\s", "")
+                    if (pasStr.contains(pass)) {
+                        println "pasStr $pasStr"
+                        it.children("a").click()
+                    }
+                }
+            }
+
+            $("p.validation.clearboth span.droite a.droite")[1].click()
         }
     }
 }
