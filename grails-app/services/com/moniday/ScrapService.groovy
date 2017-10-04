@@ -1,5 +1,7 @@
 package com.moniday
 
+import com.moniday.dto.AccountDTO
+import com.moniday.dto.PersonDTO
 import com.moniday.ocr.OCRUtill
 import geb.Browser
 import geb.module.TextInput
@@ -45,33 +47,54 @@ class ScrapService {
     }
 
     def scrapCAPCA() {
-        String url = "https://www.pca-g3-enligne.credit-agricole.fr/stb/entreeBam"
+        String url = "https://www.ca-pca.fr/"
         String username = "43650502079"
         String password = "060128"
+        PersonDTO personDTO = new PersonDTO()
 
         Browser.drive {
             go url
             println("title $title")
-            def liElement = $("li#acces_aux_comptes")
-            def hrefElement = liElement.children("a")
+            Navigator liElement = $("li#acces_aux_comptes")
+            Navigator hrefElement = liElement.children("a")
             hrefElement.click()
             println("New Title $title")
-            def usernameField = $(name: "CCPTE").module(TextInput)
+            Navigator usernameField = $(name: "CCPTE").module(TextInput)
             usernameField.text = username
 
             password.each { String pass ->
-                println "pass " + pass
                 $("table#pave-saisie-code tr td").each {
                     def pasStr = it.text()
                     pasStr = pasStr.replaceAll("\\s", "")
                     if (pasStr.contains(pass)) {
-                        println "pasStr $pasStr"
                         it.children("a").click()
                     }
                 }
             }
 
             $("p.validation.clearboth span.droite a.droite")[1].click()
+            Navigator advisor = $("div#racineGDC").children("div.bloc-pap-texte").children("p")[0]
+            List<String> names = advisor.text()?.split("\n")
+            println(names)
+            if (names) {
+                personDTO.firstName = names[0]
+                personDTO.lastName = names[1]
+            }
+
+            List<AccountDTO> accountDTOS = personDTO.accounts
+            ["colcellignepaire", "colcelligneimpaire"].each { String css ->
+                $("table.ca-table tr.$css").each { Navigator rowNavigator ->
+                    println rowNavigator.text()
+                    Navigator accountRow = rowNavigator.children("td")
+                    AccountDTO accountDTO = new AccountDTO()
+                    accountDTO.typeOfAccount = accountRow[0].text()
+                    accountDTO.accountNumber = accountRow[2].text()
+                    accountDTO.balance = accountRow[4].text()?.replaceAll("\\s|,", "") as Long
+                    accountDTO.currencyType = accountRow[5].text()
+                    accountDTOS.add(accountDTO)
+                }
+            }
         }
+        return personDTO
     }
 }
