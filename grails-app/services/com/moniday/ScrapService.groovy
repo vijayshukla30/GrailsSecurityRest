@@ -2,6 +2,9 @@ package com.moniday
 
 import com.moniday.dto.AccountDTO
 import com.moniday.dto.PersonDTO
+import com.moniday.geb.page.capca.CaPcaHomePage
+import com.moniday.geb.page.capca.DashboardPage
+import com.moniday.geb.page.capca.LoginPage
 import com.moniday.ocr.OCRUtill
 import geb.Browser
 import geb.module.TextInput
@@ -53,7 +56,7 @@ class ScrapService {
         PersonDTO personDTO = new PersonDTO()
 
         Browser.drive {
-            go url
+            /*go url
             println("title $title")
             Navigator liElement = $("li#acces_aux_comptes")
             Navigator hrefElement = liElement.children("a")
@@ -84,7 +87,6 @@ class ScrapService {
             List<AccountDTO> accountDTOS = personDTO.accounts
             ["colcellignepaire", "colcelligneimpaire"].each { String css ->
                 $("table.ca-table tr.$css").each { Navigator rowNavigator ->
-                    println rowNavigator.text()
                     Navigator accountRow = rowNavigator.children("td")
                     AccountDTO accountDTO = new AccountDTO()
                     accountDTO.typeOfAccount = accountRow[0].text()
@@ -92,9 +94,54 @@ class ScrapService {
                     accountDTO.balance = accountRow[4].text()?.replaceAll("\\s|,", "") as Long
                     accountDTO.currencyType = accountRow[5].text()
                     accountDTOS.add(accountDTO)
+                    extractTransaction(accountRow[0].children("form").children("a"), accountDTO)
+                }
+            }*/
+
+            CaPcaHomePage pcaHomePage = to(CaPcaHomePage)
+            assert page instanceof CaPcaHomePage
+            println "page title from capca home page--> " + pcaHomePage.pageTitle
+
+            println "???????????????????????????????????????"
+
+            pcaHomePage.loginPageLink.click()
+
+            LoginPage loginPage = at(LoginPage)
+            println(loginPage.pageTitle)
+            loginPage.usernameField = username
+
+            password.each { String pass ->
+                $("table#pave-saisie-code tr td").each {
+                    def pasStr = it.text()
+                    pasStr = pasStr.replaceAll("\\s", "")
+                    if (pasStr.contains(pass)) {
+                        it.children("a").click()
+                    }
                 }
             }
+
+            loginPage.submitButton.click()
+            println "???????????????????????????????????????"
+
+            DashboardPage dashboardPage = at(DashboardPage)
+            assert page instanceof DashboardPage
+            println "Login Successful " + dashboardPage.pageTitle
+            Thread.sleep(1000)
+            /*if (!dashboardPage.advisor.isEmpty()) {
+                List<String> names = dashboardPage.advisor.text()?.split("\n")
+                println(names)
+                if (names) {
+                    personDTO.firstName = names[0]
+                    personDTO.lastName = names[1]
+                }
+            }*/
+
+
         }
         return personDTO
     }
+/*
+    def extractTransaction(Navigator accountLink, AccountDTO accountDTO) {
+        accountLink.click()
+    }*/
 }

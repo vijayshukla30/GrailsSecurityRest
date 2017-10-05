@@ -8,7 +8,7 @@ class BootStrap {
         bootStrapService.createRole()
         bootStrapService.createAdmin()
         bootStrapService.createSubAdmin()
-        FirebaseInitializer.startFirebaseApp()
+//        FirebaseInitializer.startFirebaseApp()
     }
     def destroy = {
     }
