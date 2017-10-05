@@ -7,10 +7,14 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService
 import org.openqa.selenium.remote.DesiredCapabilities
 
 driver = {
-    ChromeDriverManager.getInstance().setup()
-    def chromeDriver = new ChromeDriver()
-    chromeDriver.manage().window().maximize()
-    chromeDriver.switchTo().window(chromeDriver.getWindowHandle())
+    DesiredCapabilities caps = new DesiredCapabilities()
+    caps.setJavascriptEnabled(true);
+    caps.setCapability("takesScreenshot", true)
+    caps.setCapability(
+            PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
+            "/usr/local/share/phantomjs/bin/phantomjs"
+    )
+    new PhantomJSDriver(caps)
 }
 //htmlunit { driver = { new HtmlUnitDriver(true) } }
 
