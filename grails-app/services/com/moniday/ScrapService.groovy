@@ -105,7 +105,7 @@ class ScrapService {
                         transactionTable = $(By.xpath("/html/body/div[1]/table/tbody/tr[7]/td/table/tbody/tr/td[3]/div/div/div/div[1]/div[5]/table[2]/tbody"))
                     } else if (accountDTO.typeOfAccount == "CEL") {
                         println("*************%%%%%%%%%%%%%%%%%%%%%%%%%************")
-                        transactionTable = $(By.xpath("/html/body/div[1]/table/tbody/tr[7]/td/table/tbody/tr/td[3]/div/div/div/div[1]/div[4]/table[2]/tbody/tr[1]"))
+                        transactionTable = $(By.xpath("/html/body/div[1]/table/tbody/tr[7]/td/table/tbody/tr/td[3]/div/div/div/div[1]/div[4]/table[2]/tbody"))
                     } else {
                         println "HHHHHHHHHHHHHHHHHHHHHHHHHHHH"
                         println accountDTO.typeOfAccount
