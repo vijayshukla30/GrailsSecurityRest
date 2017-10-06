@@ -2,10 +2,12 @@ package com.moniday
 
 import com.moniday.dto.AccountDTO
 import com.moniday.dto.PersonDTO
+import com.moniday.dto.TransactionDTO
 import com.moniday.ocr.OCRUtill
 import geb.Browser
 import geb.module.TextInput
 import geb.navigator.Navigator
+import org.openqa.selenium.By
 
 class ScrapService {
     static transactional = false
@@ -87,14 +89,61 @@ class ScrapService {
                     println rowNavigator.text()
                     Navigator accountRow = rowNavigator.children("td")
                     AccountDTO accountDTO = new AccountDTO()
-                    accountDTO.typeOfAccount = accountRow[0].text()
-                    accountDTO.accountNumber = accountRow[2].text()
+                    accountDTO.typeOfAccount = accountRow[0].text()?.replaceAll("\\s", "")
+                    accountDTO.accountNumber = accountRow[2].text()?.replaceAll("\\s", "")
                     accountDTO.balance = accountRow[4].text()?.replaceAll("\\s|,", "") as Long
-                    accountDTO.currencyType = accountRow[5].text()
+                    accountDTO.currencyType = accountRow[5].text()?.replaceAll("\\s", "")
                     accountDTOS.add(accountDTO)
+                    println("*(((((((((((((((((1((((((((((((((((((((((")
+                    println "${accountDTO.typeOfAccount} ------->>>> ${title}"
+                    accountRow[0].children("form").children("a").click()
+                    println "${accountDTO.typeOfAccount} ------->>>> ${title}"
+                    println("*(((((((((((((((((((2((((((((((((((((((((")
+                    def transactionTable
+                    if (accountDTO.typeOfAccount == "CCHQ") {
+                        println("*************11111111111111************")
+                        transactionTable = $(By.xpath("/html/body/div[1]/table/tbody/tr[7]/td/table/tbody/tr/td[3]/div/div/div/div[1]/div[5]/table[2]/tbody"))
+                    } else if (accountDTO.typeOfAccount == "CEL") {
+                        println("*************%%%%%%%%%%%%%%%%%%%%%%%%%************")
+                        transactionTable = $(By.xpath("/html/body/div[1]/table/tbody/tr[7]/td/table/tbody/tr/td[3]/div/div/div/div[1]/div[4]/table[2]/tbody/tr[1]"))
+                    } else {
+                        println "HHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+                        println accountDTO.typeOfAccount
+                    }
+                    if (transactionTable) {
+                        println("I have transaction page")
+                        List<TransactionDTO> transactionDTOS = extractTransaction(transactionTable, accountDTO.typeOfAccount)
+                        accountDTO.transactions = transactionDTOS
+                        def backToHome = $("li#ariane-home").siblings().first().children()
+                        backToHome.click()
+                    }
                 }
             }
         }
         return personDTO
+    }
+
+    List<TransactionDTO> extractTransaction(Navigator transNav, String accountType) {
+        List<TransactionDTO> transactionDTOS = []
+        transNav.children("tr").each { rowNav ->
+            println "Going to traverse table transaction"
+            def cellNav = rowNav.children("td")
+            if (accountType == "CCHQ") {
+                println("*************2222222222222222************")
+                TransactionDTO transactionDTO = new TransactionDTO()
+                transactionDTO.date = cellNav[0].text()
+                transactionDTO.description = cellNav[2].text()
+                transactionDTO.amount = cellNav[4].text()
+                transactionDTOS.add(transactionDTO)
+            } else if (accountType == "CEL") {
+                println("))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+                TransactionDTO transactionDTO = new TransactionDTO()
+                transactionDTO.date = cellNav[0].text()
+                transactionDTO.description = cellNav[1].text()
+                transactionDTO.amount = cellNav[2].text()
+                transactionDTOS.add(transactionDTO)
+            }
+        }
+        transactionDTOS
     }
 }
