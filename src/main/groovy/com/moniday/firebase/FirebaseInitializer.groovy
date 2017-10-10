@@ -11,8 +11,8 @@ class FirebaseInitializer {
 
     private static DatabaseReference database;
 
-    static void startFirebaseApp() {
-        FileInputStream fileInputStream = new FileInputStream("/home/vijay/service.json")
+    static void startFirebaseApp(String path) {
+        FileInputStream fileInputStream = new FileInputStream(path)
         FirebaseOptions options = new FirebaseOptions.Builder().setCredential(FirebaseCredentials.fromCertificate(fileInputStream)).setDatabaseUrl(DATABASE_URL).build()
         FirebaseApp firebaseApp = FirebaseApp.initializeApp(options)
         println firebaseApp.name

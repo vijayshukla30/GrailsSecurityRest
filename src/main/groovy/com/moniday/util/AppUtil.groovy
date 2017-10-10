@@ -1,4 +1,4 @@
-package com.moniday
+package com.moniday.util
 
 import java.time.Month
 

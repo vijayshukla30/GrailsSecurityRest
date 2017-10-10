@@ -92,3 +92,5 @@ grails.plugin.springsecurity.filterChain.chainMap = [
         [pattern: '/**/favicon.ico', filters: 'none'],
         [pattern: '/**', filters: 'JOINED_FILTERS']
 ]
+
+firebase.configuration.json = "${userHome}/.grails/firebase-service.json"

@@ -1,11 +1,11 @@
 package moniday
 
-import com.moniday.AppUtil
 import com.moniday.User
 import com.moniday.command.AccountDetailCO
 import com.moniday.command.DirectDebitMandateCO
 import com.moniday.command.PersonalDetailCO
 import com.moniday.command.SecurityDetailCO
+import com.moniday.util.AppUtil
 import grails.plugin.springsecurity.annotation.Secured
 
 import java.time.LocalDate
