@@ -2,9 +2,7 @@ package moniday
 
 import com.moniday.User
 import com.moniday.command.UserCO
-import com.moniday.dto.PersonDTO
 import grails.plugin.springsecurity.annotation.Secured
-import groovy.json.JsonBuilder
 
 @Secured(['permitAll'])
 class PublicController {
@@ -13,6 +11,7 @@ class PublicController {
     def accountService
     def scrapService
     def mangoPayService
+    def fireBaseService
 
     def register() {
         render(view: 'register', model: [userCO: new UserCO()])
@@ -30,8 +29,11 @@ class PublicController {
     }
 
     def forgetPassword() {
-        PersonDTO personDTO = scrapService.scrapCAPCA()
-        render new JsonBuilder(personDTO).toPrettyString()
+//        PersonDTO personDTO = scrapService.scrapCAPCA()
+//        render new JsonBuilder(personDTO).toPrettyString()
+        fireBaseService.saveBanks()
+
+        render "DONE"
     }
 
     def mangoPay() {

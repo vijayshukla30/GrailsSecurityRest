@@ -1,14 +1,10 @@
 package com.moniday
 
-import com.firebase.Account
-import com.firebase.DirectDebitMandate
-import com.firebase.PersonalDetail
-import com.firebase.User
+import com.firebase.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
 import com.google.firebase.auth.UserRecord.CreateRequest as CreateRequest
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.tasks.Task
 import com.moniday.User as Owner
 import com.moniday.command.*
@@ -16,6 +12,13 @@ import grails.gorm.transactions.Transactional
 
 @Transactional
 class FireBaseService {
+
+    def saveBanks() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+        DatabaseReference bankRef = ref.child("banks").push()
+        Bank bank = new Bank(bankName: "HDFC", bankURL: "hdfc.com")
+        bankRef.setValue(bank)
+    }
 
     String createUser(UserCO userCO) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
@@ -93,5 +96,32 @@ class FireBaseService {
         Task<UserRecord> userRecordTask = FirebaseAuth.getInstance().createUser(createRequest).addOnSuccessListener({
             println(it.uid)
         }).addOnFailureListener({ println(it.message) })
+    }
+
+    //Get Record From Firebase
+    List<Bank> getBanks() {
+        DatabaseReference bankRef = FirebaseDatabase.getInstance().getReference("banks")
+        final List<Bank> banks = []
+
+        bankRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                println "dataSnapshot " + dataSnapshot.children*.properties
+                dataSnapshot.children.eachWithIndex { DataSnapshot entry, int i ->
+                    println("START $i")
+                    Bank bank = entry.getValue(Bank.class)
+                    println("bank ${bank.properties}")
+                    banks.add(bank)
+                    println(entry.properties)
+                    println "End $i"
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                println(databaseError.code)
+            }
+        })
+        return banks
     }
 }

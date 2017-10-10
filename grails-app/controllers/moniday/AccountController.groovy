@@ -1,5 +1,6 @@
 package moniday
 
+import com.firebase.Bank
 import com.moniday.User
 import com.moniday.command.AccountDetailCO
 import com.moniday.command.DirectDebitMandateCO
@@ -33,7 +34,6 @@ class AccountController {
             User user = springSecurityService.currentUser as User
             uniqueId = user.uniqueId
         }
-        println uniqueId
         if (uniqueId) {
             render(view: 'personalDetail', model: [uniqueId: uniqueId, personalDetailCO: new PersonalDetailCO()])
         }
@@ -68,7 +68,8 @@ class AccountController {
             uniqueId = user.uniqueId
         }
         if (uniqueId) {
-            render(view: 'accountDetail', model: [uniqueId: uniqueId, accountDetail: new AccountDetailCO()])
+            List<Bank> banks = fireBaseService.banks
+            render(view: 'accountDetail', model: [uniqueId: uniqueId, accountDetail: new AccountDetailCO(), bankCOS: banks])
         }
     }
 

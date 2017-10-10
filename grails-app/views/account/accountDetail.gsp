@@ -9,6 +9,7 @@
 
 <body>
 <div class="bs-docs-section clearfix">
+    bankCOS: ${bankCOS}
     <div class="row">
         <div class="col-lg-3"></div>
 

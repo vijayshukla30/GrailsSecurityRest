@@ -77,7 +77,7 @@ dependencies {
     compile 'org.grails.plugins:quartz:2.0.9'
 
     //Firebase Admin
-    compile 'com.google.firebase:firebase-admin:5.3.0'
+    compile 'com.google.firebase:firebase-admin:5.3.1'
 
     //Spring Security Plugin
     compile 'org.grails.plugins:spring-security-core:3.2.0.M1'
