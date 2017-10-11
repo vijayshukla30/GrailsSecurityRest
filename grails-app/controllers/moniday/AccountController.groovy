@@ -2,10 +2,7 @@ package moniday
 
 import com.firebase.Bank
 import com.moniday.User
-import com.moniday.command.AccountDetailCO
-import com.moniday.command.DirectDebitMandateCO
-import com.moniday.command.PersonalDetailCO
-import com.moniday.command.SecurityDetailCO
+import com.moniday.command.*
 import com.moniday.util.AppUtil
 import grails.plugin.springsecurity.annotation.Secured
 
@@ -69,24 +66,36 @@ class AccountController {
         }
         if (uniqueId) {
             List<Bank> banks = fireBaseService.banks
-            render(view: 'accountDetail', model: [uniqueId: uniqueId, accountDetail: new AccountDetailCO(), bankCOS: banks])
+            List<BankCO> bankCOS = []
+            println "banks ==========> " + banks
+            banks.each {
+                bankCOS.add(new BankCO(bankName: it.bankName, bankURL: it.bankURL, bankFirebaseId: it.bankFirebaseId))
+            }
+            render(view: 'accountDetail', model: [uniqueId: uniqueId, accountDetail: new AccountDetailCO(), bankCOS: bankCOS])
         }
     }
 
     @Secured(['ROLE_ADMIN', 'ROLE_USER'])
     def saveAccountDetail(AccountDetailCO accountDetailCO) {
         User user = User.findByUniqueId(params.uniqueId)
-        boolean validAccountDetail = accountDetailCO?.validate()
-        if (user && validAccountDetail) {
-            fireBaseService.saveAccountDetail(accountDetailCO, user?.firebaseId)
+        if (user) {
+            List<Bank> banks = fireBaseService.banks
+            banks.each {
+                if (params.bankNameId?.equals(it.bankName)) {
+                    accountDetailCO.bankNameFirebase = it.bankFirebaseId
+                }
+            }
+            if (accountDetailCO?.validate()) {
+                fireBaseService.saveAccountDetail(accountDetailCO, user?.firebaseId)
+            } else {
+                accountDetailCO.errors.allErrors.each {
+                    println(it)
+                }
+                render "Account Detail is not valid"
+            }
             redirect(action: 'securityDetail', params: [uniqueId: params.uniqueId])
         } else if (!user) {
             render "Invalid User"
-        } else {
-            accountDetailCO.errors.allErrors.each {
-                println(it)
-            }
-            render "Accountt Detail is not valid"
         }
     }
 

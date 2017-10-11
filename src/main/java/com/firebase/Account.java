@@ -4,25 +4,25 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class Account {
-    private String bankName;
+    private String bankNameFirebase;
     private String bankUserName;
     private String bankPassword;
 
     public Account() {
     }
 
-    public Account(String bankName, String bankUserName, String bankPassword) {
-        this.bankName = bankName;
+    public Account(String bankNameFirebase, String bankUserName, String bankPassword) {
+        this.bankNameFirebase = bankNameFirebase;
         this.bankUserName = bankUserName;
         this.bankPassword = bankPassword;
     }
 
     public String getBankName() {
-        return bankName;
+        return bankNameFirebase;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
+    public void setBankName(String bankNameFirebase) {
+        this.bankNameFirebase = bankNameFirebase;
     }
 
     public String getBankUserName() {

@@ -3,15 +3,15 @@ package com.firebase;
 public class Bank {
     private String bankName;
     private String bankURL;
-//    private  String bankFirebaseId;
+    private String bankFirebaseId;
 
     public Bank() {
     }
 
-    public Bank(String bankName, String bankURL) {
+    public Bank(String bankName, String bankURL, String bankFirebaseId) {
         this.bankName = bankName;
         this.bankURL = bankURL;
-//        this.bankFirebaseId = bankFirebaseId;
+        this.bankFirebaseId = bankFirebaseId;
     }
 
     public String getBankName() {
@@ -29,12 +29,12 @@ public class Bank {
     public void setBankURL(String bankURL) {
         this.bankURL = bankURL;
     }
-//
-//    public String getBankFirebaseId() {
-//        return bankFirebaseId;
-//    }
-//
-//    public void setBankFirebaseId(String bankFirebaseId) {
-//        this.bankFirebaseId = bankFirebaseId;
-//    }
+
+    public String getBankFirebaseId() {
+        return bankFirebaseId;
+    }
+
+    public void setBankFirebaseId(String bankFirebaseId) {
+        this.bankFirebaseId = bankFirebaseId;
+    }
 }

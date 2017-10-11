@@ -9,7 +9,6 @@
 
 <body>
 <div class="bs-docs-section clearfix">
-    bankCOS: ${bankCOS}
     <div class="row">
         <div class="col-lg-3"></div>
 
@@ -24,13 +23,13 @@
                         </legend>
 
                         <div class="form-group">
-                            <label for="bankName" class="col-lg-3 control-label">
+                            <label for="bankNameId" class="col-lg-3 control-label">
                                 <g:message code="user.account.bank.name"/>
                             </label>
 
                             <div class="col-lg-9">
-                                <input type="text" class="form-control" id="bankName" name="bankName"
-                                       placeholder="${message(code: 'user.account.bank.name')}">
+                                <g:select from="${bankCOS*.bankName}" name="bankNameId" id="bankNameId" class="form-control"
+                                          value=""/>
                             </div>
                         </div>
 

@@ -1,6 +1,9 @@
 package com.moniday
 
-import com.firebase.*
+import com.firebase.Account
+import com.firebase.Bank
+import com.firebase.DirectDebitMandate
+import com.firebase.PersonalDetail
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
 import com.google.firebase.auth.UserRecord.CreateRequest as CreateRequest
@@ -9,6 +12,8 @@ import com.google.firebase.tasks.Task
 import com.moniday.User as Owner
 import com.moniday.command.*
 import grails.gorm.transactions.Transactional
+
+import java.util.concurrent.CountDownLatch
 
 @Transactional
 class FireBaseService {
@@ -48,10 +53,12 @@ class FireBaseService {
     }
 
     def saveAccountDetail(AccountDetailCO accountDetailCO, String fireBaseId) {
-        Account account = new Account(accountDetailCO.bankName, accountDetailCO.bankUsername, accountDetailCO.bankPassword)
+        println(accountDetailCO.properties)
+        Account account = new Account(accountDetailCO.bankNameFirebase, accountDetailCO.bankUsername, accountDetailCO.bankPassword)
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference accountRef = ref.child("users/$fireBaseId/accountDetail")
         accountRef.setValue(account)
+        println("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
     }
 
     def saveSecurityDetail(def question, def answer, String fireBaseId) {
@@ -102,19 +109,19 @@ class FireBaseService {
     List<Bank> getBanks() {
         DatabaseReference bankRef = FirebaseDatabase.getInstance().getReference("banks")
         final List<Bank> banks = []
-
+        CountDownLatch countDownLatch = new CountDownLatch(1)
         bankRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 //                println "dataSnapshot " + dataSnapshot.children*.properties
                 dataSnapshot.children.eachWithIndex { DataSnapshot entry, int i ->
-                    println("START $i")
-                    Bank bank = entry.getValue(Bank.class)
-                    println("bank ${bank.properties}")
+                    Bank bank = new Bank()
+                    bank.setBankURL(entry.value.bankURL)
+                    bank.setBankName(entry.value.bankName)
+                    bank.setBankFirebaseId(entry.key)
                     banks.add(bank)
-                    println(entry.properties)
-                    println "End $i"
                 }
+                countDownLatch.countDown()
             }
 
             @Override
@@ -122,6 +129,15 @@ class FireBaseService {
                 println(databaseError.code)
             }
         })
+        waitForCountDownLatch(countDownLatch)
         return banks
+    }
+
+    private void waitForCountDownLatch(CountDownLatch countDownLatch) {
+        try {
+            countDownLatch.await()
+        } catch (Exception) {
+
+        }
     }
 }
