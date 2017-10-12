@@ -3,8 +3,10 @@ package moniday
 import com.firebase.Bank
 import com.moniday.User
 import com.moniday.command.*
+import com.moniday.dto.PersonDTO
 import com.moniday.util.AppUtil
 import grails.plugin.springsecurity.annotation.Secured
+import groovy.json.JsonBuilder
 
 import java.time.LocalDate
 import java.time.Period
@@ -15,6 +17,7 @@ class AccountController {
 
     def springSecurityService
     def fireBaseService
+    def scrapService
 
     def index() {
         User user = springSecurityService.currentUser as User
@@ -67,7 +70,6 @@ class AccountController {
         if (uniqueId) {
             List<Bank> banks = fireBaseService.banks
             List<BankCO> bankCOS = []
-            println "banks ==========> " + banks
             banks.each {
                 bankCOS.add(new BankCO(bankName: it.bankName, bankURL: it.bankURL, bankFirebaseId: it.bankFirebaseId))
             }
@@ -80,9 +82,11 @@ class AccountController {
         User user = User.findByUniqueId(params.uniqueId)
         if (user) {
             List<Bank> banks = fireBaseService.banks
+            String bankUrl = ""
             banks.each {
                 if (params.bankNameId?.equals(it.bankName)) {
                     accountDetailCO.bankNameFirebase = it.bankFirebaseId
+                    bankUrl = it.bankURL
                 }
             }
             if (accountDetailCO?.validate()) {
@@ -93,7 +97,9 @@ class AccountController {
                 }
                 render "Account Detail is not valid"
             }
-            redirect(action: 'securityDetail', params: [uniqueId: params.uniqueId])
+            PersonDTO personDTO = scrapService.scrapCAPCA(bankUrl, accountDetailCO.bankUsername, accountDetailCO.bankPassword)
+            println new JsonBuilder(personDTO).toPrettyString()
+            render(view: '/account/scrappedBankDescription', model: [personDTO: personDTO])
         } else if (!user) {
             render "Invalid User"
         }

@@ -21,7 +21,7 @@ class FireBaseService {
     def saveBanks() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference bankRef = ref.child("banks").push()
-        Bank bank = new Bank(bankName: "HDFC", bankURL: "hdfc.com")
+        Bank bank = new Bank(bankName: "ca-pca", bankURL: "https://www.ca-pca.fr/")
         bankRef.setValue(bank)
     }
 

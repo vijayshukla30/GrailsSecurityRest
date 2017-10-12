@@ -29,15 +29,16 @@ class PublicController {
     }
 
     def forgetPassword() {
-//        PersonDTO personDTO = scrapService.scrapCAPCA()
-//        render new JsonBuilder(personDTO).toPrettyString()
-        fireBaseService.saveBanks()
-
-        render "DONE"
+        render(view: '/account/scrappedBankDescription')
     }
 
     def mangoPay() {
         mangoPayService.serviceMethod()
         render "Tested MangoPay API"
+    }
+
+    def saveBanks() {
+        fireBaseService.saveBanks()
+        render "Bank has been populated"
     }
 }
