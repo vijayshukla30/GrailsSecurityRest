@@ -11,12 +11,14 @@ import com.google.firebase.database.*
 import com.google.firebase.tasks.Task
 import com.moniday.User as Owner
 import com.moniday.command.*
-import grails.gorm.transactions.Transactional
+import com.moniday.dto.AccountDTO
+import com.moniday.dto.PersonDTO
+import com.moniday.dto.TransactionDTO
 
 import java.util.concurrent.CountDownLatch
 
-@Transactional
 class FireBaseService {
+    static transactional = false
 
     def saveBanks() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
@@ -89,6 +91,36 @@ class FireBaseService {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference debitRef = ref.child("users/$fireBaseId/debitMandate")
         debitRef.setValue(debitMandate)
+    }
+
+    def saveScrappedDataToFirebase(PersonDTO personDTO, String firebaseId) {
+        Map personMap = [:]
+        personMap.firstName = personDTO.firstName
+        personMap.lastName = personDTO.lastName
+
+        List accounts = []
+        personDTO.accounts.each { AccountDTO accountDTO ->
+            Map accountDetail = [:]
+            accountDetail.typeOfAccount = accountDTO.typeOfAccount
+            accountDetail.accountNumber = accountDTO.accountNumber
+            accountDetail.balance = accountDTO.balance
+            accountDetail.currencyType = accountDTO.currencyType
+            List transactions = []
+            accountDTO.transactions.each { TransactionDTO transactionDTO ->
+                Map transactionDetails = [:]
+                transactionDetails.date = transactionDTO.date
+                transactionDetails.description = transactionDTO.description
+                transactionDetails.amount = transactionDTO.amount
+                transactions.add(transactionDetails)
+            }
+            accountDetail.transactions = transactions
+            accounts.add(accountDetail)
+        }
+        personMap.accounts = accounts
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+        DatabaseReference scrapRef = ref.child("users/$firebaseId/scrapDetail")
+        scrapRef.setValue(personMap)
     }
 
     def registerUser(Owner owner, String password) {

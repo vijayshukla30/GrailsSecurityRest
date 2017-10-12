@@ -98,6 +98,7 @@ class AccountController {
                 render "Account Detail is not valid"
             }
             PersonDTO personDTO = scrapService.scrapCAPCA(bankUrl, accountDetailCO.bankUsername, accountDetailCO.bankPassword)
+            fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId)
             println new JsonBuilder(personDTO).toPrettyString()
             render(view: '/account/scrappedBankDescription', model: [personDTO: personDTO])
         } else if (!user) {

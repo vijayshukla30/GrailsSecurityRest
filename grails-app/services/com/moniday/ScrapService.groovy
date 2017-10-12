@@ -11,6 +11,7 @@ import org.openqa.selenium.By
 
 class ScrapService {
     static transactional = false
+    def fireBaseService
 
     def scrapBank() {
         String bank_url = "https://clients.boursorama.com/connexion/"
@@ -108,6 +109,7 @@ class ScrapService {
                 }
             }
         }
+
         return personDTO
     }
 
