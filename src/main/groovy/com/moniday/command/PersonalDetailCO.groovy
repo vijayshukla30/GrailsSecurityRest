@@ -2,7 +2,6 @@ package com.moniday.command
 
 import com.moniday.enums.Country
 import com.moniday.enums.Currency
-import com.moniday.enums.Nationality
 import grails.validation.Validateable
 
 class PersonalDetailCO implements Validateable {
@@ -10,7 +9,7 @@ class PersonalDetailCO implements Validateable {
     String lastName
     Date dateOfBirth
     Long age
-    Nationality nationality
+    Country nationality
     Country country
     Currency currency
     static constraints = {

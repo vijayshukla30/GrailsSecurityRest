@@ -23,14 +23,14 @@
     $(document).ready(function () {
         $("#personalDetail").validate({
             rules: {
-                firstName: true,
+                email: true,
                 lastName: true,
                 nationality: true,
                 country: true,
                 currency: true
             },
             messages: {
-                firstName: "First name required",
+                email: "First name required",
                 lastName: "Last name required",
                 nationality: 'Nationality Required',
                 country: "Country Required",

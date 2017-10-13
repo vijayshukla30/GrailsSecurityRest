@@ -6,7 +6,6 @@ import com.moniday.command.*
 import com.moniday.dto.PersonDTO
 import com.moniday.util.AppUtil
 import grails.plugin.springsecurity.annotation.Secured
-import groovy.json.JsonBuilder
 
 import java.time.LocalDate
 import java.time.Period
@@ -101,8 +100,8 @@ class AccountController {
             }
             PersonDTO personDTO = scrapService.scrapCAPCA(bankUrl, accountDetailCO.bankUsername, accountDetailCO.bankPassword)
             fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId)
-            println new JsonBuilder(personDTO).toPrettyString()
-            render(view: '/account/scrappedBankDescription', model: [personDTO: personDTO])
+//            render(view: '/account/scrappedBankDescription', model: [personDTO: personDTO])
+            redirect(controller: 'account', action: 'debitMandateDetail', params: [uniqueId: params.uniqueId])
         } else if (!user) {
             render "Invalid User"
         }

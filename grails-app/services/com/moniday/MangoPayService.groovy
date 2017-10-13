@@ -59,6 +59,8 @@ class MangoPayService {
             userNatural.CountryOfResidence = CountryIso.IN
             ApiUsers apiUsers = payApi.Users
             apiUsers.create(userNatural)
+            user.mangoPayId = userNatural.Id
+            user.save(flush: true)
         } catch (Exception ex) {
             println(ex.message)
         }

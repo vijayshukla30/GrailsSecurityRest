@@ -23,12 +23,12 @@
                         </legend>
 
                         <div class="form-group">
-                            <label for="firstName" class="col-lg-3 control-label">
+                            <label for="email" class="col-lg-3 control-label">
                                 <g:message code="user.person.detail.first.name"/>
                             </label>
 
                             <div class="col-lg-9">
-                                <input type="text" class="form-control" id="firstName" name="firstName"
+                                <input type="text" class="form-control" id="email" name="email"
                                        placeholder="${message(code: 'user.person.detail.first.name')}">
                             </div>
                         </div>
@@ -114,7 +114,7 @@
     $(document).ready(function () {
         $("#personalDetail").validate({
             rules: {
-                firstName: {
+                email: {
                     required: true
                 },
                 lastName: {
@@ -131,7 +131,7 @@
                 }
             },
             messages: {
-                firstName: {
+                email: {
                     required: "FirstName is required"
                 },
                 lastName: {

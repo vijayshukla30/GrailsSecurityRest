@@ -30,7 +30,7 @@ class FireBaseService {
     String createUser(UserCO userCO) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference userRef = ref.child("users").push()
-        FireBaseUser user = new FireBaseUser(userCO.username, userCO.password)
+        FireBaseUser user = new FireBaseUser(userCO.username)
         println("*****************************************************")
         userRef.setValue(user)
         String fireBaseKey = userRef.key
