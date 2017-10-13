@@ -1,5 +1,7 @@
 package com.moniday.util
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.time.Month
 
 class AppUtil {
@@ -45,5 +47,21 @@ class AppUtil {
         }
 
         return month
+    }
+
+    static Long generateUnixTimeStampFromDate(Date date) {
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
+        Long unixTime
+
+        try {
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+            unixTime = date.getTime()
+            unixTime = unixTime / 1000
+        } catch (Exception ex) {
+            println(ex.message)
+            return null
+        }
+        return unixTime
     }
 }

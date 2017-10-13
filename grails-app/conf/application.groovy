@@ -15,10 +15,10 @@ environments {
         }
         grails {
             mangopay {
-                mangopayUrl = "https://dashboard.sandbox.mangopay.com/"
-                clientId = "moniday-ltd"
-                email = "d.rmascio@gmail.com"
-                password = "Azerty0334!"
+                mangopayUrl = "https://api.sandbox.mangopay.com/"
+                clientId = "monidaytest"
+                email = "gaelitier@gmail.com"
+                passPhrase = "1td1tjaJG3NEJLdfhnWRDAw2btMaXKZJth4Yk0UxJNCmDDO7aZ"
             }
         }
     }

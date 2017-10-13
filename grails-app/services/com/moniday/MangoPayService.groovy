@@ -3,12 +3,14 @@ package com.moniday
 import com.mangopay.MangoPayApi
 import com.mangopay.core.APIs.ApiUsers
 import com.mangopay.core.ResponseException
+import com.mangopay.core.Sorting
 import com.mangopay.core.enumerations.CountryIso
+import com.mangopay.core.enumerations.SortDirection
 import com.mangopay.entities.User as MangoUser
 import com.mangopay.entities.UserNatural
+import com.moniday.command.PersonalDetailCO
+import com.moniday.util.AppUtil
 import grails.core.GrailsApplication
-
-import java.time.Instant
 
 class MangoPayService {
     static transactional = false
@@ -18,49 +20,47 @@ class MangoPayService {
         try {
             MangoPayApi payApi = new MangoPayApi()
             payApi.Config.ClientId = grailsApplication.config.getProperty('grails.mangopay.clientId')
-            payApi.Config.ClientPassword = grailsApplication.config.getProperty('grails.mangopay.password')
+            payApi.Config.ClientPassword = grailsApplication.config.getProperty('grails.mangopay.passPhrase')
             payApi.Config.BaseUrl = grailsApplication.config.getProperty('grails.mangopay.mangopayUrl')
             payApi.Config.DebugMode = true
 
-            /* Sorting sorting = new Sorting()
-             sorting.addField("CreationDate", SortDirection.asc)
-             List<MangoUser> users = payApi.Users.getAll(null, sorting)
-             println(users)*/
+            println(payApi.Config.properties)
+
+            Sorting sorting = new Sorting()
+            sorting.addField("CreationDate", SortDirection.asc)
+            List<MangoUser> users = payApi.Users.getAll(null, sorting)
+            println(users)
 
             println(payApi.Clients.get()?.properties)
             println("((((((((((((((((((((((((((((((((((((((((")
         } catch (ResponseException responseException) {
             println("Exception MangoPay")
-            responseException.printStackTrace()
+            println responseException.message
         } catch (Exception ex) {
             println("Super Class Exception")
         }
     }
 
-    def createUser() {
+    def createUser(User user, PersonalDetailCO personalDetailCO) {
         try {
             MangoPayApi payApi = new MangoPayApi()
             payApi.Config.ClientId = grailsApplication.config.getProperty('grails.mangopay.clientId')
-            payApi.Config.ClientPassword = grailsApplication.config.getProperty('grails.mangopay.password')
+            payApi.Config.ClientPassword = grailsApplication.config.getProperty('grails.mangopay.passPhrase')
             payApi.Config.BaseUrl = grailsApplication.config.getProperty('grails.mangopay.mangopayUrl')
             payApi.Config.DebugMode = true
-            println("Client Id ${payApi.Config.ClientId}")
-            println("Client Password ${payApi.Config.ClientPassword}")
-            println("Client Base URL ${payApi.Config.BaseUrl}")
 
-            MangoUser user = new UserNatural()
-            user.FirstName = "Vijay"
-            user.Email = "vshukla684@gmail.com"
-            user.LastName = "Shukla"
-            user.Birthday = Instant.now().getEpochSecond()
-            user.Nationality = CountryIso.IN
-            user.CountryOfResidence = CountryIso.IN
+            MangoUser userNatural = new UserNatural()
+            userNatural.Tag = user?.uniqueId
+            userNatural.FirstName = personalDetailCO.firstName
+            userNatural.LastName = personalDetailCO.lastName
+            userNatural.Email = user.username
+            userNatural.Birthday = AppUtil.generateUnixTimeStampFromDate(personalDetailCO.dateOfBirth)
+            userNatural.Nationality = CountryIso.IN
+            userNatural.CountryOfResidence = CountryIso.IN
             ApiUsers apiUsers = payApi.Users
-            println(apiUsers.properties)
-            apiUsers.create(user)
-            println(user.properties)
+            apiUsers.create(userNatural)
         } catch (Exception ex) {
-
+            println(ex.message)
         }
     }
 }

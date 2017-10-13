@@ -18,6 +18,7 @@ class AccountController {
     def springSecurityService
     def fireBaseService
     def scrapService
+    def mangoPayService
 
     def index() {
         User user = springSecurityService.currentUser as User
@@ -50,6 +51,7 @@ class AccountController {
         boolean validPersonalDetail = personalDetailCO?.validate()
         if (user && validPersonalDetail) {
             fireBaseService.savePersonalDetail(personalDetailCO, user?.firebaseId)
+            mangoPayService.createUser(user, personalDetailCO)
             redirect(action: 'accountDetail', params: [uniqueId: params.uniqueId])
         } else if (!user) {
             render "Invalid User"

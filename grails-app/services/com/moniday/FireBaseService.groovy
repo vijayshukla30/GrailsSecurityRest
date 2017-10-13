@@ -4,12 +4,12 @@ import com.firebase.Account
 import com.firebase.Bank
 import com.firebase.DirectDebitMandate
 import com.firebase.PersonalDetail
+import com.firebase.User as FireBaseUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
 import com.google.firebase.auth.UserRecord.CreateRequest as CreateRequest
 import com.google.firebase.database.*
 import com.google.firebase.tasks.Task
-import com.moniday.User as Owner
 import com.moniday.command.*
 import com.moniday.dto.AccountDTO
 import com.moniday.dto.PersonDTO
@@ -30,7 +30,7 @@ class FireBaseService {
     String createUser(UserCO userCO) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference userRef = ref.child("users").push()
-        User user = new User(userCO.username, userCO.password)
+        FireBaseUser user = new FireBaseUser(userCO.username, userCO.password)
         println("*****************************************************")
         userRef.setValue(user)
         String fireBaseKey = userRef.key
@@ -123,7 +123,7 @@ class FireBaseService {
         scrapRef.setValue(personMap)
     }
 
-    def registerUser(Owner owner, String password) {
+    def registerUser(User owner, String password) {
         CreateRequest createRequest = new CreateRequest()
         createRequest.uid = owner.uniqueId
         createRequest.email = owner?.username
