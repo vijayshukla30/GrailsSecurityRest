@@ -1,6 +1,8 @@
 package com.moniday
 
 import com.moniday.command.UserCO
+import com.moniday.enums.Country
+import com.moniday.enums.Currency
 import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
@@ -14,6 +16,10 @@ class User implements Serializable {
     String uniqueId = UUID.randomUUID().toString()
     String username
     String password
+    String firstName
+    String lastName
+    Country country = Country.GB
+    Currency currency = Currency.GBP
     String firebaseId
     String mangoPayId
     String mangoPayWalletId
@@ -39,6 +45,8 @@ class User implements Serializable {
         mangoPayWalletId nullable: true, blank: false, unique: true
         mangoPayMandateId nullable: true, blank: false, unique: true
         mangoPayBankccountId nullable: true, blank: false, unique: true
+        firstName nullable: true, blank: false
+        lastName nullable: true, blank: false
     }
 
     static mapping = {

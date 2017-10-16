@@ -1,5 +1,10 @@
 package com.moniday.util
 
+import com.mangopay.core.enumerations.CountryIso
+import com.mangopay.core.enumerations.CurrencyIso
+import com.moniday.enums.Country
+import com.moniday.enums.Currency
+
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.Month
@@ -47,6 +52,14 @@ class AppUtil {
         }
 
         return month
+    }
+
+    static CountryIso countryToCountryISO(Country value) {
+        return CountryIso.values()[value.ordinal()]
+    }
+
+    static CurrencyIso currencyToCurrencyISO(Currency value) {
+        return CurrencyIso.values()[value.ordinal()]
     }
 
     static Long generateUnixTimeStampFromDate(Date date) {

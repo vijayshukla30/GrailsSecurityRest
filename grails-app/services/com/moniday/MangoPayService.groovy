@@ -7,7 +7,10 @@ import com.mangopay.core.APIs.ApiWallets
 import com.mangopay.core.Address
 import com.mangopay.core.ResponseException
 import com.mangopay.core.Sorting
-import com.mangopay.core.enumerations.*
+import com.mangopay.core.enumerations.BankAccountType
+import com.mangopay.core.enumerations.CountryIso
+import com.mangopay.core.enumerations.CultureCode
+import com.mangopay.core.enumerations.SortDirection
 import com.mangopay.entities.BankAccount
 import com.mangopay.entities.Mandate
 import com.mangopay.entities.User as MangoUser
@@ -32,8 +35,6 @@ class MangoPayService {
             payApi.Config.ClientPassword = grailsApplication.config.getProperty('grails.mangopay.passPhrase')
             payApi.Config.BaseUrl = grailsApplication.config.getProperty('grails.mangopay.mangopayUrl')
             payApi.Config.DebugMode = true
-
-            println(payApi.Config.properties)
 
             Sorting sorting = new Sorting()
             sorting.addField("CreationDate", SortDirection.asc)
@@ -65,11 +66,14 @@ class MangoPayService {
             userNatural.LastName = personalDetailCO.lastName
             userNatural.Email = user.username
             userNatural.Birthday = AppUtil.generateUnixTimeStampFromDate(personalDetailCO.dateOfBirth)
-            userNatural.Nationality = CountryIso.IN
-            userNatural.CountryOfResidence = CountryIso.IN
+            userNatural.Nationality = AppUtil.countryToCountryISO(personalDetailCO.nationality)
+            userNatural.CountryOfResidence = AppUtil.countryToCountryISO(personalDetailCO.country)
             ApiUsers apiUsers = payApi.Users
             userNatural = apiUsers.create(userNatural)
             user.mangoPayId = userNatural.Id
+            user.firstName = personalDetailCO.firstName
+            user.lastName = personalDetailCO.lastName
+            user.country = personalDetailCO.country
             user.save(flush: true)
         } catch (Exception ex) {
             println(ex.message)
@@ -89,7 +93,7 @@ class MangoPayService {
         wallet.Tag = user.uniqueId
         wallet.Owners = [user.mangoPayId]
         wallet.Description = user.uniqueId
-        wallet.Currency = CurrencyIso.GBP
+        wallet.Currency = AppUtil.currencyToCurrencyISO(user.currency)
         ApiWallets apiWallets = payApi.Wallets
         wallet = apiWallets.create(wallet)
         user.mangoPayWalletId = wallet.Id

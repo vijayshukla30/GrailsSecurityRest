@@ -1,4 +1,4 @@
-<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country; com.moniday.enums.Nationality" %>
+<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country;" %>
 <!doctype html>
 <html>
 <head>
