@@ -51,6 +51,7 @@ class AccountController {
         if (user && validPersonalDetail) {
             fireBaseService.savePersonalDetail(personalDetailCO, user?.firebaseId)
             mangoPayService.createUser(user, personalDetailCO)
+            mangoPayService.createWalletForUser(user)
             redirect(action: 'accountDetail', params: [uniqueId: params.uniqueId])
         } else if (!user) {
             render "Invalid User"
@@ -146,6 +147,8 @@ class AccountController {
         boolean validDebitDetail = debitMandateCO?.validate()
         if (user && validDebitDetail) {
             fireBaseService.saveDirectDebitMandateDetail(debitMandateCO, user?.firebaseId)
+            mangoPayService.createMandateForUser(debitMandateCO, user)
+            fireBaseService.updateUserOfFirebase(user)
             render "Direct Debit Information hase been saved"
         } else if (!user) {
             render "Invalid User"
@@ -155,5 +158,9 @@ class AccountController {
             }
             render "Accountt Detail is not valid"
         }
+    }
+
+    def mangoPayReturn() {
+        render 200
     }
 }

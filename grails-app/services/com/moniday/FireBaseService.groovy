@@ -40,7 +40,12 @@ class FireBaseService {
         return fireBaseKey
     }
 
+    def updateUserOfFirebase(User user) {
+
+    }
+
     def savePersonalDetail(PersonalDetailCO personalDetailCO, String fireBaseId) {
+        println("Saving Personal Detail")
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         PersonalDetail personalDetail = new PersonalDetail()
         personalDetail.setFirstName(personalDetailCO.firstName)
@@ -52,6 +57,7 @@ class FireBaseService {
         personalDetail.setCurrency(personalDetailCO.currency.value)
         DatabaseReference personRef = ref.child("users/$fireBaseId/personalDetail")
         personRef.setValue(personalDetail)
+        println("Saved Personal Detail")
     }
 
     def saveAccountDetail(AccountDetailCO accountDetailCO, String fireBaseId) {

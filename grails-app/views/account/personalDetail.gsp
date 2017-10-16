@@ -23,12 +23,12 @@
                         </legend>
 
                         <div class="form-group">
-                            <label for="email" class="col-lg-3 control-label">
+                            <label for="firstName" class="col-lg-3 control-label">
                                 <g:message code="user.person.detail.first.name"/>
                             </label>
 
                             <div class="col-lg-9">
-                                <input type="text" class="form-control" id="email" name="email"
+                                <input type="text" class="form-control" id="firstName" name="firstName"
                                        placeholder="${message(code: 'user.person.detail.first.name')}">
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                             </label>
 
                             <div class="col-lg-9">
-                                <g:select class="form-control" from="${Nationality.list()}" name="nationality" value=""
+                                <g:select class="form-control" from="${Country.list()}" name="nationality" value=""
                                           noSelection="${["null": "--Select Nationality--"]}" optionKey="key"
                                           optionValue="value"/>
                             </div>

@@ -16,6 +16,9 @@ class User implements Serializable {
     String password
     String firebaseId
     String mangoPayId
+    String mangoPayWalletId
+    String mangoPayMandateId
+    String mangoPayBankccountId
 
     boolean enabled = true
     boolean accountExpired
@@ -31,8 +34,11 @@ class User implements Serializable {
     static constraints = {
         password nullable: false, blank: false, password: true
         username nullable: false, blank: false, unique: true, email: true
-        firebaseId nullable: false, blank: false, unique: true
-        mangoPayId nullable: false, blank: false, unique: true
+        firebaseId nullable: true, blank: false, unique: true
+        mangoPayId nullable: true, blank: false, unique: true
+        mangoPayWalletId nullable: true, blank: false, unique: true
+        mangoPayMandateId nullable: true, blank: false, unique: true
+        mangoPayBankccountId nullable: true, blank: false, unique: true
     }
 
     static mapping = {
