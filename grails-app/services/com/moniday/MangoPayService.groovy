@@ -89,7 +89,6 @@ class MangoPayService {
         payApi.Config.BaseUrl = grailsApplication.config.getProperty('grails.mangopay.mangopayUrl')
         payApi.Config.DebugMode = true
         Wallet wallet = new Wallet()
-        println user.mangoPayId
         wallet.Tag = user.uniqueId
         wallet.Owners = [user.mangoPayId]
         wallet.Description = user.uniqueId
@@ -126,7 +125,7 @@ class MangoPayService {
 
         ApiUsers apiUsers = payApi.Users
         bankAccount = apiUsers.createBankAccount(user?.mangoPayId, bankAccount)
-
+        user.mangoPayBankccountId = bankAccount.Id
         Mandate mandate = new Mandate()
         mandate.Tag = user?.uniqueId
         mandate.BankAccountId = bankAccount.Id
@@ -134,7 +133,8 @@ class MangoPayService {
         mandate.ReturnURL = grailsLinkGenerator.link(controller: 'account', action: "mangoPayReturn", absolute: true)
         println("mandate.ReturnURL ${mandate.ReturnURL}")
         ApiMandates apiMandates = payApi.Mandates
-        apiMandates.create(mandate)
+        mandate = apiMandates.create(mandate)
         user.mangoPayMandateId = mandate.Id
+        user.save(flush: true)
     }
 }

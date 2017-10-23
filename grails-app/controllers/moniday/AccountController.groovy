@@ -161,6 +161,14 @@ class AccountController {
     }
 
     def mangoPayReturn() {
+        println(":******************************************:")
+        println request.properties
+        println(":******************************************:")
+        println params
+        println(":******************************************:")
+        println params.JSON
+        println(":******************************************:")
+        
         render 200
     }
 }
