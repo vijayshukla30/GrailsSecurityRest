@@ -1,15 +1,13 @@
 package com.moniday
 
-import com.firebase.Account
-import com.firebase.Bank
-import com.firebase.DirectDebitMandate
-import com.firebase.PersonalDetail
+import com.firebase.*
 import com.firebase.User as FireBaseUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
 import com.google.firebase.auth.UserRecord.CreateRequest as CreateRequest
 import com.google.firebase.database.*
 import com.google.firebase.tasks.Task
+import com.moniday.User
 import com.moniday.command.*
 import com.moniday.dto.AccountDTO
 import com.moniday.dto.PersonDTO
@@ -40,8 +38,12 @@ class FireBaseService {
         return fireBaseKey
     }
 
-    def updateUserOfFirebase(User user) {
-
+    def updateUserForMangoPay(User user) {
+        MangoPayDetail payDetail = new MangoPayDetail(user.mangoPayId, user.mangoPayWalletId, user.mangoPayBankccountId, user.mangoPayMandateId)
+        println payDetail.properties
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+        DatabaseReference mangoPayRef = ref.child("users/${user.firebaseId}/mangoPayDetail")
+        mangoPayRef.setValue(payDetail)
     }
 
     def savePersonalDetail(PersonalDetailCO personalDetailCO, String fireBaseId) {

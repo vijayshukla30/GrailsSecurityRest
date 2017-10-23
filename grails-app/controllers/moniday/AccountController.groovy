@@ -148,7 +148,7 @@ class AccountController {
         if (user && validDebitDetail) {
             fireBaseService.saveDirectDebitMandateDetail(debitMandateCO, user?.firebaseId)
             mangoPayService.createMandateForUser(debitMandateCO, user)
-            fireBaseService.updateUserOfFirebase(user)
+            fireBaseService.updateUserForMangoPay(user)
             render "Direct Debit Information hase been saved"
         } else if (!user) {
             render "Invalid User"
@@ -168,7 +168,7 @@ class AccountController {
         println(":******************************************:")
         println params.JSON
         println(":******************************************:")
-        
+
         render 200
     }
 }
