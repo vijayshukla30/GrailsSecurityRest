@@ -26,16 +26,16 @@ class BootStrapService {
         Role role = Role.findOrCreateByAuthority(roleAdmin)
         User user = User.findByUsername("admin@moniday.com")
         if (!user) {
-            user = new User(username: 'system@moniday.com', password: '123@moniday', firebaseId: "*").save(flush: true)
+            user = new User(username: 'admin@moniday.com', password: '123@moniday', firebaseId: "*").save(flush: true)
             UserRole.create(user, role)
         }
     }
 
     def createSubAdmin() {
         Role role = Role.findOrCreateByAuthority(roleSubAdmin)
-        User user = User.findByUsername("admin@moniday.com")
+        User user = User.findByUsername("system@moniday.com")
         if (!user) {
-            user = new User(username: 'admin@moniday.com', password: 'moniday@123', firebaseId: "**").save(flush: true)
+            user = new User(username: 'system@moniday.com', password: 'moniday@123', firebaseId: "**").save(flush: true)
             UserRole.create(user, role)
         }
     }
