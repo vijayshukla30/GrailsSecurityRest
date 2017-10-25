@@ -7,9 +7,9 @@ import com.google.firebase.auth.FirebaseCredentials
 import com.google.firebase.database.*
 
 class FirebaseInitializer {
-    private static final String DATABASE_URL = "https://moniday-f3590.firebaseio.com/"
+    private static final String DATABASE_URL = "https://moniday-3e5a7.firebaseio.com/"
 
-    private static DatabaseReference database;
+    private static DatabaseReference database
 
     static void startFirebaseApp(String path) {
         FileInputStream fileInputStream = new FileInputStream(path)
