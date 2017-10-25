@@ -38,8 +38,8 @@
         <div class="navbar-collapse collapse" id="navbar-main">
             <g:render template="/layouts/navigation"/>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="http://builtwithbootstrap.com/" target="_blank">Built With Bootstrap</a></li>
-                <li><a href="https://wrapbootstrap.com/?ref=bsw" target="_blank">WrapBootstrap</a></li>
+            <li><a href="#"><span class="fa fa-user"></span> <sec:loggedInUserInfo field="username"/></a></li>
+                <li><a href="#"><span class="fa fa-sign-out"></span>Logout</a></li>
             </ul>
 
         </div>
