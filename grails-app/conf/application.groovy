@@ -6,6 +6,7 @@ dataSource {
 
 environments {
     development {
+        grails.serverURL = "http://dev.moniday.com:8080"
         dataSource {
             dbCreate = "update"
             url = "jdbc:mysql://localhost:3306/moniday_dev?autoreconnect=true"
@@ -55,6 +56,24 @@ environments {
                 testWhileIdle = true
                 testOnReturn = true
                 validationQuery = "SELECT 1"
+            }
+        }
+    }
+    staging {
+        grails.serverURL = "http://staging.moniday.com:8080"
+        dataSource {
+            dbCreate = "update"
+            url = "jdbc:mysql://localhost:3306/moniday_dev?autoreconnect=true"
+            username = "root"
+            logSql = false
+            password = "nextdefault"
+        }
+        grails {
+            mangopay {
+                mangopayUrl = "https://api.sandbox.mangopay.com/"
+                clientId = "monidaytest"
+                email = "gaelitier@gmail.com"
+                passPhrase = "1td1tjaJG3NEJLdfhnWRDAw2btMaXKZJth4Yk0UxJNCmDDO7aZ"
             }
         }
     }
