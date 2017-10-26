@@ -88,6 +88,9 @@ dependencies {
 
     //MangoPay
     compile 'com.mangopay:mangopay2-java-sdk:1.2.0'
+
+    //Sendgrid
+    compile 'desirableobjects.grails.plugins:grails-sendgrid:2.0.1'
 }
 
 bootRun {

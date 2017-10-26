@@ -95,3 +95,7 @@ hibernate:
 grails:
     gorm:
         failOnError: true
+
+sendgrid:
+        username: 'pmungali'
+        password: 'S@nd@ta*4231'
