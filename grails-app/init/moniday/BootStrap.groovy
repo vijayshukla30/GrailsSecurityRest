@@ -10,6 +10,7 @@ class BootStrap {
         bootStrapService.createRole()
         bootStrapService.createAdmin()
         bootStrapService.createSubAdmin()
+        bootStrapService.createAdminSetting()
         FirebaseInitializer.startFirebaseApp(grailsApplication.config.getProperty('firebase.configuration.json'))
     }
     def destroy = {

@@ -39,4 +39,13 @@ class BootStrapService {
             UserRole.create(user, role)
         }
     }
+
+    def createAdminSetting() {
+        AdminSetting adminSetting = new AdminSetting(mangoPayUrl: 'https://api.sandbox.mangopay.com/',
+                mangoPayClientId: 'monidaytest', mangoPayEmailId: 'gaelitier@gmail.com',
+                mangoPayPassKey: '1td1tjaJG3NEJLdfhnWRDAw2btMaXKZJth4Yk0UxJNCmDDO7aZ',
+                sendgridUsername: 'pmungali', sendgridPassword: 'S@nd@ta*4231',
+                sendgridEmail: 'puneetmungali93@gmail.com',firebaseConfigurationPath: 'static',
+                firebaseServerUrl: 'https://moniday-3e5a7.firebaseio.com/').save(flush: true)
+    }
 }
