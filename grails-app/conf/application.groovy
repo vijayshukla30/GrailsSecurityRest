@@ -71,9 +71,6 @@ grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/?login_error=1
 grails.plugin.springsecurity.auth.loginFormUrl = '/'
 grails.plugin.springsecurity.logout.afterLogoutUrl = '/account/logout/'
 
-grails.plugin.springsecurity.rejectIfNoRule = false
-grails.plugin.springsecurity.fii.rejectPublicInvocations = false
-
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         [pattern: '/', access: ['permitAll']],
         [pattern: '/error', access: ['permitAll']],

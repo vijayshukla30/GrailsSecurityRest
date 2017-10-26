@@ -12,6 +12,7 @@ class PublicController {
     def scrapService
     def mangoPayService
     def fireBaseService
+    def emailService
 
     def register() {
         render(view: 'register', model: [userCO: new UserCO()])
@@ -22,6 +23,7 @@ class PublicController {
             User user = accountService.saveUser(userCO)
             if (user) {
                 springSecurityService.reauthenticate(userCO.username)
+                emailService.sendRegistrationMail(userCO.username)
                 redirect(controller: "account", action: 'personalDetail', params: [uniqueId: user.uniqueId])
             }
         }
