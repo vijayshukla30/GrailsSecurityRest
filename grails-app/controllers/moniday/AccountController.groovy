@@ -4,7 +4,6 @@ import com.firebase.Bank
 import com.moniday.Role
 import com.moniday.User
 import com.moniday.command.*
-import com.moniday.dto.PersonDTO
 import com.moniday.util.AppUtil
 import grails.plugin.springsecurity.annotation.Secured
 
@@ -23,16 +22,15 @@ class AccountController {
     def index() {
         User user = springSecurityService.currentUser as User
         Set<Role> roles = user.getAuthorities()
-        if (roles[0].getAuthority()=="ROLE_ADMIN") {
-            render(view: 'admin',model: [user: user])
-        } else if (roles[0].getAuthority()=="ROLE_SUB_ADMIN") {
+        if (roles[0].getAuthority() == "ROLE_ADMIN") {
+            render(view: 'admin', model: [user: user])
+        } else if (roles[0].getAuthority() == "ROLE_SUB_ADMIN") {
             render("you are sub admin")
-        } else if (roles[0].getAuthority()=="ROLE_USER") {
+        } else if (roles[0].getAuthority() == "ROLE_USER") {
             render(view: 'index', model: [user: user])
-        }
-        else {
+        } else {
             flash.message = "Some error occured. Please try again"
-            redirect(uri:"/")
+            redirect(uri: "/")
         }
     }
 
@@ -111,8 +109,8 @@ class AccountController {
                 }
                 render "Account Detail is not valid"
             }
-            PersonDTO personDTO = scrapService.scrapCAPCA(bankUrl, accountDetailCO.bankUsername, accountDetailCO.bankPassword)
-            fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId)
+//            PersonDTO personDTO = scrapService.scrapCAPCA(bankUrl, accountDetailCO.bankUsername, accountDetailCO.bankPassword)
+//            fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId)
 //            render(view: '/account/scrappedBankDescription', model: [personDTO: personDTO])
             redirect(controller: 'account', action: 'debitMandateDetail', params: [uniqueId: params.uniqueId])
         } else if (!user) {
