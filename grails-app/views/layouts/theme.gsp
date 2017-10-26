@@ -38,8 +38,11 @@
         <div class="navbar-collapse collapse" id="navbar-main">
             <g:render template="/layouts/navigation"/>
             <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="fa fa-user"></span> <sec:loggedInUserInfo field="username"/></a></li>
-                <li><a href="#"><span class="fa fa-sign-out"></span>Logout</a></li>
+                <sec:ifLoggedIn>
+                    <li><a href="#"><span class="fa fa-user"></span> <sec:loggedInUserInfo
+                            field="username"/></a></li>
+                    <li><g:link controller='logout'><span class="fa fa-sign-out"></span>Logout</g:link></li>
+                </sec:ifLoggedIn>
             </ul>
 
         </div>
