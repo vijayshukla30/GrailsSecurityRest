@@ -6,4 +6,16 @@ class PersonDTO {
     String deductedMoney
 
     List<AccountDTO> accounts = []
+
+    PersonDTO() {
+
+    }
+
+    PersonDTO(Map accountMap) {
+        this.firstName = accountMap.firstName
+        this.lastName = accountMap.lastName
+        accountMap.accounts.each {
+            this.accounts.add(new AccountDTO(it))
+        }
+    }
 }

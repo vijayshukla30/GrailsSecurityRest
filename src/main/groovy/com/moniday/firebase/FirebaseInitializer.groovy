@@ -11,7 +11,7 @@ import com.google.firebase.database.*
 import java.util.concurrent.CountDownLatch
 
 class FirebaseInitializer {
-    private static final String DATABASE_URL = "https://moniday-3e5a7.firebaseio.com/"
+    private static final String DATABASE_URL = "https://moniday-f3590.firebaseio.com/"
     public static String BANK_REF = "Banks"
     public static String USER_REF = "Users"
 
@@ -79,6 +79,7 @@ class FirebaseInitializer {
         return user
     }
 
+    //Get Account Details of User
     static Account getUserAccount(String userFireBaseId) {
         DatabaseReference accountRef = FirebaseDatabase.getInstance().getReference(USER_REF + "/${userFireBaseId}/accountDetail")
         CountDownLatch countDownLatch = new CountDownLatch(1)
@@ -99,10 +100,31 @@ class FirebaseInitializer {
                 println(databaseError.code)
             }
         })
-        println "777777777777777777777777777777777777777777777777777"
         waitForCountDownLatch(countDownLatch)
         println(account.properties)
         return account
+    }
+
+    //Get Account Details of User
+    static Map getUserScrap(String userFireBaseId) {
+        Map accountMap = [:]
+        DatabaseReference accountRef = FirebaseDatabase.getInstance().getReference(USER_REF + "/${userFireBaseId}/scrapDetail")
+        CountDownLatch countDownLatch = new CountDownLatch(1)
+        accountRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                println dataSnapshot.value
+                accountMap = (dataSnapshot.value as Map)
+                countDownLatch.countDown()
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                println(databaseError.code)
+            }
+        })
+        waitForCountDownLatch(countDownLatch)
+        accountMap
     }
 
     //Get All Users From Firebase

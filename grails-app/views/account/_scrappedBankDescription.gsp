@@ -1,13 +1,4 @@
 <%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country;" %>
-<!doctype html>
-<html>
-<head>
-    <meta name="layout" content="theme"/>
-    <title>Moniday | Bank's Accounts & Transactions</title>
-    <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
-</head>
-
-<body>
 <div class="bs-docs-section clearfix">
     <div class="row">
         <div class="col-lg-12">
@@ -23,8 +14,8 @@
                 </ul>
 
                 <div id="myTabContent" class="tab-content">
-                    <g:each in="${personDTO.accounts}" var="account">
-                        <div class="tab-pane fade active in" id="${account.accountNumber}">
+                    <g:each in="${personDTO.accounts}" var="account" status="i">
+                        <div class="tab-pane fade ${i == 0 ? "active" : ""} in" id="${account.accountNumber}">
                             <div class="row">
                                 <div class="col-md-12">
                                     <table class="table table-hover table-bordered">
@@ -54,5 +45,3 @@
         </div>
     </div>
 </div>
-</body>
-</html>
