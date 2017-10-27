@@ -64,10 +64,10 @@ environments {
         grails.serverURL = "http://13.58.157.62/"
         dataSource {
             dbCreate = "update"
-            url = "jdbc:mysql://localhost:3306/moniday_dev?autoreconnect=true"
+            url = "jdbc:mysql://localhost:3306/moniday_prod?autoreconnect=true"
             username = "root"
             logSql = false
-            password = "nextdefault"
+            password = "7wL3jH2!295zWS"
         }
         grails {
             mangopay {
