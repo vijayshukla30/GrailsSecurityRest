@@ -30,6 +30,7 @@ class User implements Serializable {
     boolean accountExpired
     boolean accountLocked
     boolean passwordExpired
+    boolean passwordForgotten = false
     Date dateCreated
     Date lastUpdated
 

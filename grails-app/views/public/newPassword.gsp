@@ -16,8 +16,7 @@
         <div class="col-lg-6">
             <div class="well bs-component">
                 <form action="${createLink(controller: 'public', action: 'saveResetPassword')}" method="POST"
-                      id="passwordResetForm"
-                      autocomplete="off">
+                      id="passwordResetForm" autocomplete="off" class="form-horizontal">
                     <fieldset>
                         <legend>
                             <g:message code="user.password.reset"/>

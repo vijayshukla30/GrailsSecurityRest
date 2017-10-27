@@ -10,14 +10,12 @@
 <div class="bs-docs-section clearfix">
     <div class="row">
 
-        <div class="col-lg-3">
-            <div class="alert alert-error" style="display: block">${flash.warn}</div>
-        </div>
+        <div class="col-lg-3"></div>
 
         <div class="col-lg-6">
             <div class="well bs-component">
                 <form action="${createLink(controller: 'public', action: 'forgetPassword')}" method="POST"
-                      id="passwordResetForm" autocomplete="off">
+                      id="passwordResetForm" autocomplete="off" class="form-horizontal">
                     <fieldset>
                         <legend>
                             <g:message code="user.password.reset"/>
@@ -36,19 +34,21 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="col-lg-3"></div>
+                            <div class="col-lg-4"></div>
 
                             <div class="col-lg-4">
                                 <button type="submit" class="btn btn-default">
                                     <g:message code="form.submit"/>
                                 </button>
                             </div>
+                            <div class="col-lg-4"></div>
                         </div>
 
                     </fieldset>
                 </form>
             </div>
         </div>
+
     </div>
 </div>
 </body>
