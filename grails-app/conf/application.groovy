@@ -22,6 +22,7 @@ environments {
                 passPhrase = "1td1tjaJG3NEJLdfhnWRDAw2btMaXKZJth4Yk0UxJNCmDDO7aZ"
             }
         }
+        firebase.configuration.json = "${userHome}/.grails/firebase-service.json"
     }
     test {
         dataSource {
@@ -60,7 +61,7 @@ environments {
         }
     }
     staging {
-        grails.serverURL = "http://staging.moniday.com:8080"
+        grails.serverURL = "http://13.58.157.62/"
         dataSource {
             dbCreate = "update"
             url = "jdbc:mysql://localhost:3306/moniday_dev?autoreconnect=true"
@@ -76,6 +77,7 @@ environments {
                 passPhrase = "1td1tjaJG3NEJLdfhnWRDAw2btMaXKZJth4Yk0UxJNCmDDO7aZ"
             }
         }
+        firebase.configuration.json = "/mnt/conf/firebase-service.json"
     }
 }
 
@@ -112,4 +114,3 @@ grails.plugin.springsecurity.filterChain.chainMap = [
         [pattern: '/**', filters: 'JOINED_FILTERS']
 ]
 
-firebase.configuration.json = "${userHome}/.grails/firebase-service.json"
