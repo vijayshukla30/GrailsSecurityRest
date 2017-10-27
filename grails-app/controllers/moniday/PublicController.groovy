@@ -31,7 +31,49 @@ class PublicController {
     }
 
     def forgetPassword() {
-        render(view: '/account/scrappedBankDescription')
+        if (params.username) {
+            String userName = params.username
+            User user = User.findByUsername(userName)
+            if (user) {
+                String path = "${createLink(controller: 'public', action: 'resetPassword', absolute: true, params: [name: user?.username, id: user?.uniqueId])}"
+                if (user.passwordForgotten) {
+                    flash.info = "Password reset link already sent to your mail"
+                } else {
+                    emailService.sendPasswordResetMail(userName, path)
+                    user.passwordForgotten = true
+                    user.save(flush: true, failOnError: true)
+                    flash.info = "Password reset mail is sent check your registered mail"
+                }
+                redirect(uri: "/")
+            } else {
+                flash.warn = "User with this emailId/Username does not exist"
+                render(view: 'passwordReset')
+            }
+        } else {
+            render(view: 'passwordReset')
+        }
+    }
+
+    def resetPassword() {
+        String userName = params.name
+        User user = User.findByUsername(userName)
+        if (user.passwordForgotten) {
+            render(view: 'newPassword', model: [name: userName])
+        } else {
+            flash.info = "The password reset link has already been used"
+            redirect(uri: "/")
+        }
+    }
+
+    def saveResetPassword() {
+        String userName = params.name
+        String newPassword = params.password
+        User user = User.findByUsername(userName)
+        user.password = newPassword
+        user.passwordForgotten = false
+        user.save(flush: true)
+        flash.info = "Password is reset.. Login to continue"
+        redirect(uri: "/")
     }
 
     def mangoPay() {
