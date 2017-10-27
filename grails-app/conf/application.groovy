@@ -77,7 +77,7 @@ environments {
                 passPhrase = "1td1tjaJG3NEJLdfhnWRDAw2btMaXKZJth4Yk0UxJNCmDDO7aZ"
             }
         }
-        firebase.configuration.json = "/mnt/conf/firebase-service.json"
+        firebase.configuration.json = "${userHome}/.grails/firebase-service.json"
     }
 }
 
