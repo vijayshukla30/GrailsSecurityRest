@@ -31,7 +31,10 @@ class AccountController {
             render("you are sub admin")
         } else if (roles[0].getAuthority() == "ROLE_USER") {
             Map accountMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
-            PersonDTO personDTO = new PersonDTO(accountMap)
+            PersonDTO personDTO = null
+            if (accountMap) {
+                personDTO = new PersonDTO(accountMap)
+            }
             render(view: 'index', model: [user: user, personDTO: personDTO])
         } else {
             flash.message = "Some error occured. Please try again"
