@@ -8,17 +8,7 @@
 </head>
 
 <body>
-<div class="bs-docs-section clearfix">
-    <div class="row">
-        <div class="col-lg-3"></div>
 
-        <div class="col-lg-6">
-            ${user.username}
-        </div>
-
-        <div class="col-lg-3"></div>
-    </div>
-</div>
 <script>
     $(document).ready(function () {
         $("#personalDetail").validate({

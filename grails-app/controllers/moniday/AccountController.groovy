@@ -25,7 +25,7 @@ class AccountController {
         User user = springSecurityService.currentUser as User
         Set<Role> roles = user.getAuthorities()
         if (roles[0].getAuthority() == "ROLE_ADMIN") {
-            render(view: 'admin', model: [user: user])
+            redirect(controller: 'admin')
         } else if (roles[0].getAuthority() == "ROLE_SUB_ADMIN") {
             render("you are sub admin")
         } else if (roles[0].getAuthority() == "ROLE_USER") {

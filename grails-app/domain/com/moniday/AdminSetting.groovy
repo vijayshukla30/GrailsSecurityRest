@@ -10,7 +10,7 @@ class AdminSetting {
     String sendgridPassword
     //email address using which email will be sent
     String sendgridEmail
-    String firebaseConfigurationPath
+//    String firebaseConfigurationPath
     String firebaseServerUrl
 
     static constraints = {
@@ -21,7 +21,7 @@ class AdminSetting {
         sendgridUsername nullable: true, blank: true
         sendgridPassword nullable: true, blank: true
         sendgridEmail nullable: true, blank: true
-        firebaseConfigurationPath nullable: true, blank: true
+//        firebaseConfigurationPath nullable: true, blank: true
         firebaseServerUrl nullable: true, blank: true
     }
 }

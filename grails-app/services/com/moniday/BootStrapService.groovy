@@ -45,7 +45,7 @@ class BootStrapService {
                 mangoPayClientId: 'monidaytest', mangoPayEmailId: 'gaelitier@gmail.com',
                 mangoPayPassKey: '1td1tjaJG3NEJLdfhnWRDAw2btMaXKZJth4Yk0UxJNCmDDO7aZ',
                 sendgridUsername: 'pmungali', sendgridPassword: 'S@nd@ta*4231',
-                sendgridEmail: 'puneetmungali93@gmail.com',firebaseConfigurationPath: 'static',
+                sendgridEmail: 'puneetmungali93@gmail.com',
                 firebaseServerUrl: 'https://moniday-3e5a7.firebaseio.com/').save(flush: true)
     }
 }
