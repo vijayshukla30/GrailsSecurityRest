@@ -21,12 +21,17 @@ class FireBaseService {
     static transactional = false
 
     String createUser(UserCO userCO) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-        DatabaseReference userRef = ref.child(FirebaseInitializer.USER_REF).push()
-        FireBaseUser user = new FireBaseUser(userCO.username)
-        userRef.setValue(user)
-        String fireBaseKey = userRef.key
-        return fireBaseKey
+        try {
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+            DatabaseReference userRef = ref.child(FirebaseInitializer.USER_REF).push()
+            FireBaseUser user = new FireBaseUser(userCO.username)
+            userRef.setValue(user)
+            String fireBaseKey = userRef.key
+            return fireBaseKey
+        } catch (Exception ex) {
+            println "Failed to Load data to server ${ex.message}"
+            return ""
+        }
     }
 
     def updateUserForMangoPay(User user) {
