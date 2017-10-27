@@ -8,21 +8,22 @@
     <asset:stylesheet src="theme/theme.css"/>
     <asset:javascript src="theme/theme.js"/>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
     <g:layoutHead/>
     <script>
         $.notify.defaults({
             clickToHide: true,
             autoHide: true,
-            autoHideDelay: 5000,
+            autoHideDelay: 3000,
             arrowShow: true,
             arrowSize: 5,
-            globalPosition: 'top center',
+            globalPosition: 'top right',
             style: 'bootstrap',
             className: 'error',
             showAnimation: 'slideDown',
-            showDuration: 400,
+            showDuration: 500,
             hideAnimation: 'slideUp',
-            hideDuration: 200,
+            hideDuration: 300,
             gap: 2
         })
     </script>
@@ -66,6 +67,6 @@
     </footer>
 </div>
 <g:render template="/layouts/notify"/>
-<div id="spinner" class="spinner" style="display:none;"></div>
+%{--<div id="spinner" class="spinner" style="display:none;"></div>--}%
 </body>
 </html>

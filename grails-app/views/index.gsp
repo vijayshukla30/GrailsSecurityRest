@@ -3,8 +3,6 @@
 <head>
     <meta name="layout" content="theme"/>
     <title>Welcome to Moniday</title>
-
-    <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
 </head>
 
 <body>
@@ -20,10 +18,6 @@
                         <legend>
                             <g:message code="user.login.form"/>
                         </legend>
-
-                        <div class="alert alert-error" style="display: block">${flash.message}</div>
-
-                        <div class="alert alert-error" style="display: block">${flash.info}</div>
 
                         <div class="form-group">
                             <label for="username" class="col-lg-2 control-label">

@@ -25,6 +25,7 @@ class PublicController {
             if (user) {
                 springSecurityService.reauthenticate(userCO.username)
                 emailService.sendRegistrationMail(userCO.username)
+                flash.msg = "You have been succesfully registerd. Please complete your profile."
                 redirect(controller: "account", action: 'personalDetail', params: [uniqueId: user.uniqueId])
             }
         }
