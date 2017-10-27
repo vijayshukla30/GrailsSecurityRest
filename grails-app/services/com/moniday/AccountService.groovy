@@ -9,17 +9,23 @@ class AccountService {
 
     @Transactional
     User saveUser(UserCO userCO) {
-        User user = new User(userCO)
+        User user = null
         if (userCO.validate()) {
+            user = new User(userCO)
             user.firebaseId = fireBaseService.createUser(userCO)
+        } else {
+            userCO.errors.allErrors.each {
+                println(it)
+            }
+            return null
         }
 
-        if (user.validate()) {
+        if (user?.validate()) {
             user.save(flush: true)
             assignRole(user)
             return user
         } else {
-            user.errors.allErrors.each {
+            user?.errors?.allErrors?.each {
                 println(it)
             }
             return null

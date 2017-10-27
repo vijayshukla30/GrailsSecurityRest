@@ -37,4 +37,5 @@ public class Bank {
     public void setBankFirebaseId(String bankFirebaseId) {
         this.bankFirebaseId = bankFirebaseId;
     }
+
 }
