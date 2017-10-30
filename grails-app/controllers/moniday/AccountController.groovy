@@ -92,6 +92,7 @@ class AccountController {
         if (uniqueId) {
             List<Bank> banks = FirebaseInitializer.banks
             List<BankCO> bankCOS = []
+            println banks
             banks.each {
                 bankCOS.add(new BankCO(bankName: it.bankName, bankURL: it.bankURL, bankFirebaseId: it.bankFirebaseId))
             }
