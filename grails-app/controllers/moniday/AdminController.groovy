@@ -17,7 +17,6 @@ class AdminController {
 
     def updateAdminSetting() {
         def adminSetting = AdminSetting.get(1)
-        println(params.)
         bindData(adminSetting,params)
         adminSetting.save(flush: true)
         flash.message="Data Updated Successfully"

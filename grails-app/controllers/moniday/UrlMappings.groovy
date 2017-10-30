@@ -9,8 +9,7 @@ class UrlMappings {
             }
         }
 
-        "/"(view: "/index")
-
+        "/"(controller: 'public', action: 'index')
         "/register"(controller: 'public', action: 'register')
         '/reset-password'(controller: 'public', action: 'forgetPassword')
         "/user/$uniqueId/personal-detail"(controller: 'account', action: 'personalDetail')

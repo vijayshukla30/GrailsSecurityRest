@@ -15,6 +15,14 @@ class PublicController {
     def fireBaseService
     def emailService
 
+    def index() {
+        if (springSecurityService.loggedIn) {
+            redirect(controller: 'account', action: 'index')
+        } else {
+            render(view: '/index')
+        }
+    }
+
     def register() {
         render(view: 'register', model: [userCO: new UserCO()])
     }
