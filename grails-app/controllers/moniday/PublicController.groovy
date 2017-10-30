@@ -2,7 +2,6 @@ package moniday
 
 import com.moniday.User
 import com.moniday.command.UserCO
-import com.moniday.firebase.FirebaseInitializer
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(['permitAll'])
@@ -14,6 +13,14 @@ class PublicController {
     def mangoPayService
     def fireBaseService
     def emailService
+
+    def index() {
+        if (springSecurityService.loggedIn) {
+            redirect(controller: 'account', action: 'index')
+        } else {
+            render(view: '/index')
+        }
+    }
 
     def register() {
         render(view: 'register', model: [userCO: new UserCO()])
@@ -83,8 +90,4 @@ class PublicController {
         render "Tested MangoPay API"
     }
 
-    def saveBanks() {
-        FirebaseInitializer.saveBanks()
-        render "Bank has been populated"
-    }
 }

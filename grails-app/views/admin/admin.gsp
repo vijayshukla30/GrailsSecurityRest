@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="theme"/>
-    <title>Moniday | Personal Detail</title>
+    <title>Moniday | Admin</title>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
 </head>
 <body>

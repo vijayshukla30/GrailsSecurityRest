@@ -11,7 +11,7 @@ class AdminSettingCO implements Validateable {
     String sendgridUsername
     String sendgridPassword
     String sendgridEmail
-    String firebaseConfigurationPath
+//    String firebaseConfigurationPath
     String firebaseServerUrl
 
     static constraints = {
@@ -22,7 +22,7 @@ class AdminSettingCO implements Validateable {
         sendgridUsername nullable: true, blank: false
         sendgridPassword nullable: true, blank: false
         sendgridEmail nullable: true, blank: false
-        firebaseConfigurationPath nullable: true, blank: false
+//        firebaseConfigurationPath nullable: true, blank: false
         firebaseServerUrl nullable: true, blank: false
     }
 }
