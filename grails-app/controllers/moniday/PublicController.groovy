@@ -2,7 +2,6 @@ package moniday
 
 import com.moniday.User
 import com.moniday.command.UserCO
-import com.moniday.firebase.FirebaseInitializer
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(['permitAll'])
@@ -91,8 +90,4 @@ class PublicController {
         render "Tested MangoPay API"
     }
 
-    def saveBanks() {
-        FirebaseInitializer.saveBanks()
-        render "Bank has been populated"
-    }
 }

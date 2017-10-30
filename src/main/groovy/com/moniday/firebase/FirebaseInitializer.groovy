@@ -131,7 +131,7 @@ class FirebaseInitializer {
     }
 
     //Save Banks
-    static saveBanks() {
+    static saveBanks(bankname, bankurl) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference bankRef = ref.child(BANK_REF).push()
         Bank bank = new Bank(bankName: "ca-pca", bankURL: "https://www.ca-pca.fr/")
