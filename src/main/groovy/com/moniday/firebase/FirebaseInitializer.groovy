@@ -11,7 +11,7 @@ import com.google.firebase.database.*
 import java.util.concurrent.CountDownLatch
 
 class FirebaseInitializer {
-    private static final String DATABASE_URL = "https://moniday-f3590.firebaseio.com/"
+    private static final String DATABASE_URL = "https://moniday-3e5a7.firebaseio.com/"
     public static String BANK_REF = "Banks"
     public static String USER_REF = "Users"
 
