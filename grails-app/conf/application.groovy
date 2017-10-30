@@ -61,7 +61,7 @@ environments {
         }
     }
     staging {
-        grails.serverURL = "http://13.58.157.62/"
+        grails.serverURL = "http://13.58.157.62"
         dataSource {
             dbCreate = "update"
             url = "jdbc:mysql://localhost:3306/moniday_prod?autoreconnect=true"
