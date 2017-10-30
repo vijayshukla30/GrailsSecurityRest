@@ -67,7 +67,7 @@ environments {
             url = "jdbc:mysql://localhost:3306/moniday_prod?autoreconnect=true"
             username = "root"
             logSql = false
-            password = "7wL3jH2!295zWS"
+            password = "7wL3jH2295zWS"
         }
         grails {
             mangopay {
