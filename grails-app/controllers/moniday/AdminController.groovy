@@ -1,6 +1,7 @@
 package moniday
 
 import com.moniday.AdminSetting
+import com.moniday.User
 import com.moniday.firebase.FirebaseInitializer
 import grails.plugin.springsecurity.annotation.Secured
 
@@ -8,7 +9,9 @@ import grails.plugin.springsecurity.annotation.Secured
 class AdminController {
 
     def index() {
-        render(view: 'admin')
+        //get users list and pass it to admin.gsp
+        List<User> users = User.getAll()
+        render(view: 'admin',model: [users:users])
     }
 
     def viewAdminSetting() {
