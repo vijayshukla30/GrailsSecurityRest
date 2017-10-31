@@ -5,6 +5,7 @@ import com.moniday.Role
 import com.moniday.ScrapBankJob
 import com.moniday.User
 import com.moniday.command.*
+import com.moniday.dto.PersonDTO
 import com.moniday.firebase.FirebaseInitializer
 import com.moniday.util.AppUtil
 import grails.plugin.springsecurity.annotation.Secured
@@ -29,7 +30,12 @@ class AccountController {
         } else if (roles[0].getAuthority() == "ROLE_SUB_ADMIN") {
             render("you are sub admin")
         } else if (roles[0].getAuthority() == "ROLE_USER") {
-            render(view: 'index', model: [user: user])
+            Map accountMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
+            PersonDTO personDTO = null
+            if (accountMap) {
+                personDTO = new PersonDTO(accountMap)
+            }
+            render(view: 'index', model: [user: user, personDTO: personDTO])
         } else {
             flash.message = "Some error occured. Please try again"
             redirect(uri: "/")
@@ -86,6 +92,7 @@ class AccountController {
         if (uniqueId) {
             List<Bank> banks = FirebaseInitializer.banks
             List<BankCO> bankCOS = []
+            println banks
             banks.each {
                 bankCOS.add(new BankCO(bankName: it.bankName, bankURL: it.bankURL, bankFirebaseId: it.bankFirebaseId))
             }
@@ -161,7 +168,8 @@ class AccountController {
             fireBaseService.saveDirectDebitMandateDetail(debitMandateCO, user?.firebaseId)
             mangoPayService.createMandateForUser(debitMandateCO, user)
             fireBaseService.updateUserForMangoPay(user)
-            render "Direct Debit Information hase been saved"
+            flash.msg = "Scrapped Record will be updated very soon..."
+            redirect(action: 'index')
         } else if (!user) {
             render "Invalid User"
         } else {
