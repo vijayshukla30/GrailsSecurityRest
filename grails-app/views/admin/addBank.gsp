@@ -49,7 +49,7 @@
 
                                 <div class="col-lg-2">
                                     <button type="submit" class="btn btn-default">
-                                        <g:message code="form.upade"/>
+                                        <g:message code="form.submit"/>
                                     </button>
                                 </div>
 

@@ -134,10 +134,10 @@ class ScrapService {
         transactionDTOS
     }
 
-    /*def scrapBNP_PARIBAS() {
-        String bank_url = "https://mabanque.bnpparibas/fr/connexion"
-        String bank_username = "7356585760"
-        String bank_password = "191214"
+    def scrapBNP_PARIBAS(String bankURL, String bankUserName, String bankPassword) {
+        String bank_url = bankURL
+        String bank_username = bankUserName
+        String bank_password = bankPassword
         println("Scrapping ")
         Browser.drive {
             go bank_url
@@ -145,31 +145,32 @@ class ScrapService {
             $("#client-nbr").value(bank_username)            //username field
             //$("#secret-nbr").value(bank_password).value(bank_password)            //password field
             def passwordMatrix = $("#secret-nbr-keyboard")  //virtual keyboard
-            String imageurl = passwordMatrix.attr("style").toString().replace("background-image: url(","").replace(");","")
+            String imageurl = passwordMatrix.attr("style").toString().replace("background-image: url(", "").replace(");", "")
             imageurl = "http://www.everyeducaid.co.nz/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/B/A/BAR129.1475537601.jpg"
-            println("Image URL "+imageurl)
+            println("Image URL " + imageurl)
 
-            *//**//*imageurl = imageurl.replaceAll("data:image/png;base64,", "")
-            byte[] decoded = imageurl.decodeBase64()*//**//*
+            imageurl = imageurl.replaceAll("data:image/png;base64,", "")
+            byte[] decoded = imageurl.decodeBase64()
             String path = "/home/Vebs@BM/Pictures/image.png"
             new File(path).withOutputStream {
                 it.write(imageurl);
             }
 
             String data = OCRUtill.crackImage(path)
-            print(data+" data *******")
+            print(data + " data *******")
             $("submitIdent").click()                        //submit button
-        }*//*
+        }
 
         //https://mabanque.bnpparibas/identification-wspl-pres/grille/c74416731216067524868722018227048230297
 
-    }*/
+    }
 
-    def scrapCreditAgricole() {
+    def scrapCreditAgricole(String bankURL, String bankUserName, String bankPassword) {
+        //println("bankurl "+bankURL+" bankusername "+bankUserName+" bankpassword "+bankPassword)
         PersonDTO personDTO = new PersonDTO()
-        String bank_url = "https://www.ca-nmp.fr/"
-        String bank_username = "51352826100"
-        String bank_password = "813106"
+        String bank_url = bankURL
+        String bank_username = bankUserName
+        String bank_password = bankPassword
         println("Scrapping ")
         Browser.drive {
             go bank_url
@@ -209,8 +210,8 @@ class ScrapService {
             $("table.ca-table")[1].$("tbody tr").each {
                 TransactionDTO transactionDTO = new TransactionDTO()
                 transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
-                transactionDTO.description = it.$("td")[1].text()
-                transactionDTO.amount = it.$("td")[2].text()?.replaceAll("\\s,", "") as Long
+                transactionDTO.description = it.$("td")[1].text().replaceAll("\n", " ")
+                transactionDTO.amount = it.$("td")[2].text()?.replaceAll("\\s|,", "") as Long
                 transactionDTOS.add(transactionDTO)
             }
             accountDTO.transactions = transactionDTOS

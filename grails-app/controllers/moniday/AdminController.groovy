@@ -36,7 +36,7 @@ class AdminController {
 
     def saveBanks() {
         String bankName = params.bankName
-        String bankUrl = params.bankUrl
+        String bankUrl = params.bankURL
         FirebaseInitializer.saveBanks(bankName, bankUrl)
         redirect(action: "index")
     }
