@@ -11,9 +11,9 @@
 <div class="bs-docs-section clearfix">
     <div class="row">
 
-        <div class="col-lg-3"></div>
+        <div class="col-lg-2"></div>
 
-        <div class="col-lg-6">
+        <div class="col-lg-8">
             <div class="well bs-component">
                 <form action="${createLink(controller: 'admin', action: 'updateAdminSetting')}" method="POST"
                       id="passwordResetForm" autocomplete="off" class="form-horizontal">
@@ -30,7 +30,7 @@
 
                             <div class="col-lg-10">
                                 <input type="url" class="form-control" id="mangourl" name="mangoPayUrl"
-                                       value="${values.mangoPayUrl}">
+                                       value="${adminSetting.mangoPayUrl}" disabled>
                             </div>
                         </div>
 
@@ -41,7 +41,7 @@
 
                             <div class="col-lg-10">
                                 <input type="text" class="form-control" id="mangoclientid" name="mangoPayClientId"
-                                       value="${values.mangoPayClientId}">
+                                       value="${adminSetting.mangoPayClientId}" disabled>
                             </div>
                         </div>
 
@@ -52,7 +52,7 @@
 
                             <div class="col-lg-10">
                                 <input type="email" class="form-control" id="mangoemailid" name="mangoPayEmailId"
-                                       value="${values.mangoPayEmailId}">
+                                       value="${adminSetting.mangoPayEmailId}" disabled>
                             </div>
                         </div>
 
@@ -63,7 +63,7 @@
 
                             <div class="col-lg-10">
                                 <input type="text" class="form-control" id="mangopasskey" name="mangoPayPassKey"
-                                       value="${values.mangoPayPassKey}">
+                                       value="${adminSetting.mangoPayPassKey}" disabled>
                             </div>
                         </div>
 
@@ -74,7 +74,7 @@
 
                             <div class="col-lg-10">
                                 <input type="text" class="form-control" id="sendgridusername" name="sendgridUsername"
-                                       value="${values.sendgridUsername}">
+                                       value="${adminSetting.sendgridUsername}" disabled>
                             </div>
                         </div>
 
@@ -86,7 +86,7 @@
                             <div class="col-lg-10">
                                 <input type="password" class="form-control" id="sendgridPassword"
                                        name="sendgridpassword"
-                                       value="${values.sendgridPassword}">
+                                       value="${adminSetting.sendgridPassword}" disabled>
                             </div>
                         </div>
 
@@ -97,7 +97,7 @@
 
                             <div class="col-lg-10">
                                 <input type="email" class="form-control" id="sendgridemail" name="sendgridEmail"
-                                       value="${values.sendgridEmail}">
+                                       value="${adminSetting.sendgridEmail}" disabled>
                             </div>
                         </div>
 
@@ -108,7 +108,7 @@
 
                             <div class="col-lg-10">
                                 <input type="url" class="form-control" id="firebaseserverurl" name="firebaseServerUrl"
-                                       value="${values.firebaseServerUrl}">
+                                       value="${adminSetting.firebaseServerUrl}" disabled>
                             </div>
                         </div>
 
@@ -128,6 +128,8 @@
                 </form>
             </div>
         </div>
+
+        <div class="col-lg-2"></div>
     </div>
 </div>
 </body>
