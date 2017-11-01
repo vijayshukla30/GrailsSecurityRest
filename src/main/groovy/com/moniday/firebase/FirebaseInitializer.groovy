@@ -7,15 +7,20 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseCredentials
 import com.google.firebase.database.*
+import com.moniday.AdminSetting
 
 import java.util.concurrent.CountDownLatch
 
 class FirebaseInitializer {
-    private static final String DATABASE_URL = "https://moniday-f3590.firebaseio.com/"
+    private static final String DATABASE_URL
     public static String BANK_REF = "APP_BANKS"
     public static String USER_REF = "APP_USERS"
 
     private static DatabaseReference database
+
+    static {
+        DATABASE_URL = AdminSetting.get(1)?.firebaseServerUrl
+    }
 
     static void startFirebaseApp(String path) {
         FileInputStream fileInputStream = new FileInputStream(path)
@@ -177,7 +182,7 @@ class FirebaseInitializer {
     static saveBanks(bankname, bankurl) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference bankRef = ref.child(BANK_REF).push()
-        Bank bank = new Bank(bankName: "ca-pca", bankURL: "https://www.ca-pca.fr/")
+        Bank bank = new Bank(bankName: bankname, bankURL: bankurl)
         bankRef.setValue(bank)
     }
 

@@ -108,7 +108,7 @@
 
                             <div class="col-lg-10">
                                 <input type="url" class="form-control" id="firebaseserverurl" name="firebaseServerUrl"
-                                       value="${adminSetting.firebaseServerUrl}" disabled>
+                                       value="${adminSetting.firebaseServerUrl}">
                             </div>
                         </div>
 

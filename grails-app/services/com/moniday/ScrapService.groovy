@@ -134,52 +134,48 @@ class ScrapService {
         transactionDTOS
     }
 
-    /*def scrapBNP_PARIBAS() {
-        String bank_url = "https://mabanque.bnpparibas/fr/connexion"
-        String bank_username = "7356585760"
-        String bank_password = "191214"
+    def scrapBnpParibas(String bankURL, String bankUserName, String bankPassword) {
+        String bank_password = bankPassword
         println("Scrapping ")
         Browser.drive {
-            go bank_url
+            go bankURL
             println(title)
-            $("#client-nbr").value(bank_username)            //username field
+            $("#client-nbr").value(bankUserName)            //username field
             //$("#secret-nbr").value(bank_password).value(bank_password)            //password field
             def passwordMatrix = $("#secret-nbr-keyboard")  //virtual keyboard
-            String imageurl = passwordMatrix.attr("style").toString().replace("background-image: url(","").replace(");","")
+            String imageurl = passwordMatrix.attr("style").toString().replace("background-image: url(", "").replace(");", "")
             imageurl = "http://www.everyeducaid.co.nz/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/B/A/BAR129.1475537601.jpg"
-            println("Image URL "+imageurl)
+            println("Image URL " + imageurl)
 
-            *//**//*imageurl = imageurl.replaceAll("data:image/png;base64,", "")
-            byte[] decoded = imageurl.decodeBase64()*//**//*
+            imageurl = imageurl.replaceAll("data:image/png;base64,", "")
+            byte[] decoded = imageurl.decodeBase64()
             String path = "/home/Vebs@BM/Pictures/image.png"
             new File(path).withOutputStream {
                 it.write(imageurl);
             }
 
             String data = OCRUtill.crackImage(path)
-            print(data+" data *******")
+            print(data + " data *******")
             $("submitIdent").click()                        //submit button
-        }*//*
+        }
 
         //https://mabanque.bnpparibas/identification-wspl-pres/grille/c74416731216067524868722018227048230297
+        return new PersonDTO()
+    }
 
-    }*/
-
-    def scrapCreditAgricole() {
+    def scrapCreditAgricole(String bankURL, String bankUserName, String bankPassword) {
+        //println("bankurl "+bankURL+" bankusername "+bankUserName+" bankpassword "+bankPassword)
         PersonDTO personDTO = new PersonDTO()
-        String bank_url = "https://www.ca-nmp.fr/"
-        String bank_username = "51352826100"
-        String bank_password = "813106"
         println("Scrapping ")
         Browser.drive {
-            go bank_url
+            go bankURL
             println(title)
             $(".toolbar-action-important").click()
             println("Login page title " + title)
 
             Navigator usernameField = $(name: "CCPTE").module(TextInput)
-            usernameField.text = bank_username
-            bank_password.each { String pass ->
+            usernameField.text = bankUserName
+            bankPassword.each { String pass ->
                 $("#pave-saisie-code tr td").each {
                     def pasStr = it.text()
                     pasStr = pasStr.replaceAll("\\s", "")
@@ -191,7 +187,7 @@ class ScrapService {
 
             $("p.validation.clearboth span.droite a.droite")[0].click()   //login button
 
-            String nameString = $("table tr td.titretetiere.cel-texte")[0].text().replaceAll("-\\s\\S*","")
+            String nameString = $("table tr td.titretetiere.cel-texte")[0].text().replaceAll("-\\s\\S*", "")
             List<String> names = nameString?.split("\\s")
             if (names) {
                 personDTO.firstName = names[1]
@@ -199,21 +195,22 @@ class ScrapService {
             }
 
             AccountDTO accountDTO = new AccountDTO()
-            accountDTO.typeOfAccount = $("table tr.colcellignepaire td a")[0].text()?.replaceAll("\\s","")
+            accountDTO.typeOfAccount = $("table tr.colcellignepaire td a")[0].text()?.replaceAll("\\s", "")
             accountDTO.accountNumber = $("table tr.colcellignepaire td a")[2].text()?.replaceAll("\\s", "")
             accountDTO.balance = $("table tr.colcellignepaire td a")[4].text()?.replaceAll("\\s|,", "") as Long
-            accountDTO.currencyType = $("table tr.colcellignepaire td a")[5].text()?.replaceAll("\\s","")
+            accountDTO.currencyType = $("table tr.colcellignepaire td a")[5].text()?.replaceAll("\\s", "")
 
             $("table tr.colcellignepaire td a")[2].click()
             List<TransactionDTO> transactionDTOS = new LinkedList<TransactionDTO>()
             $("table.ca-table")[1].$("tbody tr").each {
                 TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date=it.$("td")[0].text()?.replaceAll("\\s","")
-                transactionDTO.description=it.$("td")[1].text()
-                transactionDTO.amount=it.$("td")[2].text()?.replaceAll("\\s,", "") as Long
+                transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
+                transactionDTO.description = it.$("td")[1].text().replaceAll("\n", " ")
+                transactionDTO.amount = it.$("td")[2].text()?.replaceAll("\\s|,", "") as Long
                 transactionDTOS.add(transactionDTO)
             }
             accountDTO.transactions = transactionDTOS
         }
+        return personDTO
     }
 }

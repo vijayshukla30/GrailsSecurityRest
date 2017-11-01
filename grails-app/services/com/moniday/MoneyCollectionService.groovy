@@ -14,7 +14,23 @@ class MoneyCollectionService {
         User user = User.findByUsername(userName)
         Account account = FirebaseInitializer.getUserAccount(user.firebaseId)
         Bank bank = FirebaseInitializer.getBank(account.bankName)
-        PersonDTO personDTO = scrapService.scrapCAPCA(bank.bankURL, account.bankUserName, account.bankPassword)
-        fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId)
+        String bankName = bank.bankName
+        PersonDTO personDTO = null
+        switch (bankName) {
+            case "BNP PARIBAS":
+                personDTO = scrapService.scrapBnpParibas(bank.bankURL, account.bankUserName, account.bankPassword)
+                break
+            case "CREDIT AGRICOLE":
+                personDTO = scrapService.scrapCreditAgricole(bank.bankURL, account.bankUserName, account.bankPassword)
+                break
+            case "ca-pca":
+                personDTO = scrapService.scrapCAPCA(bank.bankURL, account.bankUserName, account.bankPassword)
+                break
+            default:
+                println("No such bank found")
+        }
+        if (personDTO) {
+            fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId)
+        }
     }
 }
