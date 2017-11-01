@@ -11,9 +11,9 @@ import com.google.firebase.database.*
 import java.util.concurrent.CountDownLatch
 
 class FirebaseInitializer {
-    private static final String DATABASE_URL = "https://moniday-3e5a7.firebaseio.com/"
-    public static String BANK_REF = "banks"
-    public static String USER_REF = "users"
+    private static final String DATABASE_URL = "https://moniday-f3590.firebaseio.com/"
+    public static String BANK_REF = "APP_BANKS"
+    public static String USER_REF = "APP_USERS"
 
     private static DatabaseReference database
 
@@ -21,7 +21,7 @@ class FirebaseInitializer {
         FileInputStream fileInputStream = new FileInputStream(path)
         FirebaseOptions options = new FirebaseOptions.Builder().setCredential(FirebaseCredentials.fromCertificate(fileInputStream)).setDatabaseUrl(DATABASE_URL).build()
         FirebaseApp firebaseApp = FirebaseApp.initializeApp(options)
-        println firebaseApp.name
+//        println firebaseApp.name
         database = FirebaseDatabase.getInstance().getReference()
         startListeners()
     }
@@ -105,7 +105,28 @@ class FirebaseInitializer {
         return account
     }
 
-    //Get Account Details of User
+    //Get Scrap Details of User
+    static Map getUserPersonalDetail(String userFireBaseId) {
+        Map personalMap = [:]
+        DatabaseReference accountRef = FirebaseDatabase.getInstance().getReference(USER_REF + "/${userFireBaseId}/personalDetail")
+        CountDownLatch countDownLatch = new CountDownLatch(1)
+        accountRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                personalMap = (dataSnapshot.value as Map)
+                countDownLatch.countDown()
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                println(databaseError.code)
+            }
+        })
+        waitForCountDownLatch(countDownLatch)
+        personalMap
+    }
+
+    //Get Scrap Details of User
     static Map getUserScrap(String userFireBaseId) {
         Map accountMap = [:]
         DatabaseReference accountRef = FirebaseDatabase.getInstance().getReference(USER_REF + "/${userFireBaseId}/scrapDetail")

@@ -3,10 +3,19 @@
 <html>
 <head>
     <meta name="layout" content="theme"/>
-    <title>Moniday | Admin</title>
+    <title>Moniday | ${tabName}</title>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
 </head>
+
 <body>
-<g:render template="/layouts/adminTabs"/>
+<div class="bs-docs-section clearfix">
+    <g:render template="/layouts/userDetailTabs" model="[tabName: tabName]"/>
+</div>
+
+<div id="userTabContent" class="tab-content">
+    <div class="tab-pane fade active in" id="personalDetail">
+        ${personalMap}
+    </div>
+</div>
 </body>
 </html>

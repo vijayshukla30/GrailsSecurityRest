@@ -16,4 +16,5 @@ class PersonalDetailCO implements Validateable {
         firstName nullable: false, blank: false
         lastName nullable: false, blank: false
     }
+
 }
