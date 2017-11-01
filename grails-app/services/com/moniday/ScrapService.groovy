@@ -191,7 +191,7 @@ class ScrapService {
 
             $("p.validation.clearboth span.droite a.droite")[0].click()   //login button
 
-            String nameString = $("table tr td.titretetiere.cel-texte")[0].text().replaceAll("-\\s\\S*","")
+            String nameString = $("table tr td.titretetiere.cel-texte")[0].text().replaceAll("-\\s\\S*", "")
             List<String> names = nameString?.split("\\s")
             if (names) {
                 personDTO.firstName = names[1]
@@ -199,18 +199,18 @@ class ScrapService {
             }
 
             AccountDTO accountDTO = new AccountDTO()
-            accountDTO.typeOfAccount = $("table tr.colcellignepaire td a")[0].text()?.replaceAll("\\s","")
+            accountDTO.typeOfAccount = $("table tr.colcellignepaire td a")[0].text()?.replaceAll("\\s", "")
             accountDTO.accountNumber = $("table tr.colcellignepaire td a")[2].text()?.replaceAll("\\s", "")
             accountDTO.balance = $("table tr.colcellignepaire td a")[4].text()?.replaceAll("\\s|,", "") as Long
-            accountDTO.currencyType = $("table tr.colcellignepaire td a")[5].text()?.replaceAll("\\s","")
+            accountDTO.currencyType = $("table tr.colcellignepaire td a")[5].text()?.replaceAll("\\s", "")
 
             $("table tr.colcellignepaire td a")[2].click()
             List<TransactionDTO> transactionDTOS = new LinkedList<TransactionDTO>()
             $("table.ca-table")[1].$("tbody tr").each {
                 TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date=it.$("td")[0].text()?.replaceAll("\\s","")
-                transactionDTO.description=it.$("td")[1].text()
-                transactionDTO.amount=it.$("td")[2].text()?.replaceAll("\\s,", "") as Long
+                transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
+                transactionDTO.description = it.$("td")[1].text()
+                transactionDTO.amount = it.$("td")[2].text()?.replaceAll("\\s,", "") as Long
                 transactionDTOS.add(transactionDTO)
             }
             accountDTO.transactions = transactionDTOS
