@@ -134,15 +134,13 @@ class ScrapService {
         transactionDTOS
     }
 
-    def scrapBNP_PARIBAS(String bankURL, String bankUserName, String bankPassword) {
-        String bank_url = bankURL
-        String bank_username = bankUserName
+    def scrapBnpParibas(String bankURL, String bankUserName, String bankPassword) {
         String bank_password = bankPassword
         println("Scrapping ")
         Browser.drive {
-            go bank_url
+            go bankURL
             println(title)
-            $("#client-nbr").value(bank_username)            //username field
+            $("#client-nbr").value(bankUserName)            //username field
             //$("#secret-nbr").value(bank_password).value(bank_password)            //password field
             def passwordMatrix = $("#secret-nbr-keyboard")  //virtual keyboard
             String imageurl = passwordMatrix.attr("style").toString().replace("background-image: url(", "").replace(");", "")
@@ -162,25 +160,22 @@ class ScrapService {
         }
 
         //https://mabanque.bnpparibas/identification-wspl-pres/grille/c74416731216067524868722018227048230297
-
+        return new PersonDTO()
     }
 
     def scrapCreditAgricole(String bankURL, String bankUserName, String bankPassword) {
         //println("bankurl "+bankURL+" bankusername "+bankUserName+" bankpassword "+bankPassword)
         PersonDTO personDTO = new PersonDTO()
-        String bank_url = bankURL
-        String bank_username = bankUserName
-        String bank_password = bankPassword
         println("Scrapping ")
         Browser.drive {
-            go bank_url
+            go bankURL
             println(title)
             $(".toolbar-action-important").click()
             println("Login page title " + title)
 
             Navigator usernameField = $(name: "CCPTE").module(TextInput)
-            usernameField.text = bank_username
-            bank_password.each { String pass ->
+            usernameField.text = bankUserName
+            bankPassword.each { String pass ->
                 $("#pave-saisie-code tr td").each {
                     def pasStr = it.text()
                     pasStr = pasStr.replaceAll("\\s", "")
@@ -216,5 +211,6 @@ class ScrapService {
             }
             accountDTO.transactions = transactionDTOS
         }
+        return personDTO
     }
 }
