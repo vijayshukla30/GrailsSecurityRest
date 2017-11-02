@@ -56,12 +56,19 @@ class ScrapService {
         PersonDTO personDTO = new PersonDTO()
 
         Browser.drive {
+            println  "/////////1/////////"
             go bankUrl
+            println(title)
+            println driver.properties
+            println navigator.properties
             Navigator liElement = $("li#acces_aux_comptes")
+            println  "/////////2/////////"
             Navigator hrefElement = liElement.children("a")
             hrefElement.click()
             Navigator usernameField = $(name: "CCPTE").module(TextInput)
+            println  "/////////3/////////"
             usernameField.text = username
+            println  "/////////4/////////"
 
             password.each { String pass ->
                 $("table#pave-saisie-code tr td").each {
@@ -72,6 +79,7 @@ class ScrapService {
                     }
                 }
             }
+            println  "/////////5/////////"
 
             $("p.validation.clearboth span.droite a.droite")[1].click()
             Navigator advisor = $("div#racineGDC").children("div.bloc-pap-texte").children("p")[0]
@@ -80,6 +88,7 @@ class ScrapService {
                 personDTO.firstName = names[0]
                 personDTO.lastName = names[1]
             }
+            println  "/////////6/////////"
 
             List<AccountDTO> accountDTOS = personDTO.accounts
             ["colcellignepaire", "colcelligneimpaire"].each { String css ->
