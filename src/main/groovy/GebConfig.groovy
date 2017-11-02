@@ -25,16 +25,19 @@ driver = {
     caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap)
 
     new PhantomJSDriver(caps)
-}
-//htmlunit { driver = { new HtmlUnitDriver(true) } }
 
-//phantomJs {
-//     driver = {new PhantomJSDriver(true)}
-//}
+    /*ChromeDriverManager.getInstance().setup()
+    def chromeDriver = new ChromeDriver()
+    chromeDriver.manage().window().maximize()
+    chromeDriver.switchTo().window(chromeDriver.getWindowHandle())*/
+}
+
 environments {
     chrome {
         ChromeDriverManager.getInstance().setup()
-        driver = new ChromeDriver()
+        def chromeDriver = new ChromeDriver()
+        chromeDriver.manage().window().maximize()
+        chromeDriver.switchTo().window(chromeDriver.getWindowHandle())
     }
 
     phantomJs {
