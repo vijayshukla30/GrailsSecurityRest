@@ -86,7 +86,8 @@ class PublicController {
     }
 
     def mangoPay() {
-        mangoPayService.serviceMethod()
+//        mangoPayService.serviceMethod()
+        scrapService.scrapCAPCA("https://www.ca-pca.fr/", "43650502079", "060128")
         render "Tested MangoPay API"
     }
 

@@ -24,7 +24,7 @@ driver = {
 environments {
     chrome {
         ChromeDriverManager.getInstance().setup()
-        driver = { new ChromeDriver() }
+        driver = new ChromeDriver()
     }
 
     phantomJs {
