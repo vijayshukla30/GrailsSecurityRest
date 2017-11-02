@@ -62,12 +62,12 @@ dependencies {
     //Geb and Selenium
     // https://mvnrepository.com/artifact/org.gebish/geb-core
     compile group: 'org.gebish', name: 'geb-core', version: '1.1.1'
-    compile "io.github.bonigarcia:webdrivermanager:1.7.2"
-    compile "org.seleniumhq.selenium:selenium-java:3.6.0"
+    compile "io.github.bonigarcia:webdrivermanager:1.4.9"
+    compile "org.seleniumhq.selenium:selenium-java:3.4.0"
     compile("com.codeborne:phantomjsdriver:1.4.3") {
         transitive = false
     }
-    compile("org.seleniumhq.selenium:selenium-chrome-driver:3.6.0")
+    compile("org.seleniumhq.selenium:selenium-chrome-driver:3.4.0")
 
     //Database Connectivity
     compile 'mysql:mysql-connector-java:5.1.36'
