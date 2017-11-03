@@ -81,7 +81,7 @@ dependencies {
         exclude group: 'com.google.guava'
     }
 
-    compile 'com.google.guava:guava:23.0'
+    compile 'com.google.guava:guava:22.0'
     //Spring Security Plugin
     compile 'org.grails.plugins:spring-security-core:3.2.0.M1'
 
