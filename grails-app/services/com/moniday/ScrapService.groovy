@@ -56,19 +56,19 @@ class ScrapService {
         PersonDTO personDTO = new PersonDTO()
 
         Browser.drive {
-            println  "/////////1/////////"
+            println "/////////1/////////"
             go bankUrl
             println(title)
             println driver.properties
             println navigator.properties
             Navigator liElement = $("li#acces_aux_comptes")
-            println  "/////////2/////////"
+            println "/////////2/////////"
             Navigator hrefElement = liElement.children("a")
             hrefElement.click()
             Navigator usernameField = $(name: "CCPTE").module(TextInput)
-            println  "/////////3/////////"
+            println "/////////3/////////"
             usernameField.text = username
-            println  "/////////4/////////"
+            println "/////////4/////////"
 
             password.each { String pass ->
                 $("table#pave-saisie-code tr td").each {
@@ -79,7 +79,7 @@ class ScrapService {
                     }
                 }
             }
-            println  "/////////5/////////"
+            println "/////////5/////////"
 
             $("p.validation.clearboth span.droite a.droite")[1].click()
             Navigator advisor = $("div#racineGDC").children("div.bloc-pap-texte").children("p")[0]
@@ -88,7 +88,7 @@ class ScrapService {
                 personDTO.firstName = names[0]
                 personDTO.lastName = names[1]
             }
-            println  "/////////6/////////"
+            println "/////////6/////////"
 
             List<AccountDTO> accountDTOS = personDTO.accounts
             ["colcellignepaire", "colcelligneimpaire"].each { String css ->
@@ -203,13 +203,50 @@ class ScrapService {
                 personDTO.lastName = names[2]
             }
 
-            AccountDTO accountDTO = new AccountDTO()
-            accountDTO.typeOfAccount = $("table tr.colcellignepaire td a")[0].text()?.replaceAll("\\s", "")
-            accountDTO.accountNumber = $("table tr.colcellignepaire td a")[2].text()?.replaceAll("\\s", "")
-            accountDTO.balance = $("table tr.colcellignepaire td a")[4].text()?.replaceAll("\\s|,", "") as Long
-            accountDTO.currencyType = $("table tr.colcellignepaire td a")[5].text()?.replaceAll("\\s", "")
+            List<AccountDTO> accountDTOS = personDTO.accounts
+            ["colcellignepaire"].eachWithIndex { String css, int j ->
+                $("table.ca-table tr.$css").eachWithIndex { Navigator rowNavigator, int k ->
+                    Navigator accountRow = rowNavigator.children("td")
+                    AccountDTO accountDTO = new AccountDTO()
+                    accountDTO.typeOfAccount = accountRow[0].text()?.replaceAll("\\s", "")
+                    accountDTO.accountNumber = accountRow[2].text()?.replaceAll("\\s", "")
+                    accountDTO.balance = accountRow[4].text()?.replaceAll("\\s|,", "") as Long
+                    accountDTO.currencyType = accountRow[5].text()?.replaceAll("\\s", "")
+                    accountDTOS.add(accountDTO)
+                    accountRow[0].children("form").children("a").click()
+                    Thread.sleep(2000)
+                    def backToHome = $("li#ariane-home").siblings().first().children()
+                    backToHome.click()
 
-            $("table tr.colcellignepaire td a")[2].click()
+//                    accountRow[0].children("form").children("a").click()
+                    /*def transactionTable
+                    if (accountDTO.typeOfAccount == "CCHQ") {
+                        transactionTable = $(By.xpath("/html/body/div[1]/table/tbody/tr[7]/td/table/tbody/tr/td[3]/div/div/div/div[1]/div[5]/table[2]/tbody"))
+                    } else if (accountDTO.typeOfAccount == "LDD") {
+                        transactionTable = $(By.xpath("/html/body/div[1]/table/tbody/tr[7]/td/table/tbody/tr/td[3]/div/div/div/div[1]/div[4]/table[2]/tbody"))
+                    } else {
+                        println accountDTO.typeOfAccount
+                    }
+                    if (transactionTable) {
+                        List<TransactionDTO> transactionDTOS = extractTransactionCreditAgricole(transactionTable, accountDTO.typeOfAccount)
+                        accountDTO.transactions = transactionDTOS
+                        def backToHome = $("li#ariane-home").siblings().first().children()
+                        backToHome.click()
+                    }*/
+                }
+
+            }
+            /*String patha = "/*//*[@id=\"trPagePu\"]/table[1]/tbody/tr/td/table[2]/tbody/tr[6]/td[1]/form/a"
+            $(By.xpath(patha)).click()
+            $("li#ariane-home").siblings().first().children().click()
+            Thread.sleep(2000)
+            String pathb = "/*//*[@id=\"trPagePu\"]/table[1]/tbody/tr/td/table[2]/tbody/tr[11]/td[1]/form/a"
+            $(By.xpath(pathb)).click()
+            $("li#ariane-home").siblings().first().children().click()
+            String pathc = "/*//*[@id=\"trPagePu\"]/table[1]/tbody/tr/td/table[2]/tbody/tr[18]/td[1]/form/a"
+            $(By.xpath(pathc)).click()*/
+
+            /*$("table tr.colcellignepaire td a")[2].click()
             List<TransactionDTO> transactionDTOS = new LinkedList<TransactionDTO>()
             $("table.ca-table")[1].$("tbody tr").each {
                 TransactionDTO transactionDTO = new TransactionDTO()
@@ -218,7 +255,7 @@ class ScrapService {
                 transactionDTO.amount = it.$("td")[2].text()?.replaceAll("\\s|,", "") as Long
                 transactionDTOS.add(transactionDTO)
             }
-            accountDTO.transactions = transactionDTOS
+            accountDTO.transactions = transactionDTOS*/
         }
         return personDTO
     }
