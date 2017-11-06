@@ -159,7 +159,7 @@ class ScrapService {
     def extractAccountAndTrans(PersonDTO personDTO, def extractingAccount, String css) {
         Browser browser = new Browser()
         Navigator tableAccountRow = browser.$("table.ca-table tr.$css")
-        def totalAccount = tableAccountRow.size()
+        def totalAccount = tableAccountRow.size() - 1
 
         println tableAccountRow.size()
         println "accountRows " + tableAccountRow
@@ -168,7 +168,43 @@ class ScrapService {
 
         Navigator accountRow = tableAccountRow[extractingAccount]
         Navigator accountColumn = accountRow.children("td")
+        AccountDTO accountDTO = new AccountDTO()
+        accountDTO.typeOfAccount = accountColumn[0].text()?.replaceAll("\\s", "")
+        accountDTO.accountNumber = accountColumn[2].text()?.replaceAll("\\s", "")
+        accountDTO.balance = accountColumn[4].text()?.replaceAll("\\s|,", "") as Long
+        accountDTO.currencyType = accountColumn[5].text()?.replaceAll("\\s", "")
         accountColumn[0].children("form").children("a").click()
+        //extract the transactions for current account
+        List<TransactionDTO> transactionDTOS = accountDTO.transactions
+        if (accountDTO.typeOfAccount == "LDD") {
+            browser.$("table.ca-table")[1].$("tbody tr").each {
+                TransactionDTO transactionDTO = new TransactionDTO()
+                transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
+                transactionDTO.description = it.$("td")[1].text().replaceAll("\n", " ")
+                transactionDTO.amount = it.$("td")[2].text()?.replaceAll("\\s|,", "") as Long
+                transactionDTOS.add(transactionDTO)
+            }
+        } else if (accountDTO.typeOfAccount == "CCHQ") {
+            if (browser.$("table.ca-table")[2].$("tbody tr").isEmpty()) {
+                browser.$("table.ca-table")[1].$("tbody tr").each {
+                    TransactionDTO transactionDTO = new TransactionDTO()
+                    transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
+                    transactionDTO.description = it.$("td")[2].text()
+                    transactionDTO.amount = it.$("td")[4].text()?.replaceAll("\\s|,", "") as Long
+                    transactionDTOS.add(transactionDTO)
+                }
+            } else {
+                browser.$("table.ca-table")[2].$("tbody tr").each {
+                    TransactionDTO transactionDTO = new TransactionDTO()
+                    transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
+                    transactionDTO.description = it.$("td")[2].text()
+                    transactionDTO.amount = it.$("td")[4].text()?.replaceAll("\\s|,", "") as Long
+                    transactionDTOS.add(transactionDTO)
+                }
+            }
+        }
+
+        personDTO.accounts.add(accountDTO)
         println "Click back Button to check the page"
 
         Navigator backToHome = browser.$("li#ariane-home").siblings().first().children()
