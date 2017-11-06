@@ -122,25 +122,61 @@ class ScrapService {
         return personDTO
     }
 
-    List<TransactionDTO> extractTransaction(Navigator transNav, String accountType) {
-        List<TransactionDTO> transactionDTOS = []
-        transNav.children("tr").each { rowNav ->
-            def cellNav = rowNav.children("td")
-            if (accountType == "CCHQ") {
-                TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date = cellNav[0].text()
-                transactionDTO.description = cellNav[2].text()
-                transactionDTO.amount = cellNav[4].text()
-                transactionDTOS.add(transactionDTO)
-            } else if (accountType == "CEL") {
-                TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date = cellNav[0].text()
-                transactionDTO.description = cellNav[1].text()
-                transactionDTO.amount = cellNav[2].text()
-                transactionDTOS.add(transactionDTO)
+    def scrapCreditAgricole(String bankURL, String bankUserName, String bankPassword) {
+        PersonDTO personDTO = new PersonDTO()
+        println("Scrapping ")
+        Browser.drive {
+            go bankURL
+            $(".toolbar-action-important").click()
+            println("Login page title " + title)
+
+            Navigator usernameField = $(name: "CCPTE").module(TextInput)
+            usernameField.text = bankUserName
+            bankPassword.each { String pass ->
+                $("#pave-saisie-code tr td").each {
+                    def pasStr = it.text()
+                    pasStr = pasStr.replaceAll("\\s", "")
+                    if (pasStr.contains(pass)) {
+                        it.children("a").click()
+                    }
+                }
             }
+
+            $("p.validation.clearboth span.droite a.droite")[0].click()   //login button
+            String nameString = $("table tr td.titretetiere.cel-texte")[0].text().replaceAll("-\\s\\S*", "")
+            List<String> names = nameString?.split("\\s")
+            if (names) {
+                personDTO.firstName = names[1]
+                personDTO.lastName = names[2]
+            }
+
+            extractAccountAndTrans(personDTO, 0, "colcellignepaire")
+            extractAccountAndTrans(personDTO, 0, "colcelligneimpaire")
         }
-        transactionDTOS
+        return personDTO
+    }
+
+    def extractAccountAndTrans(PersonDTO personDTO, def extractingAccount, String css) {
+        Browser browser = new Browser()
+        Navigator tableAccountRow = browser.$("table.ca-table tr.$css")
+        def totalAccount = tableAccountRow.size()
+
+        println tableAccountRow.size()
+        println "accountRows " + tableAccountRow
+        println "accountRows details " + tableAccountRow*.text()
+        println("extractingAccount ${extractingAccount}")
+
+        Navigator accountRow = tableAccountRow[extractingAccount]
+        Navigator accountColumn = accountRow.children("td")
+        accountColumn[0].children("form").children("a").click()
+        println "Click back Button to check the page"
+
+        Navigator backToHome = browser.$("li#ariane-home").siblings().first().children()
+        backToHome.click()
+
+        if (totalAccount > extractingAccount) {
+            extractAccountAndTrans(personDTO, extractingAccount + 1, css)
+        }
     }
 
     def scrapBnpParibas(String bankURL, String bankUserName, String bankPassword) {
@@ -172,91 +208,24 @@ class ScrapService {
         return new PersonDTO()
     }
 
-    def scrapCreditAgricole(String bankURL, String bankUserName, String bankPassword) {
-        //println("bankurl "+bankURL+" bankusername "+bankUserName+" bankpassword "+bankPassword)
-        PersonDTO personDTO = new PersonDTO()
-        println("Scrapping ")
-        Browser.drive {
-            go bankURL
-            println(title)
-            $(".toolbar-action-important").click()
-            println("Login page title " + title)
-
-            Navigator usernameField = $(name: "CCPTE").module(TextInput)
-            usernameField.text = bankUserName
-            bankPassword.each { String pass ->
-                $("#pave-saisie-code tr td").each {
-                    def pasStr = it.text()
-                    pasStr = pasStr.replaceAll("\\s", "")
-                    if (pasStr.contains(pass)) {
-                        it.children("a").click()
-                    }
-                }
-            }
-
-            $("p.validation.clearboth span.droite a.droite")[0].click()   //login button
-
-            String nameString = $("table tr td.titretetiere.cel-texte")[0].text().replaceAll("-\\s\\S*", "")
-            List<String> names = nameString?.split("\\s")
-            if (names) {
-                personDTO.firstName = names[1]
-                personDTO.lastName = names[2]
-            }
-
-            List<AccountDTO> accountDTOS = personDTO.accounts
-            ["colcellignepaire"].eachWithIndex { String css, int j ->
-                $("table.ca-table tr.$css").eachWithIndex { Navigator rowNavigator, int k ->
-                    Navigator accountRow = rowNavigator.children("td")
-                    AccountDTO accountDTO = new AccountDTO()
-                    accountDTO.typeOfAccount = accountRow[0].text()?.replaceAll("\\s", "")
-                    accountDTO.accountNumber = accountRow[2].text()?.replaceAll("\\s", "")
-                    accountDTO.balance = accountRow[4].text()?.replaceAll("\\s|,", "") as Long
-                    accountDTO.currencyType = accountRow[5].text()?.replaceAll("\\s", "")
-                    accountDTOS.add(accountDTO)
-                    accountRow[0].children("form").children("a").click()
-                    Thread.sleep(2000)
-                    def backToHome = $("li#ariane-home").siblings().first().children()
-                    backToHome.click()
-
-//                    accountRow[0].children("form").children("a").click()
-                    /*def transactionTable
-                    if (accountDTO.typeOfAccount == "CCHQ") {
-                        transactionTable = $(By.xpath("/html/body/div[1]/table/tbody/tr[7]/td/table/tbody/tr/td[3]/div/div/div/div[1]/div[5]/table[2]/tbody"))
-                    } else if (accountDTO.typeOfAccount == "LDD") {
-                        transactionTable = $(By.xpath("/html/body/div[1]/table/tbody/tr[7]/td/table/tbody/tr/td[3]/div/div/div/div[1]/div[4]/table[2]/tbody"))
-                    } else {
-                        println accountDTO.typeOfAccount
-                    }
-                    if (transactionTable) {
-                        List<TransactionDTO> transactionDTOS = extractTransactionCreditAgricole(transactionTable, accountDTO.typeOfAccount)
-                        accountDTO.transactions = transactionDTOS
-                        def backToHome = $("li#ariane-home").siblings().first().children()
-                        backToHome.click()
-                    }*/
-                }
-
-            }
-            /*String patha = "/*//*[@id=\"trPagePu\"]/table[1]/tbody/tr/td/table[2]/tbody/tr[6]/td[1]/form/a"
-            $(By.xpath(patha)).click()
-            $("li#ariane-home").siblings().first().children().click()
-            Thread.sleep(2000)
-            String pathb = "/*//*[@id=\"trPagePu\"]/table[1]/tbody/tr/td/table[2]/tbody/tr[11]/td[1]/form/a"
-            $(By.xpath(pathb)).click()
-            $("li#ariane-home").siblings().first().children().click()
-            String pathc = "/*//*[@id=\"trPagePu\"]/table[1]/tbody/tr/td/table[2]/tbody/tr[18]/td[1]/form/a"
-            $(By.xpath(pathc)).click()*/
-
-            /*$("table tr.colcellignepaire td a")[2].click()
-            List<TransactionDTO> transactionDTOS = new LinkedList<TransactionDTO>()
-            $("table.ca-table")[1].$("tbody tr").each {
+    List<TransactionDTO> extractTransaction(Navigator transNav, String accountType) {
+        List<TransactionDTO> transactionDTOS = []
+        transNav.children("tr").each { rowNav ->
+            def cellNav = rowNav.children("td")
+            if (accountType == "CCHQ") {
                 TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
-                transactionDTO.description = it.$("td")[1].text().replaceAll("\n", " ")
-                transactionDTO.amount = it.$("td")[2].text()?.replaceAll("\\s|,", "") as Long
+                transactionDTO.date = cellNav[0].text()
+                transactionDTO.description = cellNav[2].text()
+                transactionDTO.amount = cellNav[4].text()
+                transactionDTOS.add(transactionDTO)
+            } else if (accountType == "CEL") {
+                TransactionDTO transactionDTO = new TransactionDTO()
+                transactionDTO.date = cellNav[0].text()
+                transactionDTO.description = cellNav[1].text()
+                transactionDTO.amount = cellNav[2].text()
                 transactionDTOS.add(transactionDTO)
             }
-            accountDTO.transactions = transactionDTOS*/
         }
-        return personDTO
+        transactionDTOS
     }
 }
