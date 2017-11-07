@@ -124,7 +124,6 @@ class ScrapService {
 
     def scrapCreditAgricole(String bankURL, String bankUserName, String bankPassword) {
         PersonDTO personDTO = new PersonDTO()
-        println("Scrapping ")
         Browser.drive {
             go bankURL
             $(".toolbar-action-important").click()
@@ -159,12 +158,7 @@ class ScrapService {
     def extractAccountAndTrans(PersonDTO personDTO, def extractingAccount, String css) {
         Browser browser = new Browser()
         Navigator tableAccountRow = browser.$("table.ca-table tr.$css")
-        def totalAccount = tableAccountRow.size() - 1
-
-        println tableAccountRow.size()
-        println "accountRows " + tableAccountRow
-        println "accountRows details " + tableAccountRow*.text()
-        println("extractingAccount ${extractingAccount}")
+        Integer totalAccount = tableAccountRow.size() - 1
 
         Navigator accountRow = tableAccountRow[extractingAccount]
         Navigator accountColumn = accountRow.children("td")
@@ -175,35 +169,15 @@ class ScrapService {
         accountDTO.currencyType = accountColumn[5].text()?.replaceAll("\\s", "")
         accountColumn[0].children("form").children("a").click()
         //extract the transactions for current account
-        List<TransactionDTO> transactionDTOS = accountDTO.transactions
-        if (accountDTO.typeOfAccount == "LDD") {
-            browser.$("table.ca-table")[1].$("tbody tr").each {
-                TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
-                transactionDTO.description = it.$("td")[1].text().replaceAll("\n", " ")
-                transactionDTO.amount = it.$("td")[2].text()?.replaceAll("\\s|,", "") as Long
-                transactionDTOS.add(transactionDTO)
-            }
-        } else if (accountDTO.typeOfAccount == "CCHQ") {
-            if (browser.$("table.ca-table")[2].$("tbody tr").isEmpty()) {
-                browser.$("table.ca-table")[1].$("tbody tr").each {
-                    TransactionDTO transactionDTO = new TransactionDTO()
-                    transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
-                    transactionDTO.description = it.$("td")[2].text()
-                    transactionDTO.amount = it.$("td")[4].text()?.replaceAll("\\s|,", "") as Long
-                    transactionDTOS.add(transactionDTO)
-                }
-            } else {
-                browser.$("table.ca-table")[2].$("tbody tr").each {
-                    TransactionDTO transactionDTO = new TransactionDTO()
-                    transactionDTO.date = it.$("td")[0].text()?.replaceAll("\\s", "")
-                    transactionDTO.description = it.$("td")[2].text()
-                    transactionDTO.amount = it.$("td")[4].text()?.replaceAll("\\s|,", "") as Long
-                    transactionDTOS.add(transactionDTO)
-                }
-            }
+
+        Navigator secondTransactionTable = browser.$("table.ca-table")[1].$("tbody")
+        Navigator thirdTransactionTable = browser.$("table.ca-table")[2].$("tbody")
+
+        if (!thirdTransactionTable.isEmpty()) {
+            secondTransactionTable = thirdTransactionTable
         }
 
+        accountDTO.transactions = extractTransaction(secondTransactionTable, accountDTO.typeOfAccount)
         personDTO.accounts.add(accountDTO)
         println "Click back Button to check the page"
 
@@ -213,6 +187,28 @@ class ScrapService {
         if (totalAccount > extractingAccount) {
             extractAccountAndTrans(personDTO, extractingAccount + 1, css)
         }
+    }
+
+    List<TransactionDTO> extractTransaction(Navigator transNav, String accountType) {
+        List<TransactionDTO> transactionDTOS = []
+        transNav.children("tr").each { rowNav ->
+            def cellNav = rowNav.children("td")
+            if (accountType == "CCHQ") {
+                TransactionDTO transactionDTO = new TransactionDTO()
+                transactionDTO.date = cellNav[0].text()
+                transactionDTO.description = cellNav[2].text()
+                transactionDTO.amount = cellNav[4].text()
+                transactionDTOS.add(transactionDTO)
+            } else if (accountType == "CEL" || accountType == "LDD") {
+                TransactionDTO transactionDTO = new TransactionDTO()
+                transactionDTO.date = cellNav[0].text()
+                transactionDTO.description = cellNav[1].text()
+                transactionDTO.amount = cellNav[2].text()
+                transactionDTOS.add(transactionDTO)
+            }
+        }
+        println(transactionDTOS*.properties)
+        transactionDTOS
     }
 
     def scrapBnpParibas(String bankURL, String bankUserName, String bankPassword) {
@@ -242,26 +238,5 @@ class ScrapService {
 
         //https://mabanque.bnpparibas/identification-wspl-pres/grille/c74416731216067524868722018227048230297
         return new PersonDTO()
-    }
-
-    List<TransactionDTO> extractTransaction(Navigator transNav, String accountType) {
-        List<TransactionDTO> transactionDTOS = []
-        transNav.children("tr").each { rowNav ->
-            def cellNav = rowNav.children("td")
-            if (accountType == "CCHQ") {
-                TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date = cellNav[0].text()
-                transactionDTO.description = cellNav[2].text()
-                transactionDTO.amount = cellNav[4].text()
-                transactionDTOS.add(transactionDTO)
-            } else if (accountType == "CEL") {
-                TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date = cellNav[0].text()
-                transactionDTO.description = cellNav[1].text()
-                transactionDTO.amount = cellNav[2].text()
-                transactionDTOS.add(transactionDTO)
-            }
-        }
-        transactionDTOS
     }
 }
