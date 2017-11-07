@@ -2,7 +2,9 @@ package moniday
 
 import com.moniday.User
 import com.moniday.command.UserCO
+import com.moniday.dto.PersonDTO
 import grails.plugin.springsecurity.annotation.Secured
+import groovy.json.JsonBuilder
 
 @Secured(['permitAll'])
 class PublicController {
@@ -87,8 +89,9 @@ class PublicController {
 
     def mangoPay() {
 //        mangoPayService.serviceMethod()
-        scrapService.scrapCAPCA("https://www.ca-pca.fr/", "43650502079", "060128")
-        render "Tested MangoPay API"
+        PersonDTO personDTO = scrapService.scrapCreditAgricole("https://www.nmp-g3-enligne.credit-agricole.fr/stb/entreeBam", "51352826100", "813106")
+        def data =  new JsonBuilder(personDTO).toPrettyString()
+        render data
     }
 
 }
