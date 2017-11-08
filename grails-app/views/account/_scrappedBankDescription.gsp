@@ -2,7 +2,7 @@
 <div class="bs-docs-section clearfix">
     <div class="row">
         <div class="col-lg-6">
-            <strong>Total Money:</strong> <span class="fa fa-eur">${personDTO.deductedMoney}</span>
+            <strong>Total Money:</strong> <span class="fa fa-eur">${personDTO?.deductedMoney}</span>
         </div>
 
         <div class="col-lg-6">
