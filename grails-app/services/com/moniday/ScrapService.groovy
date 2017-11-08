@@ -97,7 +97,7 @@ class ScrapService {
                     AccountDTO accountDTO = new AccountDTO()
                     accountDTO.typeOfAccount = accountRow[0].text()?.replaceAll("\\s", "")
                     accountDTO.accountNumber = accountRow[2].text()?.replaceAll("\\s", "")
-                    accountDTO.balance = accountRow[4].text()?.replaceAll("\\s", "")?.replaceAll(",", ".") as Long
+                    accountDTO.balance = accountRow[4].text()?.replaceAll("\\s", "")?.replaceAll(",", ".") as BigDecimal
                     accountDTO.currencyType = accountRow[5].text()?.replaceAll("\\s", "")
                     accountDTOS.add(accountDTO)
                     accountRow[0].children("form").children("a").click()
@@ -165,7 +165,7 @@ class ScrapService {
         AccountDTO accountDTO = new AccountDTO()
         accountDTO.typeOfAccount = accountColumn[0].text()?.replaceAll("\\s", "")
         accountDTO.accountNumber = accountColumn[2].text()?.replaceAll("\\s", "")
-        accountDTO.balance = accountColumn[4].text()?.replaceAll("\\s", "")?.replaceAll(",", ".") as Long
+        accountDTO.balance = accountColumn[4].text()?.replaceAll("\\s", "")?.replaceAll(",", ".") as BigDecimal
         accountDTO.currencyType = accountColumn[5].text()?.replaceAll("\\s", "")
         accountColumn[0].children("form").children("a").click()
         //extract the transactions for current account
@@ -197,13 +197,13 @@ class ScrapService {
                 TransactionDTO transactionDTO = new TransactionDTO()
                 transactionDTO.date = cellNav[0].text()
                 transactionDTO.description = cellNav[2].text()
-                transactionDTO.amount = cellNav[4].text()?.replaceAll(" ","")?.replaceAll(",", ".")
+                transactionDTO.amount = cellNav[4].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTOS.add(transactionDTO)
             } else if (accountType == "CEL" || accountType == "LDD") {
                 TransactionDTO transactionDTO = new TransactionDTO()
                 transactionDTO.date = cellNav[0].text()
                 transactionDTO.description = cellNav[1].text()
-                transactionDTO.amount = cellNav[2].text()?.replaceAll(" ","")?.replaceAll(",", ".")
+                transactionDTO.amount = cellNav[2].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTOS.add(transactionDTO)
             }
         }
