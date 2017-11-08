@@ -11,6 +11,7 @@ import com.moniday.enums.Currency
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.Month
+import java.util.regex.Pattern
 
 class AppUtil {
     public static Month getMonth(String monthString) {
@@ -99,7 +100,8 @@ class AppUtil {
         transactionDTOS.each { TransactionDTO transactionDTO ->
             println transactionDTO.amount
             if (transactionDTO.amount?.contains("-")) {
-                List<String> amountList = transactionDTO.amount?.split(".")
+                println "DEBIT TRANSACTION"
+                List<String> amountList = transactionDTO.amount?.split(Pattern.quote("."))
                 println amountList
                 if (amountList.size() > 1)
                     amountSum += (amountList[amountList.size() - 1] as Long)
