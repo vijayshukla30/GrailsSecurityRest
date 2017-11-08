@@ -1,6 +1,16 @@
 <%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country;" %>
 <div class="bs-docs-section clearfix">
     <div class="row">
+        <div class="col-lg-6">
+            <strong>Total Money:</strong> <span class="fa fa-eur">${personDTO.deductedMoney}</span>
+        </div>
+
+        <div class="col-lg-6">
+
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-lg-12">
             <h2 id="nav-tabs">Accounts and Transactions</h2>
 
