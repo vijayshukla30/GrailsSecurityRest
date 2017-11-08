@@ -28,6 +28,13 @@
                         <g:each in="${personDTO.accounts}" var="account" status="i">
                             <div class="tab-pane fade ${i == 0 ? "active" : ""} in" id="${account.accountNumber}">
                                 <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>Total Money of this Account:</strong> <span
+                                            class="fa fa-eur">${account?.deductedMoney}</span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <div class="col-md-12">
                                         <table class="table table-hover table-bordered">
                                             <thead>
