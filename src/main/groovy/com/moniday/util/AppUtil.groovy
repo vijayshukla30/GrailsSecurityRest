@@ -2,6 +2,9 @@ package com.moniday.util
 
 import com.mangopay.core.enumerations.CountryIso
 import com.mangopay.core.enumerations.CurrencyIso
+import com.moniday.dto.AccountDTO
+import com.moniday.dto.PersonDTO
+import com.moniday.dto.TransactionDTO
 import com.moniday.enums.Country
 import com.moniday.enums.Currency
 
@@ -76,5 +79,29 @@ class AppUtil {
             return null
         }
         return unixTime
+    }
+
+    static void calculateDeductionAmount(PersonDTO personDTO) {
+        List<AccountDTO> accountDTOS = personDTO.accounts
+        Long totalAmountSum = 0
+        accountDTOS.each { AccountDTO accountDTO ->
+            Long accountMoney = calculateAmountOnAccount(accountDTO)
+            accountDTO.deductedMoney = "$accountMoney"
+            totalAmountSum += (accountMoney)
+        }
+        personDTO.deductedMoney = "$totalAmountSum"
+    }
+
+    static Long calculateAmountOnAccount(AccountDTO accountDTO) {
+        Long amountSum = 0
+        List<TransactionDTO> transactionDTOS = accountDTO.transactions
+        transactionDTOS.each { TransactionDTO transactionDTO ->
+            if (transactionDTO.amount?.contains("-")) {
+                List<String> amountList = transactionDTO.amount?.split(".")
+                if (amountList.size() > 1)
+                    amountSum += (amountList[amountList.size() - 1] as Long)
+            }
+        }
+        return amountSum
     }
 }

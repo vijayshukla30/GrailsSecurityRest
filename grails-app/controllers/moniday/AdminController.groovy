@@ -2,7 +2,9 @@ package moniday
 
 import com.moniday.AdminSetting
 import com.moniday.User
+import com.moniday.dto.PersonDTO
 import com.moniday.firebase.FirebaseInitializer
+import com.moniday.util.AppUtil
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(['ROLE_ADMIN'])
@@ -46,8 +48,10 @@ class AdminController {
         if (user) {
             println("I found User")
             Map personalMap = FirebaseInitializer.getUserPersonalDetail(user?.firebaseId)
-            println personalMap
-            render(view: 'userPersonalDetails', model: [tabName: "PersonalDetail", personalMap: personalMap, user: user])
+            PersonDTO personDTO = new PersonDTO(personalMap)
+            AppUtil.calculateDeductionAmount(personDTO)
+            println personDTO.properties
+            render(view: 'userPersonalDetails', model: [tabName: "PersonalDetail", personDTO: personDTO, user: user])
         } else {
             flash.error = "No User has been found please check it..."
             redirect(action: 'index')
@@ -56,6 +60,10 @@ class AdminController {
     }
 
     def showUserAccountDetail(String uniqueId) {
+
+    }
+
+    def showUserDebitMandateDetail(String uniqueId) {
 
     }
 }

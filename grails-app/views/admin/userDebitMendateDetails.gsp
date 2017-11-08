@@ -13,7 +13,7 @@
 </div>
 
 <div id="userTabContent" class="tab-content">
-    <div class="tab-pane fade active in" id="personalDetail">
+    <div class="tab-pane fade active in" id="debitMandateDetails">
         ${personalMap}
     </div>
 </div>

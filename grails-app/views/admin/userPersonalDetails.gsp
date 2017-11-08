@@ -13,8 +13,8 @@
 </div>
 
 <div id="userTabContent" class="tab-content">
-    <div class="tab-pane fade active in" id="personalDetail">
-        ${personalMap}
+    <div class="tab-pane fade active in" id="personalDetails">
+        <g:render template="/account/scrappedBankDescription" model="[personDTO: personDTO]"/>
     </div>
 </div>
 </body>
