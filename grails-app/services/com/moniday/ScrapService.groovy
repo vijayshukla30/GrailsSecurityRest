@@ -97,7 +97,7 @@ class ScrapService {
                     AccountDTO accountDTO = new AccountDTO()
                     accountDTO.typeOfAccount = accountRow[0].text()?.replaceAll("\\s", "")
                     accountDTO.accountNumber = accountRow[2].text()?.replaceAll("\\s", "")
-                    accountDTO.balance = accountRow[4].text()?.replaceAll("\\s", "")?.replaceAll(",", ".") as BigDecimal
+                    accountDTO.balance = accountRow[4].text()?.replaceAll("\\s", "")?.replaceAll(",", ".") as Double
                     accountDTO.currencyType = accountRow[5].text()?.replaceAll("\\s", "")
                     accountDTOS.add(accountDTO)
                     accountRow[0].children("form").children("a").click()
@@ -165,7 +165,7 @@ class ScrapService {
         AccountDTO accountDTO = new AccountDTO()
         accountDTO.typeOfAccount = accountColumn[0].text()?.replaceAll("\\s", "")
         accountDTO.accountNumber = accountColumn[2].text()?.replaceAll("\\s", "")
-        accountDTO.balance = accountColumn[4].text()?.replaceAll("\\s", "")?.replaceAll(",", ".") as BigDecimal
+        accountDTO.balance = accountColumn[4].text()?.replaceAll("\\s", "")?.replaceAll(",", ".") as Double
         accountDTO.currencyType = accountColumn[5].text()?.replaceAll("\\s", "")
         accountColumn[0].children("form").children("a").click()
         //extract the transactions for current account
