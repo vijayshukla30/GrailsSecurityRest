@@ -84,6 +84,7 @@ class AppUtil {
     static void calculateDeductionAmount(PersonDTO personDTO) {
         List<AccountDTO> accountDTOS = personDTO.accounts
         Long totalAmountSum = 0
+        println "Calculate the amount to be deducted from the accounts"
         accountDTOS.each { AccountDTO accountDTO ->
             Long accountMoney = calculateAmountOnAccount(accountDTO)
             accountDTO.deductedMoney = "$accountMoney"
@@ -96,8 +97,10 @@ class AppUtil {
         Long amountSum = 0
         List<TransactionDTO> transactionDTOS = accountDTO.transactions
         transactionDTOS.each { TransactionDTO transactionDTO ->
+            println transactionDTO.amount
             if (transactionDTO.amount?.contains("-")) {
                 List<String> amountList = transactionDTO.amount?.split(".")
+                println amountList
                 if (amountList.size() > 1)
                     amountSum += (amountList[amountList.size() - 1] as Long)
             }
