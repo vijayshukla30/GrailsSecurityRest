@@ -11,6 +11,7 @@ import com.moniday.enums.Currency
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.Month
+import java.util.regex.Pattern
 
 class AppUtil {
     public static Month getMonth(String monthString) {
@@ -84,6 +85,7 @@ class AppUtil {
     static void calculateDeductionAmount(PersonDTO personDTO) {
         List<AccountDTO> accountDTOS = personDTO.accounts
         Long totalAmountSum = 0
+        println "Calculate the amount to be deducted from the accounts"
         accountDTOS.each { AccountDTO accountDTO ->
             Long accountMoney = calculateAmountOnAccount(accountDTO)
             accountDTO.deductedMoney = "$accountMoney"
@@ -96,8 +98,11 @@ class AppUtil {
         Long amountSum = 0
         List<TransactionDTO> transactionDTOS = accountDTO.transactions
         transactionDTOS.each { TransactionDTO transactionDTO ->
+            println transactionDTO.amount
             if (transactionDTO.amount?.contains("-")) {
-                List<String> amountList = transactionDTO.amount?.split(".")
+                println "DEBIT TRANSACTION"
+                List<String> amountList = transactionDTO.amount?.split(Pattern.quote("."))
+                println amountList
                 if (amountList.size() > 1)
                     amountSum += (amountList[amountList.size() - 1] as Long)
             }

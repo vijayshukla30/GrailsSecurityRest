@@ -47,7 +47,7 @@ class AdminController {
         User user = User.findByUniqueId(uniqueId)
         if (user) {
             println("I found User")
-            Map personalMap = FirebaseInitializer.getUserPersonalDetail(user?.firebaseId)
+            Map personalMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
             PersonDTO personDTO = new PersonDTO(personalMap)
             AppUtil.calculateDeductionAmount(personDTO)
             println personDTO.properties
