@@ -42,6 +42,7 @@
                                                 <td>Date</td>
                                                 <td>Amount</td>
                                                 <td>Description</td>
+                                                <td>Credit Card Transaction</td>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -50,6 +51,7 @@
                                                     <td>${transaction.date}</td>
                                                     <td>${transaction.amount}</td>
                                                     <td>${transaction.description}</td>
+                                                    <td> <div class="fa ${transaction.isCardTransaction?"fa-check":"fa-times"} "/></td>
                                                 </tr>
                                             </g:each>
                                             </tbody>
