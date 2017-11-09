@@ -4,6 +4,7 @@ class TransactionDTO {
     String date
     String description
     String amount
+    boolean isCardTransaction
 
     TransactionDTO() {
 
@@ -13,5 +14,6 @@ class TransactionDTO {
         this.date = transactionMap?.date
         this.description = transactionMap?.description
         this.amount = transactionMap?.amount
+        this.isCardTransaction = transactionMap?.isCardTransaction
     }
 }
