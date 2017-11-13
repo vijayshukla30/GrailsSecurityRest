@@ -6,6 +6,7 @@ class AccountDTO {
     Double balance
     String currencyType
     String deductedMoney = ""
+    String creditCardDeductMoney = ""
 
     List<TransactionDTO> transactions = []
 

@@ -2,11 +2,12 @@
 <div class="bs-docs-section clearfix">
     <div class="row">
         <div class="col-lg-6">
-            <strong>Total Money:</strong> <span class="fa fa-eur">${personDTO?.deductedMoney}</span>
+            <strong>Total Debit Account Money:</strong> <span class="fa fa-eur">${personDTO?.deductedMoney}</span>
         </div>
 
-        <div class="col-lg-6">
-
+        <div class="col-lg-6 bg-primary">
+            <strong>Total Credit Account Money:</strong> <span
+                class="fa fa-eur">${personDTO?.creditCardDeductMoney}</span>
         </div>
     </div>
 
@@ -29,8 +30,13 @@
                             <div class="tab-pane fade ${i == 0 ? "active" : ""} in" id="${account.accountNumber}">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <strong>Total Money of this Account:</strong> <span
+                                        <strong>Total Money of Debit Account:</strong> <span
                                             class="fa fa-eur">${account?.deductedMoney}</span>
+                                    </div>
+
+                                    <div class="col-md-6 bg-primary">
+                                        <strong>Total Money of Credit Account:</strong> <span
+                                            class="fa fa-eur">${account?.creditCardDeductMoney}</span>
                                     </div>
                                 </div>
 
@@ -42,16 +48,14 @@
                                                 <td>Date</td>
                                                 <td>Amount</td>
                                                 <td>Description</td>
-                                                <td>Credit Card Transaction</td>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <g:each in="${account.transactions}" var="transaction">
-                                                <tr>
+                                                <tr class="${transaction?.isCardTransaction ? "bg-info" : ""}">
                                                     <td>${transaction.date}</td>
                                                     <td>${transaction.amount}</td>
                                                     <td>${transaction.description}</td>
-                                                    <td> <div class="fa ${transaction.isCardTransaction?"fa-check":"fa-times"} "/></td>
                                                 </tr>
                                             </g:each>
                                             </tbody>
