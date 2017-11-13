@@ -174,10 +174,11 @@ class ScrapService {
         Navigator thirdTransactionTable = browser.$("table.ca-table")[2].$("tbody")
 
         if (!thirdTransactionTable.isEmpty()) {
-            secondTransactionTable = thirdTransactionTable
+            accountDTO.transactions = extractTransaction(thirdTransactionTable, accountDTO.typeOfAccount, true)
+        } else {
+            accountDTO.transactions = extractTransaction(secondTransactionTable, accountDTO.typeOfAccount)
         }
 
-        accountDTO.transactions = extractTransaction(secondTransactionTable, accountDTO.typeOfAccount)
         personDTO.accounts.add(accountDTO)
         println "Click back Button to check the page"
 
@@ -189,7 +190,7 @@ class ScrapService {
         }
     }
 
-    List<TransactionDTO> extractTransaction(Navigator transNav, String accountType) {
+    List<TransactionDTO> extractTransaction(Navigator transNav, String accountType, boolean isCardAttached = false) {
         List<TransactionDTO> transactionDTOS = []
         transNav.children("tr").each { rowNav ->
             def cellNav = rowNav.children("td")
@@ -198,12 +199,34 @@ class ScrapService {
                 transactionDTO.date = cellNav[0].text()
                 transactionDTO.description = cellNav[2].text()
                 transactionDTO.amount = cellNav[4].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
+                transactionDTO.isCardTransaction = false
                 transactionDTOS.add(transactionDTO)
             } else if (accountType == "CEL" || accountType == "LDD") {
                 TransactionDTO transactionDTO = new TransactionDTO()
                 transactionDTO.date = cellNav[0].text()
                 transactionDTO.description = cellNav[1].text()
                 transactionDTO.amount = cellNav[2].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
+                transactionDTO.isCardTransaction = false
+                transactionDTOS.add(transactionDTO)
+            }
+        }
+        if (isCardAttached)
+            transactionDTOS.addAll(extractCardTransactions())
+        transactionDTOS
+    }
+
+    List<TransactionDTO> extractCardTransactions() {  //send browser.$("table.ca-table")[1].$("tbody")
+        Browser browser = new Browser()
+        browser.$("table.ca-table")[1].$("tbody tr th")[0].children("a").click()
+        List<TransactionDTO> transactionDTOS = []
+        browser.$("table.ca-table")[1].$("tbody").children("tr").each { rowNav ->
+            def cellNav = rowNav.children("td")
+            TransactionDTO transactionDTO = new TransactionDTO()
+            transactionDTO.date = cellNav[0].text().replaceAll(" ","")
+            transactionDTO.description = cellNav[1].text()
+            transactionDTO.amount = cellNav[3].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
+            transactionDTO.isCardTransaction = true
+            if(transactionDTO.date != "") {
                 transactionDTOS.add(transactionDTO)
             }
         }

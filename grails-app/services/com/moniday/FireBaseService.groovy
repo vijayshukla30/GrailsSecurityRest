@@ -114,6 +114,7 @@ class FireBaseService {
                 transactionDetails.date = transactionDTO.date
                 transactionDetails.description = transactionDTO.description
                 transactionDetails.amount = transactionDTO.amount
+                transactionDetails.isCardTransaction = transactionDTO.isCardTransaction
                 transactions.add(transactionDetails)
             }
             accountDetail.transactions = transactions
