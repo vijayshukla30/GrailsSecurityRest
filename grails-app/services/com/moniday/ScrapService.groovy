@@ -110,8 +110,7 @@ class ScrapService {
                         println accountDTO.typeOfAccount
                     }
                     if (transactionTable) {
-                        List<TransactionDTO> transactionDTOS = extractTransaction(transactionTable, accountDTO.typeOfAccount)
-                        accountDTO.transactions = transactionDTOS
+                        extractTransaction(personDTO, accountDTO, transactionTable)
                         def backToHome = $("li#ariane-home").siblings().first().children()
                         backToHome.click()
                     }
@@ -174,9 +173,9 @@ class ScrapService {
         Navigator thirdTransactionTable = browser.$("table.ca-table")[2].$("tbody")
 
         if (!thirdTransactionTable.isEmpty()) {
-            accountDTO.transactions = extractTransaction(thirdTransactionTable, accountDTO.typeOfAccount, true)
+            extractTransaction(personDTO, accountDTO, thirdTransactionTable, true)
         } else {
-            accountDTO.transactions = extractTransaction(secondTransactionTable, accountDTO.typeOfAccount)
+            extractTransaction(personDTO, accountDTO, secondTransactionTable)
         }
 
         personDTO.accounts.add(accountDTO)
@@ -190,18 +189,18 @@ class ScrapService {
         }
     }
 
-    List<TransactionDTO> extractTransaction(Navigator transNav, String accountType, boolean isCardAttached = false) {
+    def extractTransaction(PersonDTO personDTO, AccountDTO accountDTO, Navigator transNav, boolean isCardAttached = false) {
         List<TransactionDTO> transactionDTOS = []
         transNav.children("tr").each { rowNav ->
             def cellNav = rowNav.children("td")
-            if (accountType == "CCHQ") {
+            if (accountDTO.typeOfAccount == "CCHQ") {
                 TransactionDTO transactionDTO = new TransactionDTO()
                 transactionDTO.date = cellNav[0].text()
                 transactionDTO.description = cellNav[2].text()
                 transactionDTO.amount = cellNav[4].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTO.isCardTransaction = false
                 transactionDTOS.add(transactionDTO)
-            } else if (accountType == "CEL" || accountType == "LDD") {
+            } else if (accountDTO.typeOfAccount == "CEL" || accountDTO.typeOfAccount == "LDD") {
                 TransactionDTO transactionDTO = new TransactionDTO()
                 transactionDTO.date = cellNav[0].text()
                 transactionDTO.description = cellNav[1].text()
@@ -210,9 +209,21 @@ class ScrapService {
                 transactionDTOS.add(transactionDTO)
             }
         }
-        if (isCardAttached)
-            transactionDTOS.addAll(extractCardTransactions())
-        transactionDTOS
+        accountDTO.transactions = transactionDTOS
+
+        if (isCardAttached) {
+            println("*********************")
+            println("Account has credit Card with it")
+            println("*********************")
+            AccountDTO creditAccountDto = new AccountDTO()
+            creditAccountDto.isCardTransaction = Boolean.TRUE
+            creditAccountDto.typeOfAccount = accountDTO.typeOfAccount
+            creditAccountDto.accountNumber = accountDTO.accountNumber
+            creditAccountDto.balance = accountDTO.balance
+            creditAccountDto.currencyType = accountDTO.currencyType
+            creditAccountDto.transactions = extractCardTransactions()
+            personDTO.accounts.add(creditAccountDto)
+        }
     }
 
     List<TransactionDTO> extractCardTransactions() {  //send browser.$("table.ca-table")[1].$("tbody")
@@ -222,11 +233,11 @@ class ScrapService {
         browser.$("table.ca-table")[1].$("tbody").children("tr").each { rowNav ->
             def cellNav = rowNav.children("td")
             TransactionDTO transactionDTO = new TransactionDTO()
-            transactionDTO.date = cellNav[0].text().replaceAll(" ","")
+            transactionDTO.date = cellNav[0].text().replaceAll(" ", "")
             transactionDTO.description = cellNav[1].text()
             transactionDTO.amount = cellNav[3].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
             transactionDTO.isCardTransaction = true
-            if(transactionDTO.date != "") {
+            if (transactionDTO.date != "") {
                 transactionDTOS.add(transactionDTO)
             }
         }

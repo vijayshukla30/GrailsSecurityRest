@@ -94,6 +94,7 @@ class FireBaseService {
             accountDetail.accountNumber = accountDTO.accountNumber
             accountDetail.balance = accountDTO.balance
             accountDetail.currencyType = accountDTO.currencyType
+            accountDetail.isCardTransaction = accountDTO.isCardTransaction
             List transactions = []
             accountDTO.transactions.each { TransactionDTO transactionDTO ->
                 Map transactionDetails = [:]

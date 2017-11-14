@@ -106,39 +106,28 @@ class AppUtil {
     static void calculateDeductionAmount(PersonDTO personDTO) {
         List<AccountDTO> accountDTOS = personDTO.accounts
         Double totalAmountSum = 0
-        Double totalCreditCardAmountSum = 0
-
         println "Calculate the amount to be deducted from the accounts"
         accountDTOS.each { AccountDTO accountDTO ->
-            List amounts = calculateAmountOnAccount(accountDTO)
-            Double accountMoney = amounts[0]
-            Double creditCardAccountMoney = amounts[1]
+            Double accountMoney = calculateAmountOnAccount(accountDTO)
             accountDTO.deductedMoney = "$accountMoney"
-            accountDTO.creditCardDeductMoney = "$creditCardAccountMoney"
             totalAmountSum += (accountMoney)
-            totalCreditCardAmountSum += (creditCardAccountMoney)
         }
-        personDTO.deductedMoney = "${totalAmountSum}"
-        personDTO.creditCardDeductMoney = "${totalCreditCardAmountSum}"
+        personDTO.deductedMoney = "$totalAmountSum"
     }
 
-    static List calculateAmountOnAccount(AccountDTO accountDTO) {
+    static Double calculateAmountOnAccount(AccountDTO accountDTO) {
         Double amountSum = 0
-        Double creditCardAmountSum = 0
         List<TransactionDTO> transactionDTOS = accountDTO.transactions
         transactionDTOS.each { TransactionDTO transactionDTO ->
+            println transactionDTO.amount
             if (transactionDTO.amount?.contains("-")) {
                 println "DEBIT TRANSACTION"
                 List<String> amountList = transactionDTO.amount?.split(Pattern.quote("."))
-                if (amountList.size() > 1) {
-                    if (transactionDTO?.isCardTransaction) {
-                        creditCardAmountSum += (amountList[amountList.size() - 1] as Double)
-                    } else {
-                        amountSum += (amountList[amountList.size() - 1] as Double)
-                    }
-                }
+                println amountList
+                if (amountList.size() > 1)
+                    amountSum += (amountList[amountList.size() - 1] as Double)
             }
         }
-        return [(amountSum / 100), (creditCardAmountSum / 100)]
+        return amountSum / 100
     }
 }

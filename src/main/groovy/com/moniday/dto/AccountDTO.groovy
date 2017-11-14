@@ -7,6 +7,7 @@ class AccountDTO {
     String currencyType
     String deductedMoney = ""
     String creditCardDeductMoney = ""
+    Boolean isCardTransaction = Boolean.FALSE
 
     List<TransactionDTO> transactions = []
 
@@ -19,6 +20,7 @@ class AccountDTO {
         this.accountNumber = accountMap?.accountNumber
         this.balance = (accountMap?.balance as Double)
         this.currencyType = accountMap?.currencyType
+        this.isCardTransaction = accountMap?.isCardTransaction
 
         accountMap.transactions.each {
             this.transactions.add(new TransactionDTO(it))

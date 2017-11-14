@@ -4,7 +4,7 @@ class TransactionDTO {
     String date
     String description
     String amount
-    boolean isCardTransaction
+    Boolean isCardTransaction = Boolean.FALSE
 
     TransactionDTO() {
 
