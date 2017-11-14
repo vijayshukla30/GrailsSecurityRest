@@ -68,6 +68,17 @@ environments {
             username = "root"
             logSql = false
             password = "7wL3jH2295zWS"
+            pooled = true
+            properties {
+                maxActive = -1
+                minEvictableIdleTimeMillis = 1800000
+                timeBetweenEvictionRunsMillis = 1800000
+                numTestsPerEvictionRun = 3
+                testOnBorrow = true
+                testWhileIdle = true
+                testOnReturn = true
+                validationQuery = "SELECT 1"
+            }
         }
         grails {
             mangopay {
