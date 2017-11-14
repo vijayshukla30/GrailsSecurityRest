@@ -10,10 +10,24 @@ import com.moniday.enums.Currency
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.Month
+import java.time.ZoneId
 import java.util.regex.Pattern
 
 class AppUtil {
+
+    static def getEnumByString(String code, def enumData) {
+        def data = null
+        enumData.values().each {
+            if (it.value == code) {
+                data = it
+                return false
+            }
+        }
+        return data
+    }
+
     public static Month getMonth(String monthString) {
         Month month = null
         switch (monthString) {
@@ -67,7 +81,6 @@ class AppUtil {
     }
 
     static Long generateUnixTimeStampFromDate(Date date) {
-
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
         Long unixTime
 
@@ -80,6 +93,14 @@ class AppUtil {
             return null
         }
         return unixTime
+    }
+
+    static Date generateDateFromString(Long date, Long month, Long year) {
+        println date
+        println month
+        println year
+        LocalDate dobDate = LocalDate.of(year as int, getMonth("$month"), date as int)
+        Date.from(dobDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
     }
 
     static void calculateDeductionAmount(PersonDTO personDTO) {

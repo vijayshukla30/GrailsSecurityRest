@@ -69,7 +69,7 @@ class AccountController {
         personalDetailCO.age = period.years
         boolean validPersonalDetail = personalDetailCO?.validate()
         if (user && validPersonalDetail) {
-            fireBaseService.savePersonalDetail(personalDetailCO, user?.firebaseId)
+            FirebaseInitializer.savePersonalDetail(personalDetailCO, user?.firebaseId)
             mangoPayService.createUser(user, personalDetailCO)
             mangoPayService.createWalletForUser(user)
             redirect(action: 'accountDetail', params: [uniqueId: params.uniqueId])

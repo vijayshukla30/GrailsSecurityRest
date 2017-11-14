@@ -3,7 +3,6 @@ package com.moniday
 import com.firebase.Account
 import com.firebase.DirectDebitMandate
 import com.firebase.MangoPayDetail
-import com.firebase.PersonalDetail
 import com.firebase.User as FireBaseUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserRecord
@@ -11,7 +10,10 @@ import com.google.firebase.auth.UserRecord.CreateRequest as CreateRequest
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.tasks.Task
-import com.moniday.command.*
+import com.moniday.command.AccountDetailCO
+import com.moniday.command.DirectDebitMandateCO
+import com.moniday.command.SecurityDetailCO
+import com.moniday.command.UserCO
 import com.moniday.dto.AccountDTO
 import com.moniday.dto.PersonDTO
 import com.moniday.dto.TransactionDTO
@@ -40,22 +42,6 @@ class FireBaseService {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference mangoPayRef = ref.child("${FirebaseInitializer.USER_REF}/${user.firebaseId}/mangoPayDetail")
         mangoPayRef.setValue(payDetail)
-    }
-
-    def savePersonalDetail(PersonalDetailCO personalDetailCO, String fireBaseId) {
-        println("Saving Personal Detail")
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-        PersonalDetail personalDetail = new PersonalDetail()
-        personalDetail.setFirstName(personalDetailCO.firstName)
-        personalDetail.setLastName(personalDetailCO.lastName)
-        personalDetail.setDateOfBirth(personalDetailCO.dateOfBirth)
-        personalDetail.setAge(personalDetailCO.age)
-        personalDetail.setNationality(personalDetailCO.nationality.value)
-        personalDetail.setCountryOfResidence(personalDetailCO.country.value)
-        personalDetail.setCurrency(personalDetailCO.currency.value)
-        DatabaseReference personRef = ref.child("${FirebaseInitializer.USER_REF}/$fireBaseId/personalDetail")
-        personRef.setValue(personalDetail)
-        println("Saved Personal Detail")
     }
 
     def saveAccountDetail(AccountDetailCO accountDetailCO, String fireBaseId) {
