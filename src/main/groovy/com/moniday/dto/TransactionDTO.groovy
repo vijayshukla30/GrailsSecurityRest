@@ -19,7 +19,7 @@ class TransactionDTO {
         this.description = transactionMap?.description
         this.amount = transactionMap?.amount
         this.isCardTransaction = transactionMap?.isCardTransaction
-        this.status = transactionMap?.status
+        this.status = transactionMap?.status ?: TransactionStatus.NOT_PROCESSED
         this.grabAmount = transactionMap?.grabAmount
     }
 

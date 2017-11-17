@@ -24,5 +24,4 @@ enum TransactionStatus {
     String toString() {
         return value
     }
-
 }
