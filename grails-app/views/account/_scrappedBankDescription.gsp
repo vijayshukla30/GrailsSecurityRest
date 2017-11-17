@@ -2,11 +2,7 @@
 <div class="bs-docs-section clearfix">
     <div class="row">
         <div class="col-lg-6">
-            <strong>Total Money:</strong> <span class="fa fa-eur">${personDTO?.deductedMoney}</span>
-        </div>
-
-        <div class="col-lg-6">
-
+            <strong>Total Debit Account Money:</strong> <span class="fa fa-eur">${personDTO?.deductedMoney}</span>
         </div>
     </div>
 
@@ -19,17 +15,19 @@
                     <ul class="nav nav-tabs">
                         <g:each in="${personDTO.accounts}" var="account" status="i">
                             <li class="${i == 0 ? "active" : ""}">
-                                <a href="#${account.accountNumber}" data-toggle="tab">${account.accountNumber}</a>
+                                <a href="#${account.isCardTransaction ? "${account?.accountNumber}-CreditCard" : account?.accountNumber}"
+                                   data-toggle="tab">${account.isCardTransaction ? "${account?.accountNumber}-CreditCard" : account?.accountNumber}</a>
                             </li>
                         </g:each>
                     </ul>
 
                     <div id="myTabContent" class="tab-content">
                         <g:each in="${personDTO.accounts}" var="account" status="i">
-                            <div class="tab-pane fade ${i == 0 ? "active" : ""} in" id="${account.accountNumber}">
+                            <div class="tab-pane fade ${i == 0 ? "active" : ""} in"
+                                 id="${account.isCardTransaction ? "${account?.accountNumber}-CreditCard" : account?.accountNumber}">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <strong>Total Money of this Account:</strong> <span
+                                        <strong>Total Money of Debit Account:</strong> <span
                                             class="fa fa-eur">${account?.deductedMoney}</span>
                                     </div>
                                 </div>
@@ -39,10 +37,9 @@
                                         <table class="table table-hover table-bordered">
                                             <thead>
                                             <tr>
-                                                <td>Date</td>
-                                                <td>Amount</td>
-                                                <td>Description</td>
-                                                <td>Credit Card Transaction</td>
+                                                <th>Date</th>
+                                                <th>Amount</th>
+                                                <th>Description</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -51,7 +48,6 @@
                                                     <td>${transaction.date}</td>
                                                     <td>${transaction.amount}</td>
                                                     <td>${transaction.description}</td>
-                                                    <td> <div class="fa ${transaction.isCardTransaction?"fa-check":"fa-times"} "/></td>
                                                 </tr>
                                             </g:each>
                                             </tbody>

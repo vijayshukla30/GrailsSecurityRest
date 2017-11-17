@@ -2,6 +2,7 @@ package moniday
 
 import com.moniday.AdminSetting
 import com.moniday.User
+import com.moniday.command.PersonalDetailCO
 import com.moniday.dto.PersonDTO
 import com.moniday.firebase.FirebaseInitializer
 import com.moniday.util.AppUtil
@@ -47,11 +48,9 @@ class AdminController {
         User user = User.findByUniqueId(uniqueId)
         if (user) {
             println("I found User")
-            Map personalMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
-            PersonDTO personDTO = new PersonDTO(personalMap)
-            AppUtil.calculateDeductionAmount(personDTO)
-            println personDTO.properties
-            render(view: 'userPersonalDetails', model: [tabName: "PersonalDetail", personDTO: personDTO, user: user])
+            Map personalMap = FirebaseInitializer.getUserPersonalDetail(user?.firebaseId)
+            PersonalDetailCO personalDetailCO = new PersonalDetailCO(personalMap)
+            render(view: 'userPersonalDetails', model: [tabName: "PersonalDetail", personalDetailCO: personalDetailCO, user: user])
         } else {
             flash.error = "No User has been found please check it..."
             redirect(action: 'index')
@@ -60,7 +59,19 @@ class AdminController {
     }
 
     def showUserAccountDetail(String uniqueId) {
-
+        User user = User.findByUniqueId(uniqueId)
+        if (user) {
+            println("I found User")
+            Map personalMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
+            PersonDTO personDTO = new PersonDTO(personalMap)
+            AppUtil.calculateDeductionAmount(personDTO)
+            println personDTO.properties
+            render(view: 'userAccoutDetails', model: [tabName: "AccountDetail", personDTO: personDTO, user: user])
+        } else {
+            flash.error = "No User has been found please check it..."
+            redirect(action: 'index')
+            return
+        }
     }
 
     def showUserDebitMandateDetail(String uniqueId) {

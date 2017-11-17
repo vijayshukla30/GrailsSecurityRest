@@ -34,6 +34,7 @@ class AccountController {
             PersonDTO personDTO = null
             if (accountMap) {
                 personDTO = new PersonDTO(accountMap)
+                AppUtil.calculateDeductionAmount(personDTO)
             }
             render(view: 'index', model: [user: user, personDTO: personDTO])
         } else {
@@ -69,7 +70,7 @@ class AccountController {
         personalDetailCO.age = period.years
         boolean validPersonalDetail = personalDetailCO?.validate()
         if (user && validPersonalDetail) {
-            fireBaseService.savePersonalDetail(personalDetailCO, user?.firebaseId)
+            FirebaseInitializer.savePersonalDetail(personalDetailCO, user?.firebaseId)
             mangoPayService.createUser(user, personalDetailCO)
             mangoPayService.createWalletForUser(user)
             redirect(action: 'accountDetail', params: [uniqueId: params.uniqueId])

@@ -68,6 +68,17 @@ environments {
             username = "root"
             logSql = false
             password = "7wL3jH2295zWS"
+            pooled = true
+            properties {
+                maxActive = -1
+                minEvictableIdleTimeMillis = 1800000
+                timeBetweenEvictionRunsMillis = 1800000
+                numTestsPerEvictionRun = 3
+                testOnBorrow = true
+                testWhileIdle = true
+                testOnReturn = true
+                validationQuery = "SELECT 1"
+            }
         }
         grails {
             mangopay {
@@ -90,7 +101,7 @@ grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/account/index'
 grails.plugin.springsecurity.failureHandler.defaultFailureUrl = '/?login_error=1'
 grails.plugin.springsecurity.auth.loginFormUrl = '/'
-grails.plugin.springsecurity.logout.afterLogoutUrl = '/account/logout/'
+grails.plugin.springsecurity.logout.afterLogoutUrl = '/'
 
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         [pattern: '/', access: ['permitAll']],

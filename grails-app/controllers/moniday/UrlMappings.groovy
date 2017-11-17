@@ -16,6 +16,7 @@ class UrlMappings {
         "/user/$uniqueId/account-detail"(controller: 'account', action: 'accountDetail')
         "/user/$uniqueId/security-detail"(controller: 'account', action: 'securityDetail')
         "/admin/$uniqueId/show-user-details"(controller: 'admin', action: 'showUserDetails')
+        "/admin/$uniqueId/show-account-details"(controller: 'admin', action: 'showUserAccountDetail')
 
         "500"(view: '/error')
         "404"(view: '/notFound')

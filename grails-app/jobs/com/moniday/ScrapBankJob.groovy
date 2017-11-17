@@ -9,7 +9,7 @@ class ScrapBankJob {
     def execute(context) {
         // execute job
         println "Going to Execute Job to Scrap and collect money from the Account"
-        String  userName = context.mergedJobDataMap.get("username")
+        String userName = context.mergedJobDataMap.get("username")
         moneyCollectionService.collectMoney(userName)
         println "Money Collection Job Finished"
     }

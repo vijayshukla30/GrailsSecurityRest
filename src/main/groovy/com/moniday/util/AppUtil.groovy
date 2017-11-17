@@ -10,10 +10,24 @@ import com.moniday.enums.Currency
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.Month
+import java.time.ZoneId
 import java.util.regex.Pattern
 
 class AppUtil {
+
+    static def getEnumByString(String code, def enumData) {
+        def data = null
+        enumData.values().each {
+            if (it.value == code) {
+                data = it
+                return false
+            }
+        }
+        return data
+    }
+
     public static Month getMonth(String monthString) {
         Month month = null
         switch (monthString) {
@@ -67,7 +81,6 @@ class AppUtil {
     }
 
     static Long generateUnixTimeStampFromDate(Date date) {
-
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
         Long unixTime
 
@@ -82,20 +95,28 @@ class AppUtil {
         return unixTime
     }
 
+    static Date generateDateFromString(Long date, Long month, Long year) {
+        println date
+        println month
+        println year
+        LocalDate dobDate = LocalDate.of(year as int, getMonth("$month"), date as int)
+        Date.from(dobDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    }
+
     static void calculateDeductionAmount(PersonDTO personDTO) {
         List<AccountDTO> accountDTOS = personDTO.accounts
-        Long totalAmountSum = 0
+        Double totalAmountSum = 0
         println "Calculate the amount to be deducted from the accounts"
         accountDTOS.each { AccountDTO accountDTO ->
-            Long accountMoney = calculateAmountOnAccount(accountDTO)
+            Double accountMoney = calculateAmountOnAccount(accountDTO)
             accountDTO.deductedMoney = "$accountMoney"
             totalAmountSum += (accountMoney)
         }
         personDTO.deductedMoney = "$totalAmountSum"
     }
 
-    static Long calculateAmountOnAccount(AccountDTO accountDTO) {
-        Long amountSum = 0
+    static Double calculateAmountOnAccount(AccountDTO accountDTO) {
+        Double amountSum = 0
         List<TransactionDTO> transactionDTOS = accountDTO.transactions
         transactionDTOS.each { TransactionDTO transactionDTO ->
             println transactionDTO.amount
@@ -104,9 +125,9 @@ class AppUtil {
                 List<String> amountList = transactionDTO.amount?.split(Pattern.quote("."))
                 println amountList
                 if (amountList.size() > 1)
-                    amountSum += (amountList[amountList.size() - 1] as Long)
+                    amountSum += (amountList[amountList.size() - 1] as Double)
             }
         }
-        return amountSum
+        return amountSum / 100
     }
 }

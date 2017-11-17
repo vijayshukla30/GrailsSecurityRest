@@ -2,12 +2,14 @@ package com.moniday.firebase
 
 import com.firebase.Account
 import com.firebase.Bank
+import com.firebase.PersonalDetail
 import com.firebase.User
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseCredentials
 import com.google.firebase.database.*
 import com.moniday.AdminSetting
+import com.moniday.command.PersonalDetailCO
 
 import java.util.concurrent.CountDownLatch
 
@@ -110,7 +112,24 @@ class FirebaseInitializer {
         return account
     }
 
-    //Get Scrap Details of User
+    //Save Personal Details of User
+    static def savePersonalDetail(PersonalDetailCO personalDetailCO, String fireBaseId) {
+        println("Saving Personal Detail")
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
+        PersonalDetail personalDetail = new PersonalDetail()
+        personalDetail.setFirstName(personalDetailCO.firstName)
+        personalDetail.setLastName(personalDetailCO.lastName)
+        personalDetail.setDateOfBirth(personalDetailCO.dateOfBirth)
+        personalDetail.setAge(personalDetailCO.age)
+        personalDetail.setNationality(personalDetailCO.nationality.value)
+        personalDetail.setCountryOfResidence(personalDetailCO.country.value)
+        personalDetail.setCurrency(personalDetailCO.currency.value)
+        DatabaseReference personRef = ref.child("${USER_REF}/$fireBaseId/personalDetail")
+        personRef.setValue(personalDetail)
+        println("Saved Personal Detail")
+    }
+
+    //Get Personal Details of User
     static Map getUserPersonalDetail(String userFireBaseId) {
         Map personalMap = [:]
         DatabaseReference accountRef = FirebaseDatabase.getInstance().getReference(USER_REF + "/${userFireBaseId}/personalDetail")

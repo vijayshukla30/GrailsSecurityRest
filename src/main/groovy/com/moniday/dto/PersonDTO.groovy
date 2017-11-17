@@ -4,6 +4,7 @@ class PersonDTO {
     String firstName
     String lastName
     String deductedMoney = ""
+    String creditCardDeductMoney = ""
 
     List<AccountDTO> accounts = []
 
