@@ -47,7 +47,6 @@ class AdminController {
     def showUserDetails(String uniqueId) {
         User user = User.findByUniqueId(uniqueId)
         if (user) {
-            println("I found User")
             Map personalMap = FirebaseInitializer.getUserPersonalDetail(user?.firebaseId)
             PersonalDetailCO personalDetailCO = new PersonalDetailCO(personalMap)
             render(view: 'userPersonalDetails', model: [tabName: "PersonalDetail", personalDetailCO: personalDetailCO, user: user])
@@ -61,11 +60,9 @@ class AdminController {
     def showUserAccountDetail(String uniqueId) {
         User user = User.findByUniqueId(uniqueId)
         if (user) {
-            println("I found User")
             Map personalMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
             PersonDTO personDTO = new PersonDTO(personalMap)
             AppUtil.calculateDeductionAmount(personDTO)
-            println personDTO.properties
             render(view: 'userAccoutDetails', model: [tabName: "AccountDetail", personDTO: personDTO, user: user])
         } else {
             flash.error = "No User has been found please check it..."

@@ -12,6 +12,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Month
+import java.time.Year
 import java.time.ZoneId
 import java.util.regex.Pattern
 
@@ -96,14 +97,24 @@ class AppUtil {
     }
 
     static Date convertBankDateStringToDate(String dateString) {
-
+        //format will be date/month/year
+        //TODO: Need Refactoring
+        Date date
+        if (dateString == "") {
+            date = null
+        } else {
+            String[] dateValues = dateString.split(Pattern.quote("/"))
+            int day = Integer.parseInt(dateValues[0])
+            int month = Integer.parseInt(dateValues[1])
+            int currentYear = Year.now().getValue()
+            LocalDate dobDate = LocalDate.of(currentYear, month, day)
+            date = Date.from(dobDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        }
+        return date
     }
 
     static Date generateDateFromString(Long date, Long month, Long year) {
-        println date
-        println month
-        println year
-        LocalDate dobDate = LocalDate.of(year as int, getMonth("$month"), date as int)
+        LocalDate dobDate = LocalDate.of(year as int, getMonth("${month + 1}"), date as int)
         Date.from(dobDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
     }
 
@@ -130,7 +141,6 @@ class AppUtil {
                 println amountList
                 if (amountList.size() > 1) {
                     def extraAmount = ((amountList[amountList.size() - 1] as Double) / 100)
-                    println(extraAmount)
                     transactionDTO.grabAmount = ((extraAmount > 0 ? 1 - extraAmount : 0.0) as Double).round(2)
                     amountSum += transactionDTO.grabAmount
                 }

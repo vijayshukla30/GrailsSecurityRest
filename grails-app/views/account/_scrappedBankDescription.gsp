@@ -49,10 +49,11 @@
                                                 <tr>
                                                     <td>${transaction?.transactionDate}</td>
                                                     <td>${transaction?.description}</td>
-                                                    <td>${transaction?.amount}</td>
-                                                    <td>${transaction?.grabAmount}</td>
+                                                    <td><g:message code="amount" args="${[transaction?.amount]}"/></td>
+                                                    <td><g:message code="amount"
+                                                                   args="${[transaction?.grabAmount ?: 0.0]}"/></td>
                                                     <td>
-                                                        <g:message code="amount" args="${[transaction?.status]}"/>
+                                                        ${transaction?.status}
                                                     </td>
                                                 </tr>
                                             </g:each>
