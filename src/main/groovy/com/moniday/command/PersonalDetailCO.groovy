@@ -24,11 +24,11 @@ class PersonalDetailCO implements Validateable {
 
     PersonalDetailCO(Map dataMap) {
         println dataMap
-        this.firstName = dataMap.firstName
-        this.lastName = dataMap.lastName
-        this.country = AppUtil.getEnumByString(dataMap.countryOfResidence, Country)
-        this.nationality = AppUtil.getEnumByString(dataMap.nationality, Country)
-        this.currency = AppUtil.getEnumByString(dataMap.currency, Currency)
-        this.dateOfBirth = AppUtil.generateDateFromString(dataMap.dateOfBirth.date, dataMap.dateOfBirth.month, dataMap.dateOfBirth.year)
+        this.firstName = dataMap?.firstName
+        this.lastName = dataMap?.lastName
+        this.country = AppUtil.getEnumByString(dataMap?.countryOfResidence, Country)
+        this.nationality = AppUtil.getEnumByString(dataMap?.nationality, Country)
+        this.currency = AppUtil.getEnumByString(dataMap?.currency, Currency)
+        this.dateOfBirth = AppUtil.generateDateFromString(dataMap?.dateOfBirth?.transactionDate, dataMap?.dateOfBirth?.month, dataMap?.dateOfBirth?.year)
     }
 }

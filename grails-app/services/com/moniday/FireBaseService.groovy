@@ -98,7 +98,7 @@ class FireBaseService {
             List transactions = []
             accountDTO.transactions.each { TransactionDTO transactionDTO ->
                 Map transactionDetails = [:]
-                transactionDetails.date = transactionDTO.date
+                transactionDetails.transactionDate = transactionDTO.transactionDate
                 transactionDetails.description = transactionDTO.description
                 transactionDetails.amount = transactionDTO.amount
                 transactionDetails.isCardTransaction = transactionDTO.isCardTransaction

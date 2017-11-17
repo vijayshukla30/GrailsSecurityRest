@@ -37,17 +37,23 @@
                                         <table class="table table-hover table-bordered">
                                             <thead>
                                             <tr>
-                                                <th>Date</th>
-                                                <th>Amount</th>
-                                                <th>Description</th>
+                                                <th><g:message code="date.label"/></th>
+                                                <th><g:message code="bank.comment.label"/></th>
+                                                <th><g:message code="expenses.label"/></th>
+                                                <th><g:message code="grab.label"/></th>
+                                                <th><g:message code="status.label"/></th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <g:each in="${account.transactions}" var="transaction">
                                                 <tr>
-                                                    <td>${transaction.date}</td>
-                                                    <td>${transaction.amount}</td>
-                                                    <td>${transaction.description}</td>
+                                                    <td>${transaction?.transactionDate}</td>
+                                                    <td>${transaction?.description}</td>
+                                                    <td>${transaction?.amount}</td>
+                                                    <td>${transaction?.grabAmount}</td>
+                                                    <td>
+                                                        <g:message code="amount" args="${[transaction?.status]}"/>
+                                                    </td>
                                                 </tr>
                                             </g:each>
                                             </tbody>
