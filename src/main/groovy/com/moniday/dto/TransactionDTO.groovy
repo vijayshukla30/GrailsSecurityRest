@@ -22,4 +22,21 @@ class TransactionDTO {
         this.status = transactionMap?.status
         this.grabAmount = transactionMap?.grabAmount
     }
+
+    @Override
+    boolean equals(Object obj) {
+        boolean equal = true
+        if (obj instanceof TransactionDTO) {
+            TransactionDTO transactionDTO = (TransactionDTO) obj
+            if (transactionDTO.transactionDate != this.transactionDate || transactionDTO.description != this.description || transactionDTO.amount != this.amount || transactionDTO.isCardTransaction != this.isCardTransaction) {
+                equal = false
+            }
+        }
+        return equal
+    }
+
+    @Override
+    String toString() {
+        return (transactionDate + " , " + description + " , " + amount + " , " + isCardTransaction)
+    }
 }

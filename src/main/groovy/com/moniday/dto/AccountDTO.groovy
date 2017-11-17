@@ -26,4 +26,16 @@ class AccountDTO {
             this.transactions.add(new TransactionDTO(it))
         }
     }
+
+    @Override
+    boolean equals(Object obj) {
+        boolean equal = true
+        if (obj instanceof AccountDTO) {
+            AccountDTO accountDTO = (AccountDTO) obj
+            if (accountDTO.accountNumber != this.accountNumber || accountDTO.typeOfAccount != this.typeOfAccount || accountDTO.isCardTransaction != this.isCardTransaction) {
+                equal = false
+            }
+        }
+        return equal
+    }
 }

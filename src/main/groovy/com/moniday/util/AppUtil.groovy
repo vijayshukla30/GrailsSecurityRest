@@ -96,7 +96,19 @@ class AppUtil {
     }
 
     static Date convertBankDateStringToDate(String dateString) {
-
+        //format will be date/month/year
+        Date date
+        if (dateString == "") {
+            date = null
+        } else {
+            String[] dateValues = dateString.split("/")
+            int day = Integer.parseInt(dateValues[0])
+            int month = Integer.parseInt(dateValues[1])
+            int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+            date = new GregorianCalendar(dateValues.length == 3 ? dateValues[2] : currentYear, month - 1, day).getTime();
+            println(date)
+        }
+        return date
     }
 
     static Date generateDateFromString(Long date, Long month, Long year) {
