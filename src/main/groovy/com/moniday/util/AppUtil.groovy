@@ -95,6 +95,10 @@ class AppUtil {
         return unixTime
     }
 
+    static Date convertBankDateStringToDate(String dateString) {
+
+    }
+
     static Date generateDateFromString(Long date, Long month, Long year) {
         println date
         println month
@@ -108,26 +112,30 @@ class AppUtil {
         Double totalAmountSum = 0
         println "Calculate the amount to be deducted from the accounts"
         accountDTOS.each { AccountDTO accountDTO ->
-            Double accountMoney = calculateAmountOnAccount(accountDTO)
-            accountDTO.deductedMoney = "$accountMoney"
-            totalAmountSum += (accountMoney)
+            if (accountDTO?.isCardTransaction) {
+                Double accountMoney = calculateAmountOnAccount(accountDTO)
+                accountDTO.deductedMoney = "$accountMoney"
+                totalAmountSum += (accountMoney)
+            }
         }
-        personDTO.deductedMoney = "$totalAmountSum"
+        personDTO.deductedMoney = "${totalAmountSum.round(2)}"
     }
 
     static Double calculateAmountOnAccount(AccountDTO accountDTO) {
         Double amountSum = 0
         List<TransactionDTO> transactionDTOS = accountDTO.transactions
         transactionDTOS.each { TransactionDTO transactionDTO ->
-            println transactionDTO.amount
             if (transactionDTO.amount?.contains("-")) {
-                println "DEBIT TRANSACTION"
                 List<String> amountList = transactionDTO.amount?.split(Pattern.quote("."))
                 println amountList
-                if (amountList.size() > 1)
-                    amountSum += (amountList[amountList.size() - 1] as Double)
+                if (amountList.size() > 1) {
+                    def extraAmount = ((amountList[amountList.size() - 1] as Double) / 100)
+                    println(extraAmount)
+                    transactionDTO.grabAmount = ((extraAmount > 0 ? 1 - extraAmount : 0.0) as Double).round(2)
+                    amountSum += transactionDTO.grabAmount
+                }
             }
         }
-        return amountSum / 100
+        return amountSum.round(2)
     }
 }

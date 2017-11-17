@@ -4,6 +4,7 @@ import com.moniday.dto.AccountDTO
 import com.moniday.dto.PersonDTO
 import com.moniday.dto.TransactionDTO
 import com.moniday.ocr.OCRUtill
+import com.moniday.util.AppUtil
 import geb.Browser
 import geb.module.TextInput
 import geb.navigator.Navigator
@@ -195,14 +196,14 @@ class ScrapService {
             def cellNav = rowNav.children("td")
             if (accountDTO.typeOfAccount == "CCHQ") {
                 TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date = cellNav[0].text()
+                transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text())
                 transactionDTO.description = cellNav[2].text()
                 transactionDTO.amount = cellNav[4].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTO.isCardTransaction = false
                 transactionDTOS.add(transactionDTO)
             } else if (accountDTO.typeOfAccount == "CEL" || accountDTO.typeOfAccount == "LDD") {
                 TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.date = cellNav[0].text()
+                transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text())
                 transactionDTO.description = cellNav[1].text()
                 transactionDTO.amount = cellNav[2].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTO.isCardTransaction = false
@@ -233,11 +234,11 @@ class ScrapService {
         browser.$("table.ca-table")[1].$("tbody").children("tr").each { rowNav ->
             def cellNav = rowNav.children("td")
             TransactionDTO transactionDTO = new TransactionDTO()
-            transactionDTO.date = cellNav[0].text().replaceAll(" ", "")
+            transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text().replaceAll(" ", ""))
             transactionDTO.description = cellNav[1].text()
             transactionDTO.amount = cellNav[3].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
             transactionDTO.isCardTransaction = true
-            if (transactionDTO.date != "") {
+            if (transactionDTO.transactionDate != "") {
                 transactionDTOS.add(transactionDTO)
             }
         }
