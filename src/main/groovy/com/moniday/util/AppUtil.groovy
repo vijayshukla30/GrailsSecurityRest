@@ -12,6 +12,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Month
+import java.time.Year
 import java.time.ZoneId
 import java.util.regex.Pattern
 
@@ -105,7 +106,7 @@ class AppUtil {
             String[] dateValues = dateString.split(Pattern.quote("/"))
             int day = Integer.parseInt(dateValues[0])
             int month = Integer.parseInt(dateValues[1])
-            int currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            int currentYear = Year.now().getValue()
             LocalDate dobDate = LocalDate.of(currentYear, month, day)
             date = Date.from(dobDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
         }
@@ -113,10 +114,7 @@ class AppUtil {
     }
 
     static Date generateDateFromString(Long date, Long month, Long year) {
-        println date
-        println month
-        println year
-        LocalDate dobDate = LocalDate.of(year as int, getMonth("$month"), date as int)
+        LocalDate dobDate = LocalDate.of(year as int, getMonth("${month + 1}"), date as int)
         Date.from(dobDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
     }
 

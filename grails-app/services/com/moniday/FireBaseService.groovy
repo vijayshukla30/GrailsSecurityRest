@@ -88,8 +88,6 @@ class FireBaseService {
             saveNewScrappedDataToFirebase(personDTO, firebaseId)
             return
         }
-        println("executing saveScrappedData")
-        PersonDTO existingData = new PersonDTO(personalMap)
         Map personMap = [:]
         personMap.firstName = personDTO.firstName
         personMap.lastName = personDTO.lastName

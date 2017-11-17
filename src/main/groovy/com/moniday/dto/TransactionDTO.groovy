@@ -1,6 +1,7 @@
 package com.moniday.dto
 
 import com.moniday.enums.TransactionStatus
+import com.moniday.util.AppUtil
 
 class TransactionDTO {
     Date transactionDate
@@ -15,12 +16,15 @@ class TransactionDTO {
     }
 
     TransactionDTO(Map transactionMap) {
-        this.transactionDate = transactionMap?.transactionDate
-        this.description = transactionMap?.description
-        this.amount = transactionMap?.amount
-        this.isCardTransaction = transactionMap?.isCardTransaction
-        this.status = transactionMap?.status ?: TransactionStatus.NOT_PROCESSED
-        this.grabAmount = transactionMap?.grabAmount
+        println(transactionMap?.transactionDate)
+        if (transactionMap?.transactionDate) {
+            this.transactionDate = AppUtil.generateDateFromString(transactionMap?.transactionDate?.date as Long, transactionMap?.transactionDate?.month as Long, transactionMap?.transactionDate?.year as Long)
+            this.description = transactionMap?.description
+            this.amount = transactionMap?.amount
+            this.isCardTransaction = transactionMap?.isCardTransaction
+            this.status = transactionMap?.status ?: TransactionStatus.NOT_PROCESSED
+            this.grabAmount = transactionMap?.grabAmount
+        }
     }
 
     @Override
