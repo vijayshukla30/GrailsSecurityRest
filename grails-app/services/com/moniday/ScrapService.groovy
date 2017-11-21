@@ -123,8 +123,11 @@ class ScrapService {
     }
 
     def scrapCreditAgricole(String bankURL, String bankUserName, String bankPassword) {
+        println "/////////////////////2//////////////////////"
         PersonDTO personDTO = new PersonDTO()
+        println "////////////////////3//////////////////////"
         Browser.drive {
+            println "/////////////////////4//////////////////////"
             go bankURL
             $(".toolbar-action-important").click()
             println("Login page title " + title)
@@ -152,6 +155,7 @@ class ScrapService {
             extractAccountAndTrans(personDTO, 0, "colcellignepaire")
             extractAccountAndTrans(personDTO, 0, "colcelligneimpaire")
         }
+        println "/////////////////////5//////////////////////"
         return personDTO
     }
 
@@ -211,6 +215,16 @@ class ScrapService {
             }
         }
         accountDTO.transactions = transactionDTOS
+
+        println "****&&&&&&&&&&***********"
+        println "****&&&&&&&&&&***********"
+        println "****&&&&&&&&&&***********"
+        println "****&&&&&&&&&&***********"
+        println accountDTO.accountNumber
+        println(accountDTO.transactions*.transactionDate)
+        println "****&&&&&&&&&&***********"
+        println "****&&&&&&&&&&***********"
+        println "****&&&&&&&&&&***********"
 
         if (isCardAttached) {
             println("*********************")

@@ -32,7 +32,7 @@ class AccountDTO {
         boolean equal = true
         if (obj instanceof AccountDTO) {
             AccountDTO accountDTO = (AccountDTO) obj
-            if (accountDTO.accountNumber != this.accountNumber || accountDTO.typeOfAccount != this.typeOfAccount || accountDTO.isCardTransaction != this.isCardTransaction) {
+            if ((accountDTO.accountNumber != this.accountNumber) && (accountDTO.typeOfAccount != this.typeOfAccount) && (accountDTO.isCardTransaction != this.isCardTransaction)) {
                 equal = false
             }
         }

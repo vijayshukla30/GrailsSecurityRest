@@ -4,7 +4,6 @@ import com.moniday.User
 import com.moniday.command.UserCO
 import com.moniday.dto.PersonDTO
 import grails.plugin.springsecurity.annotation.Secured
-import groovy.json.JsonBuilder
 
 @Secured(['permitAll'])
 class PublicController {
@@ -89,9 +88,16 @@ class PublicController {
 
     def mangoPay() {
 //        mangoPayService.serviceMethod()
+        println "/////////////////////1//////////////////////"
         PersonDTO personDTO = scrapService.scrapCreditAgricole("https://www.nmp-g3-enligne.credit-agricole.fr/stb/entreeBam", "51352826100", "813106")
-        def data =  new JsonBuilder(personDTO).toPrettyString()
-        render data
+//        def data = new JsonBuilder(personDTO).toPrettyString()
+        println "/////////////////////6//////////////////////"
+        if (personDTO) {
+            println "/////////////////////7//////////////////////"
+            fireBaseService.saveScrappedDataToFirebase(personDTO, "-KytxaTLyoSGfXMSSiTo")
+        }
+        println "/////////////////////8//////////////////////"
+        render ""
     }
 
 }

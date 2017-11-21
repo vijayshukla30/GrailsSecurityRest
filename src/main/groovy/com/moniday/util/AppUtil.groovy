@@ -108,7 +108,7 @@ class AppUtil {
             int month = Integer.parseInt(dateValues[1])
             int currentYear = Year.now().getValue()
             LocalDate dobDate = LocalDate.of(currentYear, month, day)
-            date = Date.from(dobDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+            date = Date.from(dobDate.atStartOfDay(ZoneId.of("Europe/Berlin")).toInstant())
         }
         return date
     }
