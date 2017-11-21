@@ -107,6 +107,10 @@ class AppUtil {
             int day = Integer.parseInt(dateValues[0])
             int month = Integer.parseInt(dateValues[1])
             int currentYear = Year.now().getValue()
+            if (LocalDate.now().isBefore(LocalDate.of(currentYear, month, day))) {
+                //today's date comes before transaction date... transaction is of previous year
+                currentYear = currentYear - 1
+            }
             LocalDate dobDate = LocalDate.of(currentYear, month, day)
             date = Date.from(dobDate.atStartOfDay(ZoneId.of("Europe/Berlin")).toInstant())
         }

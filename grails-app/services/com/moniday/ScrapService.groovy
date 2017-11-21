@@ -8,6 +8,7 @@ import com.moniday.util.AppUtil
 import geb.Browser
 import geb.module.TextInput
 import geb.navigator.Navigator
+import org.joda.time.DateTime
 import org.openqa.selenium.By
 
 class ScrapService {
@@ -204,27 +205,25 @@ class ScrapService {
                 transactionDTO.description = cellNav[2].text()
                 transactionDTO.amount = cellNav[4].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTO.isCardTransaction = false
-                transactionDTOS.add(transactionDTO)
+                if (transactionDTO.transactionDate.before(new DateTime().minusMonths(1).toDate())) {
+                    return false
+                } else {
+                    transactionDTOS.add(transactionDTO)
+                }
             } else if (accountDTO.typeOfAccount == "CEL" || accountDTO.typeOfAccount == "LDD") {
                 TransactionDTO transactionDTO = new TransactionDTO()
                 transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text())
                 transactionDTO.description = cellNav[1].text()
                 transactionDTO.amount = cellNav[2].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTO.isCardTransaction = false
-                transactionDTOS.add(transactionDTO)
+                if (transactionDTO.transactionDate.before(new DateTime().minusMonths(1).toDate())) {
+                    return false
+                } else {
+                    transactionDTOS.add(transactionDTO)
+                }
             }
         }
         accountDTO.transactions = transactionDTOS
-
-        println "****&&&&&&&&&&***********"
-        println "****&&&&&&&&&&***********"
-        println "****&&&&&&&&&&***********"
-        println "****&&&&&&&&&&***********"
-        println accountDTO.accountNumber
-        println(accountDTO.transactions*.transactionDate)
-        println "****&&&&&&&&&&***********"
-        println "****&&&&&&&&&&***********"
-        println "****&&&&&&&&&&***********"
 
         if (isCardAttached) {
             println("*********************")
@@ -237,15 +236,6 @@ class ScrapService {
             creditAccountDto.balance = accountDTO.balance
             creditAccountDto.currencyType = accountDTO.currencyType
             creditAccountDto.transactions = extractCardTransactions()
-            println "****&&&&&&&&&&***********"
-            println "****&&&&&&&&&&***********"
-            println "****&&&&&&&&&&***********"
-            println "****&&&&&&&&&&***********"
-            println creditAccountDto.accountNumber
-            println(creditAccountDto.transactions*.transactionDate)
-            println "****&&&&&&&&&&***********"
-            println "****&&&&&&&&&&***********"
-            println "****&&&&&&&&&&***********"
             personDTO.accounts.add(creditAccountDto)
         }
     }
@@ -261,8 +251,12 @@ class ScrapService {
             transactionDTO.description = cellNav[1].text()
             transactionDTO.amount = cellNav[3].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
             transactionDTO.isCardTransaction = true
-            if (transactionDTO.transactionDate != "") {
-                transactionDTOS.add(transactionDTO)
+            if (transactionDTO.transactionDate != "" && transactionDTO.transactionDate != null) {
+                if (transactionDTO.transactionDate.before(new DateTime().minusMonths(1).toDate())) {
+                    return false
+                } else {
+                    transactionDTOS.add(transactionDTO)
+                }
             }
         }
         transactionDTOS
