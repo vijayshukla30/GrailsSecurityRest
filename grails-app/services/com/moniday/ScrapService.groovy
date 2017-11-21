@@ -237,6 +237,15 @@ class ScrapService {
             creditAccountDto.balance = accountDTO.balance
             creditAccountDto.currencyType = accountDTO.currencyType
             creditAccountDto.transactions = extractCardTransactions()
+            println "****&&&&&&&&&&***********"
+            println "****&&&&&&&&&&***********"
+            println "****&&&&&&&&&&***********"
+            println "****&&&&&&&&&&***********"
+            println creditAccountDto.accountNumber
+            println(creditAccountDto.transactions*.transactionDate)
+            println "****&&&&&&&&&&***********"
+            println "****&&&&&&&&&&***********"
+            println "****&&&&&&&&&&***********"
             personDTO.accounts.add(creditAccountDto)
         }
     }
