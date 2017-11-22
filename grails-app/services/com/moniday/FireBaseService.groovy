@@ -103,6 +103,7 @@ class FireBaseService {
         Map personMap = [:]
         personMap.firstName = oldScrapRecord.firstName
         personMap.lastName = oldScrapRecord.lastName
+        personMap.deductedMoney = oldScrapRecord.deductedMoney
 
         List accounts = []
         oldScrapRecord.accounts.each { AccountDTO accountDTO ->
@@ -112,6 +113,7 @@ class FireBaseService {
             accountDetail.balance = accountDTO.balance
             accountDetail.currencyType = accountDTO.currencyType
             accountDetail.isCardTransaction = accountDTO.isCardTransaction
+            accountDetail.deductedMoney = accountDTO.deductedMoney
             List transactions = []
             accountDTO.transactions.each { TransactionDTO transactionDTO ->
                 Map transactionDetails = [:]

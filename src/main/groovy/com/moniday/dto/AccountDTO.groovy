@@ -5,7 +5,7 @@ class AccountDTO {
     String accountNumber
     Double balance
     String currencyType
-    String deductedMoney = ""
+    String deductedMoney = "0"
     String creditCardDeductMoney = ""
     Boolean isCardTransaction = Boolean.FALSE
 
