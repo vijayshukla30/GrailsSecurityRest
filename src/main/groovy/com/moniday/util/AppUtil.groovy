@@ -7,6 +7,7 @@ import com.moniday.dto.PersonDTO
 import com.moniday.dto.TransactionDTO
 import com.moniday.enums.Country
 import com.moniday.enums.Currency
+import com.moniday.enums.TransactionState
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -140,14 +141,17 @@ class AppUtil {
         Double amountSum = 0
         List<TransactionDTO> transactionDTOS = accountDTO.transactions
         transactionDTOS.each { TransactionDTO transactionDTO ->
-            if (transactionDTO.amount?.contains("-")) {
-                List<String> amountList = transactionDTO.amount?.split(Pattern.quote("."))
-                println amountList
-                if (amountList.size() > 1) {
-                    def extraAmount = ((amountList[amountList.size() - 1] as Double) / 100)
-                    transactionDTO.grabAmount = ((extraAmount > 0 ? 1 - extraAmount : 0.0) as Double).round(2)
-                    amountSum += transactionDTO.grabAmount
+            if (transactionDTO.state == TransactionState.NEW) {     //calculate amount only if transaction state in NEW
+                if (transactionDTO.amount?.contains("-")) {
+                    List<String> amountList = transactionDTO.amount?.split(Pattern.quote("."))
+                    println amountList
+                    if (amountList.size() > 1) {
+                        def extraAmount = ((amountList[amountList.size() - 1] as Double) / 100)
+                        transactionDTO.grabAmount = ((extraAmount > 0 ? 1 - extraAmount : 0.0) as Double).round(2)
+                        amountSum += transactionDTO.grabAmount
+                    }
                 }
+                transactionDTO.state = TransactionState.OLD     //change the state of transaction to OLD
             }
         }
         return amountSum.round(2)

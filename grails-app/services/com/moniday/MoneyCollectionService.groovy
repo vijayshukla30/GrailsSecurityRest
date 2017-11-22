@@ -4,6 +4,7 @@ import com.firebase.Account
 import com.firebase.Bank
 import com.moniday.dto.PersonDTO
 import com.moniday.firebase.FirebaseInitializer
+import com.moniday.util.AppUtil
 
 class MoneyCollectionService {
     def transactional = false
@@ -30,6 +31,7 @@ class MoneyCollectionService {
                 println("No such bank found")
         }
         if (personDTO) {
+            AppUtil.calculateDeductionAmount(personDTO)
             fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId)
         }
     }

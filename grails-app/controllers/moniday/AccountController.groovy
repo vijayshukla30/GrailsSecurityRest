@@ -34,7 +34,6 @@ class AccountController {
             PersonDTO personDTO = null
             if (accountMap) {
                 personDTO = new PersonDTO(accountMap)
-                AppUtil.calculateDeductionAmount(personDTO)
             }
             render(view: 'index', model: [user: user, personDTO: personDTO])
         } else {

@@ -4,7 +4,8 @@ enum TransactionStatus {
     PROCESSED('Processed'),
     PENDING('Pending'),
     APPROVED("Approved"),
-    NOT_PROCESSED("Not Processed")
+    NOT_PROCESSED("Not Processed"),
+    PROCESSING("Processing")
 
 
     private final String value
