@@ -1,5 +1,6 @@
 package com.moniday.dto
 
+import com.moniday.enums.TransactionState
 import com.moniday.enums.TransactionStatus
 import com.moniday.util.AppUtil
 
@@ -10,6 +11,7 @@ class TransactionDTO {
     Double grabAmount = 0.0
     Boolean isCardTransaction = Boolean.FALSE
     TransactionStatus status = TransactionStatus.NOT_PROCESSED
+    TransactionState state = TransactionState.NEW
 
     TransactionDTO() {
 
