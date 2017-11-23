@@ -133,21 +133,15 @@ class AppUtil {
         accountDTOS.each { AccountDTO accountDTO ->
             if (accountDTO?.isCardTransaction) {
                 Double accountMoney = calculateAmountOnAccount(accountDTO)
-                accountDTO.deductedMoney = "$accountMoney"
-                totalAmountSum += (accountMoney)
+                //if accountDTO already has some deductedMoney value then new value must be added to it
+                Double deductedMoney = Double.parseDouble(accountDTO.deductedMoney)
+                println("&**^^*(( ${deductedMoney} &&^%%% ${accountMoney}")
+                deductedMoney = deductedMoney + accountMoney
+                accountDTO.deductedMoney = "$deductedMoney"
+                totalAmountSum += (deductedMoney)
             }
         }
-        /*
-        * in case the deducted money could not get more than specified value then
-        * we have to wait for next scrapping.
-        * amountSum received from newly added transaction must be added to already present
-        * value until it gets above a specified value
-        *
-        * reset the deductedMoney to 0 once the transaction is done after admin approval
-        * */
-        Double deductedMoney = Double.parseDouble(personDTO.deductedMoney)
-        deductedMoney = deductedMoney + totalAmountSum.round(2)
-        personDTO.deductedMoney = "${deductedMoney.round(2)}"
+        personDTO.deductedMoney = "${totalAmountSum.round(2)}"
         /*
         * if total amount sum is greater then a certain value then
         * change the status of transaction to PENDING

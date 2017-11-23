@@ -138,6 +138,9 @@ class FireBaseService {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference scrapRef = ref.child("${FirebaseInitializer.USER_REF}/$firebaseId/scrapDetail")
         scrapRef.setValue(personMap)
+
+        println("((((((((((((data saved to firebase is))))))))))")
+        println(personMap)
     }
 
     PersonDTO filterNewAccountAndTransaction(PersonDTO newScrapRecord, PersonDTO oldScrapRecord) {

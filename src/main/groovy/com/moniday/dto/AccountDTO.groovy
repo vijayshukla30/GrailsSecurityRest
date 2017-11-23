@@ -21,7 +21,7 @@ class AccountDTO {
         this.balance = (accountMap?.balance as Double)
         this.currencyType = accountMap?.currencyType
         this.isCardTransaction = accountMap?.isCardTransaction
-
+        this.deductedMoney = accountMap?.deductedMoney
         accountMap.transactions.each {
             this.transactions.add(new TransactionDTO(it))
         }
