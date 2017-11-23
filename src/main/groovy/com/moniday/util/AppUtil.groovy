@@ -8,6 +8,7 @@ import com.moniday.dto.TransactionDTO
 import com.moniday.enums.Country
 import com.moniday.enums.Currency
 import com.moniday.enums.TransactionState
+import com.moniday.enums.TransactionStatus
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -18,6 +19,8 @@ import java.time.ZoneId
 import java.util.regex.Pattern
 
 class AppUtil {
+
+    static final Double MINDEDUCTEDMONEY = 5
 
     static def getEnumByString(String code, def enumData) {
         def data = null
@@ -134,7 +137,25 @@ class AppUtil {
                 totalAmountSum += (accountMoney)
             }
         }
-        personDTO.deductedMoney = "${totalAmountSum.round(2)}"
+        /*
+        * in case the deducted money could not get more than specified value then
+        * we have to wait for next scrapping.
+        * amountSum received from newly added transaction must be added to already present
+        * value until it gets above a specified value
+        *
+        * reset the deductedMoney to 0 once the transaction is done after admin approval
+        * */
+        Double deductedMoney = Double.parseDouble(personDTO.deductedMoney)
+        deductedMoney = deductedMoney + totalAmountSum.round(2)
+        personDTO.deductedMoney = "${deductedMoney.round(2)}"
+        /*
+        * if total amount sum is greater then a certain value then
+        * change the status of transaction to PENDING
+        *
+        * */
+        if (totalAmountSum > MINDEDUCTEDMONEY) {
+            changeTransactionStatusToPending(personDTO)
+        }
     }
 
     static Double calculateAmountOnAccount(AccountDTO accountDTO) {
@@ -155,5 +176,23 @@ class AppUtil {
             }
         }
         return amountSum.round(2)
+    }
+
+    static void changeTransactionStatusToPending(PersonDTO personDTO) {
+        /*
+        * Change only the card transactions with status as NOT PROCESSED to PENDING
+        *
+        * */
+        List<AccountDTO> accountDTOS = personDTO.accounts
+        accountDTOS.each { AccountDTO accountDTO ->
+            if (accountDTO?.isCardTransaction) {
+                List<TransactionDTO> transactionDTOS = accountDTO.transactions
+                transactionDTOS.each { TransactionDTO transactionDTO ->
+                    if (transactionDTO.status == TransactionStatus.NOT_PROCESSED && transactionDTO.state == TransactionState.OLD) {
+                        transactionDTO.status = TransactionStatus.PENDING
+                    }
+                }
+            }
+        }
     }
 }

@@ -3,8 +3,8 @@ package com.moniday.dto
 class PersonDTO {
     String firstName
     String lastName
-    String deductedMoney = ""
-    String creditCardDeductMoney = ""
+    String deductedMoney = "0"
+    String creditCardDeductMoney = "0"
 
     List<AccountDTO> accounts = []
 
