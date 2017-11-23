@@ -19,6 +19,7 @@ import com.moniday.dto.AccountDTO
 import com.moniday.dto.PersonDTO
 import com.moniday.dto.TransactionDTO
 import com.moniday.firebase.FirebaseInitializer
+import com.moniday.util.AppUtil
 
 class FireBaseService {
     static transactional = false
@@ -96,6 +97,9 @@ class FireBaseService {
         } else {
             oldScrapRecord = personDTO
         }
+
+        //calculate deduction amount after new transactions are merged with old ones
+        AppUtil.calculateDeductionAmount(oldScrapRecord)
 
         println("COMBINE SCRAPPED RECORD")
         println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(oldScrapRecord))
