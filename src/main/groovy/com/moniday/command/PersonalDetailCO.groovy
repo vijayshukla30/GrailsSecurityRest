@@ -29,6 +29,6 @@ class PersonalDetailCO implements Validateable {
         this.country = AppUtil.getEnumByString(dataMap?.countryOfResidence, Country)
         this.nationality = AppUtil.getEnumByString(dataMap?.nationality, Country)
         this.currency = AppUtil.getEnumByString(dataMap?.currency, Currency)
-        this.dateOfBirth = AppUtil.generateDateFromString(dataMap?.dateOfBirth?.transactionDate, dataMap?.dateOfBirth?.month, dataMap?.dateOfBirth?.year)
+        this.dateOfBirth = AppUtil.generateDateFromString(dataMap?.dateOfBirth?.date, dataMap?.dateOfBirth?.month, dataMap?.dateOfBirth?.year)
     }
 }
