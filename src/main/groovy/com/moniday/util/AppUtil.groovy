@@ -104,16 +104,16 @@ class AppUtil {
         //format will be date/month/year
         //TODO: Need Refactoring
         Date date
-        if (dateString == "") {
+        if (dateString) {
             date = null
         } else {
             String[] dateValues = dateString.split(Pattern.quote("/"))
-            int day = Integer.parseInt(dateValues[0])
-            int month = Integer.parseInt(dateValues[1])
+            int day = dateValues[0] as Integer
+            int month = dateValues[1] as Integer
             int currentYear = Year.now().getValue()
             if (LocalDate.now().isBefore(LocalDate.of(currentYear, month, day))) {
                 //today's date comes before transaction date... transaction is of previous year
-                currentYear = currentYear - 1
+                currentYear -= 1
             }
             LocalDate dobDate = LocalDate.of(currentYear, month, day)
             date = Date.from(dobDate.atStartOfDay(ZoneId.of("Europe/Berlin")).toInstant())
