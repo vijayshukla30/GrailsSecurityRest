@@ -1,5 +1,7 @@
 package com.moniday.dto
 
+import com.moniday.util.AppUtil
+
 class DeductionDetailDTO {
     String fromAccount
     String toAccount
@@ -12,8 +14,8 @@ class DeductionDetailDTO {
     DeductionDetailDTO(Map deductionDetailMap) {
         this.fromAccount = deductionDetailMap?.fromAccount
         this.toAccount = deductionDetailMap?.toAccount
-        this.approvalDate = deductionDetailMap?.approvalDate
-        this.deductionDate = deductionDetailMap?.deductionDate
+        this.approvalDate = AppUtil.generateDateFromString(deductionDetailMap?.approvalDate?.date as Long, deductionDetailMap?.approvalDate?.month as Long, deductionDetailMap?.approvalDate?.year as Long)
+        this.deductionDate = AppUtil.generateDateFromString(deductionDetailMap?.approvalDate?.date as Long, deductionDetailMap?.approvalDate?.month as Long, deductionDetailMap?.approvalDate?.year as Long)
         this.isDeducted = deductionDetailMap?.isDeducted as Boolean
     }
 }
