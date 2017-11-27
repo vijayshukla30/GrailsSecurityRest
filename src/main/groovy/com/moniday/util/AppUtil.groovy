@@ -2,6 +2,7 @@ package com.moniday.util
 
 import com.mangopay.core.enumerations.CountryIso
 import com.mangopay.core.enumerations.CurrencyIso
+import com.moniday.AdminSetting
 import com.moniday.dto.AccountDTO
 import com.moniday.dto.PersonDTO
 import com.moniday.dto.TransactionDTO
@@ -20,8 +21,6 @@ import java.time.ZoneId
 import java.util.regex.Pattern
 
 class AppUtil {
-
-    static final Double MINDEDUCTEDMONEY = 5
 
     static def getEnumByString(String code, def enumData) {
         def data = null
@@ -148,7 +147,7 @@ class AppUtil {
         * change the status of transaction to PENDING
         *
         * */
-        if (totalAmountSum > MINDEDUCTEDMONEY) {
+        if (totalAmountSum > AdminSetting.get(1).minDeductionAmount) {
             changeTransactionStatusToPending(personDTO)
         }
     }
