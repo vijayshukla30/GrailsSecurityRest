@@ -113,6 +113,18 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="minDeductionAmount" class="col-lg-2 control-label">
+                                <g:message code="admin.setting.deduction.amount.min"/>
+                            </label>
+
+                            <div class="col-lg-10">
+                                <input type="number" class="form-control" id="minDeductionAmount"
+                                       name="minDeductionAmount"
+                                       value="${adminSetting.minDeductionAmount}" step="0.5">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-4">
 
                                 <div class="col-lg-2">

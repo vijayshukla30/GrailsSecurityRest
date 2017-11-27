@@ -1,4 +1,4 @@
-<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country;" %>
+<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country; com.moniday.AdminSetting" %>
 <!doctype html>
 <html>
 <head>
@@ -10,7 +10,8 @@
 <body>
 <div class="bs-docs-section clearfix">
 
-    <g:render template="scrappedBankDescription" model="[personDTO: personDTO]"/>
+    <g:render template="scrappedBankDescription"
+              model="[personDTO: personDTO, minDeductionAmount: AdminSetting.get(1).minDeductionAmount]"/>
 
 </div>
 </body>

@@ -12,6 +12,7 @@ class AdminSetting {
     String sendgridEmail
 //    String firebaseConfigurationPath
     String firebaseServerUrl
+    Double minDeductionAmount = 0.0
 
     static constraints = {
         mangoPayUrl nullable: true, blank: true
@@ -23,5 +24,6 @@ class AdminSetting {
         sendgridEmail nullable: true, blank: true
 //        firebaseConfigurationPath nullable: true, blank: true
         firebaseServerUrl nullable: true, blank: true
+        minDeductionAmount nullable: true, blank: true
     }
 }

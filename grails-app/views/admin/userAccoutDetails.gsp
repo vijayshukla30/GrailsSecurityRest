@@ -14,7 +14,7 @@
 
 <div id="userTabContent" class="tab-content">
     <div class="tab-pane fade active in" id="personalDetails">
-        <g:render template="/account/scrappedBankDescription" model="[personDTO: personDTO]"/>
+        <g:render template="/account/scrappedBankDescription" model="[personDTO: personDTO, user: user]"/>
     </div>
 </div>
 </body>

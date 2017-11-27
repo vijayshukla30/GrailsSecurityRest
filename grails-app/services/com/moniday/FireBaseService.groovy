@@ -84,12 +84,12 @@ class FireBaseService {
         debitRef.setValue(debitMandate)
     }
 
-    def saveScrappedDataToFirebase(PersonDTO personDTO, String firebaseId) {
+    def saveScrappedDataToFirebase(PersonDTO personDTO, String firebaseId, Boolean forUpdate) {
         println("NEW SCRAPPED RECORD")
         println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(personDTO))
         Map personalMap = FirebaseInitializer.getUserScrap(firebaseId)
         PersonDTO oldScrapRecord = null
-        if (personalMap) {
+        if (personalMap && (!forUpdate)) {
             oldScrapRecord = new PersonDTO(personalMap)
             println("OLD SCRAPPED RECORD")
             println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(oldScrapRecord))

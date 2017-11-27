@@ -31,7 +31,7 @@ class MoneyCollectionService {
         }
         if (personDTO) {
 //            AppUtil.calculateDeductionAmount(personDTO)
-            fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId)
+            fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId, false)
         }
     }
 }

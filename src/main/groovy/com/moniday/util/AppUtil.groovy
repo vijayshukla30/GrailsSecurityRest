@@ -9,6 +9,7 @@ import com.moniday.enums.Country
 import com.moniday.enums.Currency
 import com.moniday.enums.TransactionState
 import com.moniday.enums.TransactionStatus
+import com.moniday.firebase.FirebaseInitializer
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -104,7 +105,7 @@ class AppUtil {
         //format will be date/month/year
         //TODO: Need Refactoring
         Date date
-        if (dateString) {
+        if (!dateString) {
             date = null
         } else {
             String[] dateValues = dateString.split(Pattern.quote("/"))
@@ -187,6 +188,44 @@ class AppUtil {
                     }
                 }
             }
+        }
+    }
+
+    static PersonDTO approveDeduction(String firebaseId, Boolean forOneAccount, String accountNumber) {
+        Map personalMap = FirebaseInitializer.getUserScrap(firebaseId)
+        PersonDTO personDTO = new PersonDTO(personalMap)
+        if (forOneAccount) {
+            println("from apputil for one account only")
+            personDTO.accounts.each { AccountDTO accountDTO ->
+                if ((accountDTO.accountNumber == accountNumber) && accountDTO.isCardTransaction) {
+                    println("approving for ${accountDTO.accountNumber}")
+                    personDTO.deductedMoney = ((personDTO.deductedMoney as Double) - (accountDTO.deductedMoney as Double)) as String
+                    accountDTO.deductedMoney = "0"
+                    println("${personDTO.deductedMoney} person money after deduction")
+                    changeTransactionStatusToApproved(accountDTO)
+                }
+            }
+        } else {
+            println("form apputil for all accounts")
+            personDTO.accounts.each { AccountDTO accountDTO ->
+                if (accountDTO.isCardTransaction) {
+                    println("approving for ${accountDTO.accountNumber}")
+                    personDTO.deductedMoney = ((personDTO.deductedMoney as Double) - (accountDTO.deductedMoney as Double)) as String
+                    accountDTO.deductedMoney = "0"
+                    changeTransactionStatusToApproved(accountDTO)
+                }
+            }
+        }
+        personDTO
+    }
+
+    static changeTransactionStatusToApproved(AccountDTO accountDTO) {
+        accountDTO.transactions.each { TransactionDTO transactionDTO ->
+            if (transactionDTO.status == TransactionStatus.PENDING) {
+                println("changing status to approved")
+                transactionDTO.status = TransactionStatus.APPROVED
+            }
+            //add the detail to DeductionDetailDTO
         }
     }
 }

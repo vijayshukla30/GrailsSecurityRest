@@ -94,7 +94,7 @@ class PublicController {
         println "/////////////////////6//////////////////////"
         if (personDTO) {
             println "/////////////////////7//////////////////////"
-            fireBaseService.saveScrappedDataToFirebase(personDTO, "-KytxaTLyoSGfXMSSiTo")
+            fireBaseService.saveScrappedDataToFirebase(personDTO, "-KytxaTLyoSGfXMSSiTo", false)
         }
         println "/////////////////////8//////////////////////"
         render ""
