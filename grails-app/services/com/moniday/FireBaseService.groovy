@@ -16,6 +16,7 @@ import com.moniday.command.DirectDebitMandateCO
 import com.moniday.command.SecurityDetailCO
 import com.moniday.command.UserCO
 import com.moniday.dto.AccountDTO
+import com.moniday.dto.DeductionDetailDTO
 import com.moniday.dto.PersonDTO
 import com.moniday.dto.TransactionDTO
 import com.moniday.firebase.FirebaseInitializer
@@ -108,6 +109,18 @@ class FireBaseService {
         personMap.firstName = oldScrapRecord.firstName
         personMap.lastName = oldScrapRecord.lastName
         personMap.deductedMoney = oldScrapRecord.deductedMoney
+        List deductionHistory = []
+
+        oldScrapRecord.deductionHistory.each { DeductionDetailDTO deductionDetailDTO ->
+            Map deductionDetail = [:]
+            deductionDetail.toAccount = deductionDetailDTO.toAccount
+            deductionDetail.fromAccount = deductionDetailDTO.fromAccount
+            deductionDetail.approvalDate = deductionDetailDTO.approvalDate
+            deductionDetail.deductionDate = deductionDetailDTO.deductionDate
+            deductionDetail.isDeducted = deductionDetailDTO.isDeducted
+            deductionHistory.add(deductionDetail)
+        }
+        personMap.deductionHistory = deductionHistory
 
         List accounts = []
         oldScrapRecord.accounts.each { AccountDTO accountDTO ->
@@ -185,6 +198,16 @@ class FireBaseService {
         Task<UserRecord> userRecordTask = FirebaseAuth.getInstance().createUser(createRequest).addOnSuccessListener({
             println(it.uid)
         }).addOnFailureListener({ println(it.message) })
+    }
+
+    def filterNewDeductionHistory(PersonDTO oldRecord, PersonDTO newRecord) {
+        List<DeductionDetailDTO> oldDeductionList = oldRecord.deductionHistory
+        List<DeductionDetailDTO> newDeductionList = newRecord.deductionHistory
+        newDeductionList.each { DeductionDetailDTO newDeductionDetailDTO ->
+            if (!(newDeductionDetailDTO in oldDeductionList)) {
+                oldDeductionList.add(newDeductionDetailDTO)
+            }
+        }
     }
 
 }

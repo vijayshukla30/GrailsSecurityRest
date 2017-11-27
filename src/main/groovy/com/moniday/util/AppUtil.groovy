@@ -4,6 +4,7 @@ import com.mangopay.core.enumerations.CountryIso
 import com.mangopay.core.enumerations.CurrencyIso
 import com.moniday.AdminSetting
 import com.moniday.dto.AccountDTO
+import com.moniday.dto.DeductionDetailDTO
 import com.moniday.dto.PersonDTO
 import com.moniday.dto.TransactionDTO
 import com.moniday.enums.Country
@@ -202,6 +203,8 @@ class AppUtil {
                     accountDTO.deductedMoney = "0"
                     println("${personDTO.deductedMoney} person money after deduction")
                     changeTransactionStatusToApproved(accountDTO)
+                    DeductionDetailDTO deductionDetailDTO = getDeductionDetailDTO(accountDTO.accountNumber, "123456789")
+                    personDTO.deductionHistory.add(deductionDetailDTO)
                 }
             }
         } else {
@@ -212,6 +215,8 @@ class AppUtil {
                     personDTO.deductedMoney = ((personDTO.deductedMoney as Double) - (accountDTO.deductedMoney as Double)) as String
                     accountDTO.deductedMoney = "0"
                     changeTransactionStatusToApproved(accountDTO)
+                    DeductionDetailDTO deductionDetailDTO = getDeductionDetailDTO(accountDTO.accountNumber, "123456789")
+                    personDTO.deductionHistory.add(deductionDetailDTO)
                 }
             }
         }
@@ -224,7 +229,14 @@ class AppUtil {
                 println("changing status to approved")
                 transactionDTO.status = TransactionStatus.APPROVED
             }
-            //add the detail to DeductionDetailDTO
         }
+    }
+
+    static DeductionDetailDTO getDeductionDetailDTO(String fromAccount, String toAccount) {
+        DeductionDetailDTO deductionDetailDTO = new DeductionDetailDTO()
+        deductionDetailDTO.fromAccount = fromAccount
+        deductionDetailDTO.toAccount = toAccount
+        deductionDetailDTO.approvalDate = new Date()
+        deductionDetailDTO
     }
 }

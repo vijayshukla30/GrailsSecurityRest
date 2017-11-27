@@ -8,6 +8,8 @@ class PersonDTO {
 
     List<AccountDTO> accounts = []
 
+    List<DeductionDetailDTO> deductionHistory = []
+
     PersonDTO() {
 
     }
@@ -18,6 +20,9 @@ class PersonDTO {
         this.deductedMoney = accountMap?.deductedMoney
         accountMap.accounts.each {
             this.accounts.add(new AccountDTO(it))
+        }
+        accountMap.deductionHistory.each {
+            this.deductionHistory.add(new DeductionDetailDTO(it))
         }
     }
 }
