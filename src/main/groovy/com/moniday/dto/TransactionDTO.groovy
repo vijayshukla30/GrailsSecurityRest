@@ -2,10 +2,9 @@ package com.moniday.dto
 
 import com.moniday.enums.TransactionState
 import com.moniday.enums.TransactionStatus
-import com.moniday.util.AppUtil
 
 class TransactionDTO {
-    Date transactionDate
+    String transactionDate
     String description
     String amount
     Double grabAmount = 0.0
@@ -19,7 +18,7 @@ class TransactionDTO {
 
     TransactionDTO(Map transactionMap) {
         if (transactionMap?.transactionDate) {
-            this.transactionDate = AppUtil.generateDateFromString(transactionMap?.transactionDate?.date as Long, transactionMap?.transactionDate?.month as Long, transactionMap?.transactionDate?.year as Long)
+            this.transactionDate = transactionMap?.transactionDate
             this.description = transactionMap?.description
             this.amount = transactionMap?.amount
             this.isCardTransaction = transactionMap?.isCardTransaction

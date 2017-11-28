@@ -101,10 +101,10 @@ class AppUtil {
         return unixTime
     }
 
-    static Date convertBankDateStringToDate(String dateString) {
+    static String createBankDateString(String dateString) {
         //format will be date/month/year
         //TODO: Need Refactoring
-        Date date
+        String date
         if (!dateString) {
             date = null
         } else {
@@ -116,8 +116,7 @@ class AppUtil {
                 //today's date comes before transaction date... transaction is of previous year
                 currentYear -= 1
             }
-            LocalDate dobDate = LocalDate.of(currentYear, month, day)
-            date = Date.from(dobDate.atStartOfDay(ZoneId.of("Europe/Berlin")).toInstant())
+            date = "${day}/${month}/${currentYear}"
         }
         return date
     }
@@ -136,7 +135,6 @@ class AppUtil {
                 Double accountMoney = calculateAmountOnAccount(accountDTO)
                 //if accountDTO already has some deductedMoney value then new value must be added to it
                 Double deductedMoney = Double.parseDouble(accountDTO.deductedMoney)
-                println("&**^^*(( ${deductedMoney} &&^%%% ${accountMoney}")
                 deductedMoney = deductedMoney + accountMoney
                 accountDTO.deductedMoney = "$deductedMoney"
                 totalAmountSum += (deductedMoney)
@@ -240,7 +238,25 @@ class AppUtil {
         deductionDetailDTO.fromAccount = fromAccount
         deductionDetailDTO.toAccount = toAccount
         deductionDetailDTO.amount = amount
-        deductionDetailDTO.approvalDate = new Date()
+        deductionDetailDTO.approvalDate = new Date().toString()
         deductionDetailDTO
+    }
+
+    //datetocompare , todays date
+    static boolean dateBefore(String dateString, Date date) {
+        boolean comesBefore = false
+        int year = dateString.split("/")[2] as Integer
+        int month = dateString.split("/")[1] as Integer
+        int day = dateString.split("/")[0] as Integer
+        if (year < (date.year+1900)) {
+            comesBefore = true
+        }
+        else if ((year == (date.year+1900)) && (month < (date.month+1))) {
+            comesBefore = true
+        }
+        else if (((date.month+1) == month) && (day < date.date)) {
+                comesBefore = true
+        }
+        return comesBefore
     }
 }

@@ -86,14 +86,14 @@ class FireBaseService {
     }
 
     def saveScrappedDataToFirebase(PersonDTO personDTO, String firebaseId, Boolean forUpdate) {
-        println("NEW SCRAPPED RECORD")
-        println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(personDTO))
+//        println("NEW SCRAPPED RECORD")
+//        println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(personDTO))
         Map personalMap = FirebaseInitializer.getUserScrap(firebaseId)
         PersonDTO oldScrapRecord = null
         if (personalMap && (!forUpdate)) {
             oldScrapRecord = new PersonDTO(personalMap)
-            println("OLD SCRAPPED RECORD")
-            println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(oldScrapRecord))
+//            println("OLD SCRAPPED RECORD")
+//            println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(oldScrapRecord))
             filterNewAccountAndTransaction(personDTO, oldScrapRecord)
         } else {
             oldScrapRecord = personDTO
@@ -153,8 +153,8 @@ class FireBaseService {
         DatabaseReference scrapRef = ref.child("${FirebaseInitializer.USER_REF}/$firebaseId/scrapDetail")
         scrapRef.setValue(personMap)
 
-        println("((((((((((((data saved to firebase is))))))))))")
-        println(personMap)
+//        println("((((((((((((data saved to firebase is))))))))))")
+//        println(personMap)
     }
 
     PersonDTO filterNewAccountAndTransaction(PersonDTO newScrapRecord, PersonDTO oldScrapRecord) {

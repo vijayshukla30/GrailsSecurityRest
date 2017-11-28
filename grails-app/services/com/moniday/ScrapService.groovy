@@ -201,22 +201,22 @@ class ScrapService {
             def cellNav = rowNav.children("td")
             if (accountDTO.typeOfAccount == "CCHQ") {
                 TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text())
+                transactionDTO.transactionDate = AppUtil.createBankDateString(cellNav[0].text())
                 transactionDTO.description = cellNav[2].text()
                 transactionDTO.amount = cellNav[4].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTO.isCardTransaction = false
-                if (transactionDTO.transactionDate.before(new DateTime().minusMonths(1).toDate())) {
+                if (AppUtil.dateBefore(transactionDTO.transactionDate, (new DateTime().minusMonths(2).toDate()))) {
                     return false
                 } else {
                     transactionDTOS.add(transactionDTO)
                 }
             } else if (accountDTO.typeOfAccount == "CEL" || accountDTO.typeOfAccount == "LDD") {
                 TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text())
+                transactionDTO.transactionDate = AppUtil.createBankDateString(cellNav[0].text())
                 transactionDTO.description = cellNav[1].text()
                 transactionDTO.amount = cellNav[2].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTO.isCardTransaction = false
-                if (transactionDTO.transactionDate.before(new DateTime().minusMonths(1).toDate())) {
+                if (AppUtil.dateBefore(transactionDTO.transactionDate, (new DateTime().minusMonths(2).toDate()))) {
                     return false
                 } else {
                     transactionDTOS.add(transactionDTO)
@@ -247,12 +247,12 @@ class ScrapService {
         browser.$("table.ca-table")[1].$("tbody").children("tr").each { rowNav ->
             def cellNav = rowNav.children("td")
             TransactionDTO transactionDTO = new TransactionDTO()
-            transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text().replaceAll(" ", ""))
+            transactionDTO.transactionDate = AppUtil.createBankDateString(cellNav[0].text().replaceAll(" ", ""))
             transactionDTO.description = cellNav[1].text()
             transactionDTO.amount = cellNav[3].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
             transactionDTO.isCardTransaction = true
             if (transactionDTO.transactionDate != "" && transactionDTO.transactionDate != null) {
-                if (transactionDTO.transactionDate.before(new DateTime().minusMonths(1).toDate())) {
+                if (AppUtil.dateBefore(transactionDTO.transactionDate, (new DateTime().minusMonths(2).toDate()))) {
                     return false
                 } else {
                     transactionDTOS.add(transactionDTO)

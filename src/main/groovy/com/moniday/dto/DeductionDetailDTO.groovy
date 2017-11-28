@@ -1,13 +1,12 @@
 package com.moniday.dto
 
-import com.moniday.util.AppUtil
 
 class DeductionDetailDTO {
     String fromAccount
     String toAccount
     Double amount
-    Date approvalDate
-    Date deductionDate = null
+    String approvalDate
+    String deductionDate = null
     Boolean isDeducted = Boolean.FALSE
 
     DeductionDetailDTO() {}
@@ -16,8 +15,8 @@ class DeductionDetailDTO {
         this.fromAccount = deductionDetailMap?.fromAccount
         this.toAccount = deductionDetailMap?.toAccount
         this.amount = deductionDetailMap?.amount
-        this.approvalDate = AppUtil.generateDateFromString(deductionDetailMap?.approvalDate?.date as Long, deductionDetailMap?.approvalDate?.month as Long, deductionDetailMap?.approvalDate?.year as Long)
-        this.deductionDate = AppUtil.generateDateFromString(deductionDetailMap?.approvalDate?.date as Long, deductionDetailMap?.approvalDate?.month as Long, deductionDetailMap?.approvalDate?.year as Long)
+        this.approvalDate = deductionDetailMap?.approvalDate
+        this.deductionDate = deductionDetailMap?.approvalDate
         this.isDeducted = deductionDetailMap?.isDeducted as Boolean
     }
 }
