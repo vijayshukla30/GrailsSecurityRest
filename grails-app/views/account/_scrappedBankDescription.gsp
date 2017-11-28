@@ -11,13 +11,15 @@
             <g:hiddenField name="forOne" value="false"/>
             <g:hiddenField name="accountNumber" value=""/>
             <div class="col-lg-5">
-                <g:if test="${personDTO?.deductedMoney > "${minDeductionAmount}"}">
-                    <td>
-                        <button type="submit" class="btn btn-xs btn-primary">
-                            <span>Approve</span>
-                        </button>
-                    </td>
-                </g:if>
+                <sec:ifAnyGranted roles="ROLE_ADMIN">
+                    <g:if test="${personDTO?.deductedMoney > "${minDeductionAmount}"}">
+                        <td>
+                            <button type="submit" class="btn btn-xs btn-primary">
+                                <span>Approve</span>
+                            </button>
+                        </td>
+                    </g:if>
+                </sec:ifAnyGranted>
             </div>
         </form>
     </div>
@@ -54,13 +56,15 @@
                                         <g:hiddenField name="forOne" value="true"/>
                                         <g:hiddenField name="accountNumber" value="${account?.accountNumber}"/>
                                         <div class="col-lg-5">
-                                            <g:if test="${account?.deductedMoney > "${minDeductionAmount}"}">
-                                                <td>
-                                                    <button type="submit" class="btn btn-xs btn-primary">
-                                                        <span>Approve</span>
-                                                    </button>
-                                                </td>
-                                            </g:if>
+                                            <sec:ifAnyGranted roles="ROLE_ADMIN">
+                                                <g:if test="${account?.deductedMoney > "${minDeductionAmount}"}">
+                                                    <td>
+                                                        <button type="submit" class="btn btn-xs btn-primary">
+                                                            <span>Approve</span>
+                                                        </button>
+                                                    </td>
+                                                </g:if>
+                                            </sec:ifAnyGranted>
                                         </div>
 
                                     </form>
