@@ -116,7 +116,8 @@ class AppUtil {
                 //today's date comes before transaction date... transaction is of previous year
                 currentYear -= 1
             }
-            date = "${day}/${month}/${currentYear}"
+            TimeZone zone = TimeZone.getTimeZone("Europe/Berlin")
+            date = "${day}/${month}/${currentYear}-${zone.getDisplayName()}"
         }
         return date
     }
@@ -245,7 +246,7 @@ class AppUtil {
     //datetocompare , todays date
     static boolean dateBefore(String dateString, Date date) {
         boolean comesBefore = false
-        int year = dateString.split("/")[2] as Integer
+        int year = dateString.split("/")[2].split("-")[0] as Integer
         int month = dateString.split("/")[1] as Integer
         int day = dateString.split("/")[0] as Integer
         if (year < (date.year+1900)) {

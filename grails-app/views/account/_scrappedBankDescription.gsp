@@ -81,7 +81,7 @@
                                             <tbody>
                                             <g:each in="${account.transactions}" var="transaction">
                                                 <tr>
-                                                    <td>${transaction?.transactionDate}</td>
+                                                    <td>${transaction?.transactionDate.split("-")[0]}</td>
                                                     <td>${transaction?.description}</td>
                                                     <td><g:message code="amount" args="${[transaction?.amount]}"/></td>
                                                     <td><g:message code="amount"
