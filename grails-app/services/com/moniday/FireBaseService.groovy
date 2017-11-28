@@ -115,6 +115,7 @@ class FireBaseService {
             Map deductionDetail = [:]
             deductionDetail.toAccount = deductionDetailDTO.toAccount
             deductionDetail.fromAccount = deductionDetailDTO.fromAccount
+            deductionDetail.amount = deductionDetailDTO.amount
             deductionDetail.approvalDate = deductionDetailDTO.approvalDate
             deductionDetail.deductionDate = deductionDetailDTO.deductionDate
             deductionDetail.isDeducted = deductionDetailDTO.isDeducted

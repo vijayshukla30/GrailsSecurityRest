@@ -4,6 +4,7 @@
     <meta name="layout" content="theme"/>
     <title>Moniday | Conform Transactions</title>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
+    <%@ page import="com.moniday.enums.TransactionStatus" %>
 </head>
 
 <body>
@@ -42,7 +43,7 @@
                                     </thead>
                                     <tbody>
                                     <g:each in="${accountDTO.transactions}" var="transaction">
-                                        <g:if test="${transaction?.status == com.moniday.enums.TransactionStatus.PENDING}">
+                                        <g:if test="${transaction?.status == TransactionStatus.PENDING}">
                                             <tr>
                                                 <td>${transaction?.transactionDate}</td>
                                                 <td>${transaction?.description}</td>
@@ -64,7 +65,7 @@
                             <div class="col-lg-10 col-lg-offset-4">
 
                                 <div class="col-lg-2">
-                                    <button type="submit" class="btn btn-default">
+                                    <button type="submit" class="btn btn-lg btn-success">
                                         <g:message code="form.submit"/>
                                     </button>
                                 </div>

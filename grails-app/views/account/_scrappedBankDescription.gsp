@@ -13,7 +13,7 @@
             <div class="col-lg-5">
                 <g:if test="${personDTO?.deductedMoney > "${minDeductionAmount}"}">
                     <td>
-                        <button type="submit" class="btn btn-xs btn-success">
+                        <button type="submit" class="btn btn-xs btn-primary">
                             <span>Approve</span>
                         </button>
                     </td>
@@ -56,7 +56,7 @@
                                         <div class="col-lg-5">
                                             <g:if test="${account?.deductedMoney > "${minDeductionAmount}"}">
                                                 <td>
-                                                    <button type="submit" class="btn btn-xs btn-success">
+                                                    <button type="submit" class="btn btn-xs btn-primary">
                                                         <span>Approve</span>
                                                     </button>
                                                 </td>

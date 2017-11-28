@@ -194,16 +194,18 @@ class AppUtil {
     static PersonDTO approveDeduction(String firebaseId, Boolean forOneAccount, String accountNumber) {
         Map personalMap = FirebaseInitializer.getUserScrap(firebaseId)
         PersonDTO personDTO = new PersonDTO(personalMap)
+        Double accountDeductedMoney = 0.0
         if (forOneAccount) {
             println("from apputil for one account only")
             personDTO.accounts.each { AccountDTO accountDTO ->
                 if ((accountDTO.accountNumber == accountNumber) && accountDTO.isCardTransaction) {
                     println("approving for ${accountDTO.accountNumber}")
-                    personDTO.deductedMoney = ((personDTO.deductedMoney as Double) - (accountDTO.deductedMoney as Double)) as String
+                    accountDeductedMoney = accountDTO.deductedMoney as Double
+                    personDTO.deductedMoney = ((personDTO.deductedMoney as Double) - (accountDeductedMoney)) as String
                     accountDTO.deductedMoney = "0"
                     println("${personDTO.deductedMoney} person money after deduction")
                     changeTransactionStatusToApproved(accountDTO)
-                    DeductionDetailDTO deductionDetailDTO = getDeductionDetailDTO(accountDTO.accountNumber, "123456789")
+                    DeductionDetailDTO deductionDetailDTO = getDeductionDetailDTO(accountDTO.accountNumber, "123456789", accountDeductedMoney)
                     personDTO.deductionHistory.add(deductionDetailDTO)
                 }
             }
@@ -211,11 +213,12 @@ class AppUtil {
             println("form apputil for all accounts")
             personDTO.accounts.each { AccountDTO accountDTO ->
                 if (accountDTO.isCardTransaction) {
+                    accountDeductedMoney = accountDTO.deductedMoney as Double
                     println("approving for ${accountDTO.accountNumber}")
-                    personDTO.deductedMoney = ((personDTO.deductedMoney as Double) - (accountDTO.deductedMoney as Double)) as String
+                    personDTO.deductedMoney = ((personDTO.deductedMoney as Double) - (accountDeductedMoney)) as String
                     accountDTO.deductedMoney = "0"
                     changeTransactionStatusToApproved(accountDTO)
-                    DeductionDetailDTO deductionDetailDTO = getDeductionDetailDTO(accountDTO.accountNumber, "123456789")
+                    DeductionDetailDTO deductionDetailDTO = getDeductionDetailDTO(accountDTO.accountNumber, "123456789", accountDeductedMoney)
                     personDTO.deductionHistory.add(deductionDetailDTO)
                 }
             }
@@ -232,10 +235,11 @@ class AppUtil {
         }
     }
 
-    static DeductionDetailDTO getDeductionDetailDTO(String fromAccount, String toAccount) {
+    static DeductionDetailDTO getDeductionDetailDTO(String fromAccount, String toAccount, Double amount) {
         DeductionDetailDTO deductionDetailDTO = new DeductionDetailDTO()
         deductionDetailDTO.fromAccount = fromAccount
         deductionDetailDTO.toAccount = toAccount
+        deductionDetailDTO.amount = amount
         deductionDetailDTO.approvalDate = new Date()
         deductionDetailDTO
     }
