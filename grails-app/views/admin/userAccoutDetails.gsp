@@ -1,4 +1,4 @@
-<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country;" %>
+<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country; com.moniday.AdminSetting" %>
 <!doctype html>
 <html>
 <head>
@@ -14,7 +14,8 @@
 
 <div id="userTabContent" class="tab-content">
     <div class="tab-pane fade active in" id="personalDetails">
-        <g:render template="/account/scrappedBankDescription" model="[personDTO: personDTO]"/>
+        <g:render template="/account/scrappedBankDescription"
+                  model="[personDTO: personDTO, user: user, minDeductionAmount: AdminSetting.get(1).minDeductionAmount]"/>
     </div>
 </div>
 </body>

@@ -30,7 +30,8 @@ class MoneyCollectionService {
                 println("No such bank found")
         }
         if (personDTO) {
-            fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId)
+//            AppUtil.calculateDeductionAmount(personDTO)
+            fireBaseService.saveScrappedDataToFirebase(personDTO, user?.firebaseId, false)
         }
     }
 }

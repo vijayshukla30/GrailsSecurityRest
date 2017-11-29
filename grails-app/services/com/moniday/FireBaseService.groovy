@@ -1,5 +1,6 @@
 package com.moniday
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.firebase.Account
 import com.firebase.DirectDebitMandate
 import com.firebase.MangoPayDetail
@@ -15,9 +16,11 @@ import com.moniday.command.DirectDebitMandateCO
 import com.moniday.command.SecurityDetailCO
 import com.moniday.command.UserCO
 import com.moniday.dto.AccountDTO
+import com.moniday.dto.DeductionDetailDTO
 import com.moniday.dto.PersonDTO
 import com.moniday.dto.TransactionDTO
 import com.moniday.firebase.FirebaseInitializer
+import com.moniday.util.AppUtil
 
 class FireBaseService {
     static transactional = false
@@ -82,24 +85,53 @@ class FireBaseService {
         debitRef.setValue(debitMandate)
     }
 
-    def saveScrappedDataToFirebase(PersonDTO personDTO, String firebaseId) {
+    def saveScrappedDataToFirebase(PersonDTO personDTO, String firebaseId, Boolean forUpdate) {
+//        println("NEW SCRAPPED RECORD")
+//        println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(personDTO))
         Map personalMap = FirebaseInitializer.getUserScrap(firebaseId)
-        if (personalMap != null) {
-            saveNewScrappedDataToFirebase(personDTO, firebaseId)
-            return
+        PersonDTO oldScrapRecord = null
+        if (personalMap && (!forUpdate)) {
+            oldScrapRecord = new PersonDTO(personalMap)
+//            println("OLD SCRAPPED RECORD")
+//            println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(oldScrapRecord))
+            filterNewAccountAndTransaction(personDTO, oldScrapRecord)
+        } else {
+            oldScrapRecord = personDTO
         }
+
+        //calculate deduction amount after new transactions are merged with old ones
+        AppUtil.calculateDeductionAmount(oldScrapRecord)
+
+        println("COMBINE SCRAPPED RECORD")
+        println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(oldScrapRecord))
+
         Map personMap = [:]
-        personMap.firstName = personDTO.firstName
-        personMap.lastName = personDTO.lastName
+        personMap.firstName = oldScrapRecord.firstName
+        personMap.lastName = oldScrapRecord.lastName
+        personMap.deductedMoney = oldScrapRecord.deductedMoney
+        List deductionHistory = []
+
+        oldScrapRecord.deductionHistory.each { DeductionDetailDTO deductionDetailDTO ->
+            Map deductionDetail = [:]
+            deductionDetail.toAccount = deductionDetailDTO.toAccount
+            deductionDetail.fromAccount = deductionDetailDTO.fromAccount
+            deductionDetail.amount = deductionDetailDTO.amount
+            deductionDetail.approvalDate = deductionDetailDTO.approvalDate
+            deductionDetail.deductionDate = deductionDetailDTO.deductionDate
+            deductionDetail.isDeducted = deductionDetailDTO.isDeducted
+            deductionHistory.add(deductionDetail)
+        }
+        personMap.deductionHistory = deductionHistory
 
         List accounts = []
-        personDTO.accounts.each { AccountDTO accountDTO ->
+        oldScrapRecord.accounts.each { AccountDTO accountDTO ->
             Map accountDetail = [:]
             accountDetail.typeOfAccount = accountDTO.typeOfAccount
             accountDetail.accountNumber = accountDTO.accountNumber
             accountDetail.balance = accountDTO.balance
             accountDetail.currencyType = accountDTO.currencyType
             accountDetail.isCardTransaction = accountDTO.isCardTransaction
+            accountDetail.deductedMoney = accountDTO.deductedMoney
             List transactions = []
             accountDTO.transactions.each { TransactionDTO transactionDTO ->
                 Map transactionDetails = [:]
@@ -107,6 +139,9 @@ class FireBaseService {
                 transactionDetails.description = transactionDTO.description
                 transactionDetails.amount = transactionDTO.amount
                 transactionDetails.isCardTransaction = transactionDTO.isCardTransaction
+                transactionDetails.transactionStatus = transactionDTO.status
+                transactionDetails.transactionState = transactionDTO.state
+                transactionDetails.grabAmount = transactionDTO.grabAmount
                 transactions.add(transactionDetails)
             }
             accountDetail.transactions = transactions
@@ -117,95 +152,39 @@ class FireBaseService {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
         DatabaseReference scrapRef = ref.child("${FirebaseInitializer.USER_REF}/$firebaseId/scrapDetail")
         scrapRef.setValue(personMap)
+
+//        println("((((((((((((data saved to firebase is))))))))))")
+//        println(personMap)
     }
 
-    def saveNewScrappedDataToFirebase(PersonDTO newPersonDTO, String firebaseId) {
-        //here we will deal with existing data we are getting from firebase
-        println("executing saveNewScrappedDataToFirebase")
-        Map personalMap = FirebaseInitializer.getUserScrap(firebaseId)
-        PersonDTO existingData = new PersonDTO(personalMap)
-        Map personMap = [:]
-        personMap.firstName = existingData.firstName
-        personMap.lastName = existingData.lastName
-        List accounts = []
-        existingData.accounts.each { AccountDTO accountDTO ->
-            println("<<<<<<<<<working with account >>>>>>>>>" + accountDTO.accountNumber)
-            Map accountDetail = [:]
-            accountDetail.typeOfAccount = accountDTO.typeOfAccount
-            accountDetail.accountNumber = accountDTO.accountNumber
-            accountDetail.balance = accountDTO.balance
-            accountDetail.currencyType = accountDTO.currencyType
-            accountDetail.isCardTransaction = accountDTO.isCardTransaction
-            List transactions = []
-            accountDTO.transactions.each { TransactionDTO transactionDTO ->
-                Map transactionDetails = [:]
-                transactionDetails.transactionDate = transactionDTO.transactionDate
-                transactionDetails.description = transactionDTO.description
-                transactionDetails.amount = transactionDTO.amount
-                transactionDetails.isCardTransaction = transactionDTO.isCardTransaction
-                transactions.add(transactionDetails)
-            }
-            //if more transactions are added or initially transactions are empty
-            if (moreTransactionsAdded(newPersonDTO, accountDTO) || accountDTO.transactions.isEmpty()) {
-                println("+++++++++++yes more transactions are inserted into account +++++++++++++++++" + accountDTO.accountNumber)
-                //get new transactions from freshly scrapped data as a List of Map
-                List newTransactions = getNewTransactions(newPersonDTO, accountDTO)
-                println("###############newly added transactions are ############" + newTransactions)
-                //add new data to the original list at index 0
-                transactions.addAll(0, newTransactions)
+    PersonDTO filterNewAccountAndTransaction(PersonDTO newScrapRecord, PersonDTO oldScrapRecord) {
+        List<AccountDTO> oldAccountList = oldScrapRecord.accounts
+        List<AccountDTO> newAccountList = newScrapRecord.accounts
+
+        newAccountList.each { AccountDTO newAccountDTO ->
+            if (!(newAccountDTO in oldAccountList)) {
+                oldAccountList.add(newAccountDTO)
             } else {
-                println("+++++++++++++++no new transactions added ++++++++++++++++++++")
-            }
-
-            accountDetail.transactions = transactions
-            accounts.add(accountDetail)
-            println("????????????????????????????done for one account????????????????????????????????????????")
-        }
-        personMap.accounts = accounts
-
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
-        DatabaseReference scrapRef = ref.child("${FirebaseInitializer.USER_REF}/$firebaseId/scrapDetail")
-        scrapRef.setValue(personMap)
-    }
-
-    private boolean moreTransactionsAdded(PersonDTO newPersonDTO, AccountDTO oldAccountDTO) {
-        boolean newTransactionAdded = true
-        for (AccountDTO newAccountDTO : newPersonDTO.getAccounts()) {
-            if (newAccountDTO.equals(oldAccountDTO)) {
-                //first Transaction from freshly scrapped data
-                TransactionDTO newTransactionDTO = newAccountDTO.transactions.get(0)
-                TransactionDTO oldTransactionDTO = oldAccountDTO.transactions.get(0)
-                if (newTransactionDTO.equals(oldTransactionDTO)) {
-                    newTransactionAdded = false
-                    println("no new transaction added")
-                }
-                println("+++++++++old transaction++++" + oldTransactionDTO + "++++++++++++++++new transaction ++++++++++" + newTransactionDTO)
-                break
-            }
-        }
-        return newTransactionAdded
-    }
-
-    private List getNewTransactions(PersonDTO newPersonDTO, AccountDTO oldAccountDTO) {
-        List transactions = []
-        for (AccountDTO newAccountDTO : newPersonDTO.getAccounts()) {
-            if (newAccountDTO.equals(oldAccountDTO)) {
-                TransactionDTO oldTransactionDTO = oldAccountDTO.transactions.get(0)
-                newAccountDTO.transactions.each { TransactionDTO newTransactionDTO ->
-                    if (newTransactionDTO.equals(oldTransactionDTO)) {
-                        return false
+                oldAccountList.each { AccountDTO oldAccountDTO ->
+                    if (newAccountDTO.equals(oldAccountDTO)) {
+                        filterNewTransaction(newAccountDTO, oldAccountDTO)
                     }
-                    Map transactionDetails = [:]
-                    transactionDetails.transactionDate = newTransactionDTO.transactionDate
-                    transactionDetails.description = newTransactionDTO.description
-                    transactionDetails.amount = newTransactionDTO.amount
-                    transactionDetails.isCardTransaction = newTransactionDTO.isCardTransaction
-                    transactions.add(transactionDetails)
                 }
-                break
             }
         }
-        return transactions
+
+        return oldScrapRecord
+    }
+
+    def filterNewTransaction(AccountDTO newAccount, AccountDTO oldAccount) {
+        List<TransactionDTO> oldTransactionList = oldAccount.transactions
+        List<TransactionDTO> newTransactionList = newAccount.transactions
+
+        newTransactionList.each { TransactionDTO newTransactionDTO ->
+            if (!(newTransactionDTO in oldTransactionList)) {
+                oldTransactionList.add(newTransactionDTO)
+            }
+        }
     }
 
     def registerUser(User owner, String password) {
@@ -220,6 +199,16 @@ class FireBaseService {
         Task<UserRecord> userRecordTask = FirebaseAuth.getInstance().createUser(createRequest).addOnSuccessListener({
             println(it.uid)
         }).addOnFailureListener({ println(it.message) })
+    }
+
+    def filterNewDeductionHistory(PersonDTO oldRecord, PersonDTO newRecord) {
+        List<DeductionDetailDTO> oldDeductionList = oldRecord.deductionHistory
+        List<DeductionDetailDTO> newDeductionList = newRecord.deductionHistory
+        newDeductionList.each { DeductionDetailDTO newDeductionDetailDTO ->
+            if (!(newDeductionDetailDTO in oldDeductionList)) {
+                oldDeductionList.add(newDeductionDetailDTO)
+            }
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import com.moniday.util.AppUtil
 import geb.Browser
 import geb.module.TextInput
 import geb.navigator.Navigator
+import org.joda.time.DateTime
 import org.openqa.selenium.By
 
 class ScrapService {
@@ -123,8 +124,11 @@ class ScrapService {
     }
 
     def scrapCreditAgricole(String bankURL, String bankUserName, String bankPassword) {
+        println "/////////////////////2//////////////////////"
         PersonDTO personDTO = new PersonDTO()
+        println "////////////////////3//////////////////////"
         Browser.drive {
+            println "/////////////////////4//////////////////////"
             go bankURL
             $(".toolbar-action-important").click()
             println("Login page title " + title)
@@ -152,6 +156,7 @@ class ScrapService {
             extractAccountAndTrans(personDTO, 0, "colcellignepaire")
             extractAccountAndTrans(personDTO, 0, "colcelligneimpaire")
         }
+        println "/////////////////////5//////////////////////"
         return personDTO
     }
 
@@ -196,18 +201,26 @@ class ScrapService {
             def cellNav = rowNav.children("td")
             if (accountDTO.typeOfAccount == "CCHQ") {
                 TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text())
+                transactionDTO.transactionDate = AppUtil.createBankDateString(cellNav[0].text())
                 transactionDTO.description = cellNav[2].text()
                 transactionDTO.amount = cellNav[4].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTO.isCardTransaction = false
-                transactionDTOS.add(transactionDTO)
+                if (AppUtil.dateBefore(transactionDTO.transactionDate, (new DateTime().minusMonths(2).toDate()))) {
+                    return false
+                } else {
+                    transactionDTOS.add(transactionDTO)
+                }
             } else if (accountDTO.typeOfAccount == "CEL" || accountDTO.typeOfAccount == "LDD") {
                 TransactionDTO transactionDTO = new TransactionDTO()
-                transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text())
+                transactionDTO.transactionDate = AppUtil.createBankDateString(cellNav[0].text())
                 transactionDTO.description = cellNav[1].text()
                 transactionDTO.amount = cellNav[2].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
                 transactionDTO.isCardTransaction = false
-                transactionDTOS.add(transactionDTO)
+                if (AppUtil.dateBefore(transactionDTO.transactionDate, (new DateTime().minusMonths(2).toDate()))) {
+                    return false
+                } else {
+                    transactionDTOS.add(transactionDTO)
+                }
             }
         }
         accountDTO.transactions = transactionDTOS
@@ -234,12 +247,16 @@ class ScrapService {
         browser.$("table.ca-table")[1].$("tbody").children("tr").each { rowNav ->
             def cellNav = rowNav.children("td")
             TransactionDTO transactionDTO = new TransactionDTO()
-            transactionDTO.transactionDate = AppUtil.convertBankDateStringToDate(cellNav[0].text().replaceAll(" ", ""))
+            transactionDTO.transactionDate = AppUtil.createBankDateString(cellNav[0].text().replaceAll(" ", ""))
             transactionDTO.description = cellNav[1].text()
             transactionDTO.amount = cellNav[3].text()?.replaceAll(" ", "")?.replaceAll(",", ".")
             transactionDTO.isCardTransaction = true
-            if (transactionDTO.transactionDate != "") {
-                transactionDTOS.add(transactionDTO)
+            if (transactionDTO.transactionDate != "" && transactionDTO.transactionDate != null) {
+                if (AppUtil.dateBefore(transactionDTO.transactionDate, (new DateTime().minusMonths(2).toDate()))) {
+                    return false
+                } else {
+                    transactionDTOS.add(transactionDTO)
+                }
             }
         }
         transactionDTOS

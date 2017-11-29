@@ -34,7 +34,6 @@ class AccountController {
             PersonDTO personDTO = null
             if (accountMap) {
                 personDTO = new PersonDTO(accountMap)
-                AppUtil.calculateDeductionAmount(personDTO)
             }
             render(view: 'index', model: [user: user, personDTO: personDTO])
         } else {
@@ -66,7 +65,7 @@ class AccountController {
         LocalDate dobDate = LocalDate.of(params.dob_year as int, AppUtil.getMonth(params.dob_month), params.dob_day as int)
         LocalDate todayDate = LocalDate.now()
         Period period = Period.between(dobDate, todayDate)
-        personalDetailCO.dateOfBirth = Date.from(dobDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        personalDetailCO.dateOfBirth = AppUtil.createBankDateString(Date.from(dobDate.atStartOfDay(ZoneId.of("Europe/Berlin")).toInstant()))
         personalDetailCO.age = period.years
         boolean validPersonalDetail = personalDetailCO?.validate()
         if (user && validPersonalDetail) {

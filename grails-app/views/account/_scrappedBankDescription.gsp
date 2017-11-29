@@ -1,9 +1,27 @@
-<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country;" %>
+<%@ page import="com.moniday.util.AppUtil; com.moniday.enums.Currency; com.moniday.enums.Country; com.moniday.util.AppUtil;" %>
 <div class="bs-docs-section clearfix">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-3">
             <strong>Total Debit Account Money:</strong> <span class="fa fa-eur">${personDTO?.deductedMoney}</span>
         </div>
+
+        <form action="${createLink(controller: 'admin', action: 'approveAmountDeduction')}"
+              method="POST" class="form-horizontal">
+            <g:hiddenField name="uniqueId" value="${user.uniqueId}"/>
+            <g:hiddenField name="forOne" value="false"/>
+            <g:hiddenField name="accountNumber" value=""/>
+            <div class="col-lg-5">
+                <sec:ifAnyGranted roles="ROLE_ADMIN">
+                    <g:if test="${personDTO?.deductedMoney > "${minDeductionAmount}"}">
+                        <td>
+                            <button type="submit" class="btn btn-xs btn-primary">
+                                <span>Approve</span>
+                            </button>
+                        </td>
+                    </g:if>
+                </sec:ifAnyGranted>
+            </div>
+        </form>
     </div>
 
     <div class="row">
@@ -26,10 +44,30 @@
                             <div class="tab-pane fade ${i == 0 ? "active" : ""} in"
                                  id="${account.isCardTransaction ? "${account?.accountNumber}-CreditCard" : account?.accountNumber}">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <strong>Total Money of Debit Account:</strong> <span
                                             class="fa fa-eur">${account?.deductedMoney}</span>
                                     </div>
+
+
+                                    <form action="${createLink(controller: 'admin', action: 'approveAmountDeduction')}"
+                                          method="POST" class="form-horizontal">
+                                        <g:hiddenField name="uniqueId" value="${user.uniqueId}"/>
+                                        <g:hiddenField name="forOne" value="true"/>
+                                        <g:hiddenField name="accountNumber" value="${account?.accountNumber}"/>
+                                        <div class="col-lg-5">
+                                            <sec:ifAnyGranted roles="ROLE_ADMIN">
+                                                <g:if test="${account?.deductedMoney > "${minDeductionAmount}"}">
+                                                    <td>
+                                                        <button type="submit" class="btn btn-xs btn-primary">
+                                                            <span>Approve</span>
+                                                        </button>
+                                                    </td>
+                                                </g:if>
+                                            </sec:ifAnyGranted>
+                                        </div>
+
+                                    </form>
                                 </div>
 
                                 <div class="row">
@@ -47,7 +85,7 @@
                                             <tbody>
                                             <g:each in="${account.transactions}" var="transaction">
                                                 <tr>
-                                                    <td>${transaction?.transactionDate}</td>
+                                                    <td>${AppUtil.getDateStringForView(transaction?.transactionDate)}</td>
                                                     <td>${transaction?.description}</td>
                                                     <td><g:message code="amount" args="${[transaction?.amount]}"/></td>
                                                     <td><g:message code="amount"

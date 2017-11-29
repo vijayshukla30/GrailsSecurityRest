@@ -5,7 +5,7 @@ class AccountDTO {
     String accountNumber
     Double balance
     String currencyType
-    String deductedMoney = ""
+    String deductedMoney = "0"
     String creditCardDeductMoney = ""
     Boolean isCardTransaction = Boolean.FALSE
 
@@ -21,7 +21,7 @@ class AccountDTO {
         this.balance = (accountMap?.balance as Double)
         this.currencyType = accountMap?.currencyType
         this.isCardTransaction = accountMap?.isCardTransaction
-
+        this.deductedMoney = accountMap?.deductedMoney
         accountMap.transactions.each {
             this.transactions.add(new TransactionDTO(it))
         }
@@ -32,7 +32,7 @@ class AccountDTO {
         boolean equal = true
         if (obj instanceof AccountDTO) {
             AccountDTO accountDTO = (AccountDTO) obj
-            if (accountDTO.accountNumber != this.accountNumber || accountDTO.typeOfAccount != this.typeOfAccount || accountDTO.isCardTransaction != this.isCardTransaction) {
+            if ((accountDTO.accountNumber != this.accountNumber) && (accountDTO.typeOfAccount != this.typeOfAccount) && (accountDTO.isCardTransaction != this.isCardTransaction)) {
                 equal = false
             }
         }

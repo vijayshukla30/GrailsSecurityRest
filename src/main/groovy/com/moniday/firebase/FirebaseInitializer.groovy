@@ -158,8 +158,8 @@ class FirebaseInitializer {
         accountRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                println "Printing Scrap Details ---->>> " + dataSnapshot.value
-                println "Printing Scrap Details ----******************* " + dataSnapshot.properties
+//                println "Printing Scrap Details ---->>> " + dataSnapshot.value
+//                println "Printing Scrap Details ----******************* " + dataSnapshot.properties
                 accountMap = (dataSnapshot.value as Map)
                 countDownLatch.countDown()
             }
