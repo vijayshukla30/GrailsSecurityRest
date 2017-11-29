@@ -1,36 +1,47 @@
+<%@ page import="com.moniday.enums.TransactionStatus" %>
 <!doctype html>
 <html>
 <head>
     <meta name="layout" content="theme"/>
     <title>Moniday | Conform Transactions</title>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
-    <%@ page import="com.moniday.enums.TransactionStatus" %>
 </head>
 
 <body>
-
 <div class="bs-docs-section clearfix">
     <div class="row">
+        <div class="col-lg-2"></div>
+
+        <div class="col-lg-5">
+            <h4><g:message code="admin.transaction.confirm"/></h4>
+        </div>
 
         <div class="col-lg-2"></div>
 
-        <div class="col-lg-8">
-
-            <div class="well bs-component">
+        <div class="col-lg-3">
+            <div class="pull-left">
                 <form action="${createLink(controller: 'admin', action: 'conformAmountDeduction', params: [uniqueId: uniqueId, forOne: forOne, accountNumber: accountNumber])}"
-                      method="POST"
-                      id="passwordResetForm" autocomplete="off" class="form-horizontal">
+                      method="POST" class="form-horizontal">
+                    <button class="btn btn-primary btn-sm">submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <br/>
 
-                    <fieldset>
-                        <legend>
-                            <g:message code="admin.transaction.conform"/>
-                        </legend>
+    <div class="row">
+        <div class="col-lg-2"></div>
 
-                        <div class="row">
-                            <g:each in="${accountDTOS}" var="accountDTO" status="i">
-                                <legend>
-                                    <g:message code="${accountDTO.accountNumber}"/>
-                                </legend>
+        <div class="col-lg-8">
+            <form action="${createLink(controller: 'admin', action: 'conformAmountDeduction', params: [uniqueId: uniqueId, forOne: forOne, accountNumber: accountNumber])}"
+                  method="POST" class="form-horizontal">
+                <div class="panel-group">
+                    <g:each in="${accountDTOS}" var="accountDTO" status="i">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><g:message code="${accountDTO.accountNumber}"/></div>
+
+                            <div class="panel-body">
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                     <tr>
@@ -58,26 +69,32 @@
                                     </g:each>
                                     </tbody>
                                 </table>
-                            </g:each>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-lg-10 col-lg-offset-4">
-
-                                <div class="col-lg-2">
-                                    <button type="submit" class="btn btn-lg btn-success">
-                                        <g:message code="form.submit"/>
-                                    </button>
-                                </div>
-
                             </div>
                         </div>
+                    </g:each>
 
-                    </fieldset>
-                </form>
-            </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="row">
+
+                        <div class="col-lg-5"></div>
+
+                        <div class="col-lg-7 pull-left">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                <g:message code="form.submit"/>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
         </div>
+
+        <div class="col-lg-2"></div>
     </div>
+
 </div>
 </body>
 </html>
