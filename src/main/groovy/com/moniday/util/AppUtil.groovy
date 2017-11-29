@@ -103,10 +103,9 @@ class AppUtil {
 
     static String createBankDateString(String dateString) {
         //format will be date/month/year
-        //TODO: Need Refactoring
-        String date
+        String formatedDateString
         if (!dateString) {
-            date = null
+            formatedDateString = null
         } else {
             String[] dateValues = dateString.split(Pattern.quote("/"))
             int day = dateValues[0] as Integer
@@ -116,15 +115,26 @@ class AppUtil {
                 //today's date comes before transaction date... transaction is of previous year
                 currentYear -= 1
             }
-            TimeZone zone = TimeZone.getTimeZone("Europe/Berlin")
-            date = "${day}/${month}/${currentYear}-${zone.getDisplayName()}"
+            LocalDate dobDate = LocalDate.of(currentYear, month, day)
+            TimeZone tz = TimeZone.getTimeZone("Europe/Berlin")
+            Date date = Date.from(dobDate.atStartOfDay(ZoneId.of("Europe/Berlin")).toInstant())
+            SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z")
+            sdf.setTimeZone(tz)
+            formatedDateString = sdf.format(date)
         }
-        return date
+        return formatedDateString
     }
 
-    static Date generateDateFromString(Long date, Long month, Long year) {
-        LocalDate dobDate = LocalDate.of(year as int, getMonth("${month + 1}"), date as int)
-        Date.from(dobDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    static String createBankDateString(Date date) {
+        TimeZone tz = TimeZone.getTimeZone("Europe/Berlin")
+        SimpleDateFormat sdf = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z")
+        sdf.setTimeZone(tz)
+        return sdf.format(date)
+    }
+
+    static String getDateStringForView(String dateString) {
+        Date date = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z").parse(dateString)
+        return new SimpleDateFormat("dd MMM yyyy").format(date)
     }
 
     static void calculateDeductionAmount(PersonDTO personDTO) {
@@ -239,25 +249,13 @@ class AppUtil {
         deductionDetailDTO.fromAccount = fromAccount
         deductionDetailDTO.toAccount = toAccount
         deductionDetailDTO.amount = amount
-        deductionDetailDTO.approvalDate = new Date().toString()
+        deductionDetailDTO.approvalDate = createBankDateString(new Date())
         deductionDetailDTO
     }
 
     //datetocompare , todays date
     static boolean dateBefore(String dateString, Date date) {
-        boolean comesBefore = false
-        int year = dateString.split("/")[2].split("-")[0] as Integer
-        int month = dateString.split("/")[1] as Integer
-        int day = dateString.split("/")[0] as Integer
-        if (year < (date.year+1900)) {
-            comesBefore = true
-        }
-        else if ((year == (date.year+1900)) && (month < (date.month+1))) {
-            comesBefore = true
-        }
-        else if (((date.month+1) == month) && (day < date.date)) {
-                comesBefore = true
-        }
-        return comesBefore
+        Date dateOne = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z").parse(dateString)
+        return dateOne.before(date)
     }
 }

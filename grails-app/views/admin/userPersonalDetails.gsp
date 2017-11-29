@@ -1,4 +1,4 @@
-<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country;" %>
+<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country; com.moniday.util.AppUtil" %>
 <!doctype html>
 <html>
 <head>
@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <th>Date Of Birth</th>
-                    <td>${personalDetailCO?.dateOfBirth}</td>
+                    <td>${AppUtil.getDateStringForView(personalDetailCO?.dateOfBirth)}</td>
                 </tr>
                 <tr>
                     <th>Nationality</th>

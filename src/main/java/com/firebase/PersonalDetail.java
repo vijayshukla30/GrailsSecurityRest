@@ -2,13 +2,11 @@ package com.firebase;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.Date;
-
 @IgnoreExtraProperties
 public class PersonalDetail {
     private String firstName;
     private String lastName;
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private Long age;
     private String nationality;
     private String countryOfResidence;
@@ -17,7 +15,7 @@ public class PersonalDetail {
     public PersonalDetail() {
     }
 
-    public PersonalDetail(String firstName, String lastName, Date dateOfBirth, Long age, String nationality, String countryOfResidence, String currency) {
+    public PersonalDetail(String firstName, String lastName, String dateOfBirth, Long age, String nationality, String countryOfResidence, String currency) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
@@ -43,11 +41,11 @@ public class PersonalDetail {
         this.lastName = lastName;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

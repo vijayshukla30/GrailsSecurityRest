@@ -1,4 +1,4 @@
-<%@ page import="com.moniday.enums.Currency; com.moniday.enums.Country;" %>
+<%@ page import="com.moniday.util.AppUtil; com.moniday.enums.Currency; com.moniday.enums.Country; com.moniday.util.AppUtil;" %>
 <div class="bs-docs-section clearfix">
     <div class="row">
         <div class="col-lg-3">
@@ -85,7 +85,7 @@
                                             <tbody>
                                             <g:each in="${account.transactions}" var="transaction">
                                                 <tr>
-                                                    <td>${transaction?.transactionDate.split("-")[0]}</td>
+                                                    <td>${AppUtil.getDateStringForView(transaction?.transactionDate)}</td>
                                                     <td>${transaction?.description}</td>
                                                     <td><g:message code="amount" args="${[transaction?.amount]}"/></td>
                                                     <td><g:message code="amount"
