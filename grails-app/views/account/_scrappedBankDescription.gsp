@@ -57,7 +57,7 @@
                                         <g:hiddenField name="accountNumber" value="${account?.accountNumber}"/>
                                         <div class="col-lg-5">
                                             <sec:ifAnyGranted roles="ROLE_ADMIN">
-                                                <g:if test="${(Double.parseDouble(personDTO?.deductedMoney)) >= minDeductionAmount}">
+                                                <g:if test="${(Double.parseDouble(account?.deductedMoney)) >= minDeductionAmount}">
                                                     <td>
                                                         <button type="submit" class="btn btn-xs btn-primary">
                                                             <span>Approve</span>
