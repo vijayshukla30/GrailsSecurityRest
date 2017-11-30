@@ -90,16 +90,20 @@ class FireBaseService {
 //        println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(personDTO))
         Map personalMap = FirebaseInitializer.getUserScrap(firebaseId)
         PersonDTO oldScrapRecord = null
-        if (personalMap && (!forUpdate)) {
-            oldScrapRecord = new PersonDTO(personalMap)
-//            println("OLD SCRAPPED RECORD")
-//            println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(oldScrapRecord))
-            filterNewAccountAndTransaction(personDTO, oldScrapRecord)
+        if (personalMap) {
+            if (forUpdate) {
+                oldScrapRecord = personDTO
+            } else {
+                oldScrapRecord = new PersonDTO(personalMap)
+//              println("OLD SCRAPPED RECORD")
+//              println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(oldScrapRecord))
+                filterNewAccountAndTransaction(personDTO, oldScrapRecord)
+            }
         } else {
             oldScrapRecord = personDTO
         }
 
-        //calculate deduction amount after new transactions are merged with old ones
+        //calculate deduction amount
         AppUtil.calculateDeductionAmount(oldScrapRecord)
 
         println("COMBINE SCRAPPED RECORD")
