@@ -14,8 +14,13 @@
 
 <div id="userTabContent" class="tab-content">
     <div class="tab-pane fade active in" id="personalDetails">
-        <g:render template="/account/scrappedBankDescription"
-                  model="[personDTO: personDTO, user: user, minDeductionAmount: AdminSetting.get(1).minDeductionAmount]"/>
+        <g:if test="${personDTO}">
+            <g:render template="/account/scrappedBankDescription"
+                      model="[personDTO: personDTO, user: user, minDeductionAmount: AdminSetting.get(1).minDeductionAmount]"/>
+        </g:if>
+        <g:else>
+            <div class="alert alert-warning" role="alert">No Account Detail Found</div>
+        </g:else>
     </div>
 </div>
 </body>

@@ -64,7 +64,10 @@ class AdminController {
         User user = User.findByUniqueId(uniqueId)
         if (user) {
             Map personalMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
-            PersonDTO personDTO = new PersonDTO(personalMap)
+            PersonDTO personDTO = null
+            if (personalMap) {
+                personDTO = new PersonDTO(personalMap)
+            }
             render(view: 'userAccoutDetails', model: [tabName: "AccountDetail", personDTO: personDTO, user: user])
         } else {
             flash.error = "No User has been found please check it..."
