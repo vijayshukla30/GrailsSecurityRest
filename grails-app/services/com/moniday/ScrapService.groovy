@@ -146,7 +146,7 @@ class ScrapService {
             }
 
             $("p.validation.clearboth span.droite a.droite")[0].click()   //login button
-            String nameString = $("table tr td.titretetiere.cel-texte")[0].text().replaceAll("-\\s\\S*", "")
+            String nameString = $("table tr td.titretetiere.cel-texte")[0].text()?.replaceAll("-\\s\\S*", "")
             List<String> names = nameString?.split("\\s")
             if (names) {
                 personDTO.firstName = names[1]
