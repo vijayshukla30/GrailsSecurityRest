@@ -145,7 +145,7 @@ class AppUtil {
             if (accountDTO?.isCardTransaction) {
                 Double accountMoney = calculateAmountOnAccount(accountDTO)
                 //if accountDTO already has some deductedMoney value then new value must be added to it
-                Double deductedMoney = Double.parseDouble(accountDTO.deductedMoney)
+                Double deductedMoney = accountDTO.deductedMoney as Double
                 deductedMoney = deductedMoney + accountMoney
                 accountDTO.deductedMoney = "$deductedMoney"
                 totalAmountSum += (deductedMoney)
