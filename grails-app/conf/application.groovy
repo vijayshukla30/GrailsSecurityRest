@@ -125,3 +125,52 @@ grails.plugin.springsecurity.filterChain.chainMap = [
         [pattern: '/**', filters: 'JOINED_FILTERS']
 ]
 
+grails.plugin.springsecurity.rest.token.generation.useSecureRandom = false
+grails.plugin.springsecurity.rest.token.generation.useUUID = true
+//authentication configuration option
+grails.plugin.springsecurity.rest.login.active = true
+grails.plugin.springsecurity.rest.login.endpointUrl = '/api/login'
+grails.plugin.springsecurity.rest.login.failureStatusCode = 401
+//json credential extraction configuration properties
+grails.plugin.springsecurity.rest.login.useJsonCredentials = true
+grails.plugin.springsecurity.rest.login.usernamePropertyName = 'username'
+grails.plugin.springsecurity.rest.login.passwordPropertyName = 'password'
+/*//parameter extraction configuration option
+grails.plugin.springsecurity.rest.login.useRequestParamsCredentials= true
+grails.plugin.springsecurity.rest.login.usernamePropertyName = 'username'
+grails.plugin.springsecurity.rest.login.passwordPropertyName = 'password'*/
+//logout configuration option
+grails.plugin.springsecurity.rest.logout.endpointUrl = '/api/logout'
+//use gorm for token storage
+grails.plugin.springsecurity.rest.token.storage.useGorm = true
+//token generation configuration option
+grails.plugin.springsecurity.rest.token.generation.useSecureRandom = true
+//gorm configuration option
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = "com.moniday.AuthenticationToken"
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenValuePropertyName = "tokenValue"
+grails.plugin.springsecurity.rest.token.storage.gorm.usernamePropertyName = 'username'
+//Token rendering configuration options
+grails.plugin.springsecurity.rest.token.rendering.usernamePropertyName = "username"
+grails.plugin.springsecurity.rest.token.rendering.authoritiesPropertyName = "roles"
+grails.plugin.springsecurity.rest.token.rendering.tokenPropertyName = "access_token"
+//disabling bearer tokens support for full response customisation
+grails.plugin.springsecurity.rest.token.validation.useBearerToken = false
+//Validation endpoint configuration options
+grails.plugin.springsecurity.rest.token.validation.active = true
+grails.plugin.springsecurity.rest.token.validation.endpointUrl = "/api/validate"
+grails.plugin.springsecurity.rest.token.validation.headerName = "Authorization"
+
+
+grails.plugin.springsecurity.filterChain.chainMap = [
+        //Stateless chain
+        [
+                pattern: '/api/**',
+                filters: 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter'
+        ],
+
+        //Traditional chain
+        [
+                pattern: '/**',
+                filters: 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'
+        ]
+]
