@@ -20,6 +20,12 @@ class UrlMappings {
         "/admin/$uniqueId/approveAmountDeduction"(controller: 'admin', action: 'approveAmountDeduction')
         "/admin/$uniqueId/conformAmountDeduction"(controller: 'admin', action: 'conformAmountDeduction')
 
+        "/api/put/personalDetail"(controller: 'rest', action: 'savePersonalDetail')
+        "/api/get/personalDetail"(controller: 'rest', action: 'personalDetail')
+        "/api/get/banks"(controller: 'rest', action: 'banks')
+        "/api/put/accountDetail"(controller: 'rest', action: 'saveAccountDetail')
+        "/api/put/debitMendateDetail"(controller: 'rest', action: 'saveDebitMendateDetail')
+
         "500"(view: '/error')
         "404"(view: '/notFound')
     }
