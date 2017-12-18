@@ -85,6 +85,10 @@ class FireBaseService {
         debitRef.setValue(debitMandate)
     }
 
+    /*
+    * set forUpdate to true if you are updating an already present value to new value
+    * */
+
     def saveScrappedDataToFirebase(PersonDTO personDTO, String firebaseId, Boolean forUpdate) {
 //        println("NEW SCRAPPED RECORD")
 //        println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(personDTO))
@@ -183,12 +187,15 @@ class FireBaseService {
     def filterNewTransaction(AccountDTO newAccount, AccountDTO oldAccount) {
         List<TransactionDTO> oldTransactionList = oldAccount.transactions
         List<TransactionDTO> newTransactionList = newAccount.transactions
-
+        List<TransactionDTO> tempTransactionList = []
         newTransactionList.each { TransactionDTO newTransactionDTO ->
             if (!(newTransactionDTO in oldTransactionList)) {
-                oldTransactionList.add(newTransactionDTO)
+                //TODO 2: new transaction must be added before already present ones
+//                oldTransactionList.add(newTransactionDTO)
+                tempTransactionList.add(newTransactionDTO)
             }
         }
+        oldTransactionList.addAll(0, tempTransactionList)
     }
 
     def registerUser(User owner, String password) {
