@@ -113,9 +113,11 @@ class PublicController {
                 authenticationToken = TokenGenerator.generateAuthenticationToken(userCO.username)
                 Map tokenMap = ["username": authenticationToken.username, "roles": user.getAuthorities()*.authority, "access_token": authenticationToken.tokenValue]
                 render tokenMap as JSON
+            } else {
+                render(status: 503, "Invalid User")
             }
         } else {
-            render("404")
+            render(status: 400, "Invalid User Details")
         }
     }
 

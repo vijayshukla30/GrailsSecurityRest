@@ -27,7 +27,11 @@ class RestController {
     @Secured(['ROLE_USER'])
     def personalDetail() {
         User user = springSecurityService.currentUser as User
-        render user as JSON
+        if (user) {
+            render user as JSON
+        } else {
+            render(status: 404, "Invalid User")
+        }
     }
 
     @Secured(['ROLE_USER'])
@@ -44,14 +48,14 @@ class RestController {
             FirebaseInitializer.savePersonalDetail(personalDetailCO, user?.firebaseId)
             mangoPayService.createUser(user, personalDetailCO)
             mangoPayService.createWalletForUser(user)
-            render("personal details saved")
+            render(status: 200, "success")
         } else if (!user) {
-            render "Invalid User"
+            render(status: 404, "Invalid User")
         } else {
             personalDetailCO.errors.allErrors.each {
                 println(it)
             }
-            render "Person Detail is not valid"
+            render(status: 400, "Person Detail is not valid")
         }
     }
 
@@ -62,6 +66,8 @@ class RestController {
         if (uniqueId) {
             List<Bank> banks = FirebaseInitializer.banks
             render banks as JSON
+        } else {
+            render(status: 204, "No Banks Found")
         }
     }
 
@@ -82,11 +88,11 @@ class RestController {
                 accountDetailCO.errors.allErrors.each {
                     println(it)
                 }
-                render "Account Detail is not valid"
+                render(status: 400, "Account Detail is not valid")
             }
-            render("success")
+            render(status: 200, "success")
         } else if (!user) {
-            render "Invalid User"
+            render(status: 503, "Invalid User")
         }
     }
 
