@@ -69,6 +69,8 @@ class AccountController {
         personalDetailCO.age = period.years
         boolean validPersonalDetail = personalDetailCO?.validate()
         if (user && validPersonalDetail) {
+            bindData(user, params)
+            user.save(flush: true)
             FirebaseInitializer.savePersonalDetail(personalDetailCO, user?.firebaseId)
             mangoPayService.createUser(user, personalDetailCO)
             mangoPayService.createWalletForUser(user)

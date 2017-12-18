@@ -9,3 +9,5 @@ build/
 .project
 .settings
 .classpath
+.attach_pid3358
+newfile.txt

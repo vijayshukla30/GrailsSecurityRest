@@ -94,6 +94,12 @@ dependencies {
 
     //Sendgrid
     compile 'desirableobjects.grails.plugins:grails-sendgrid:2.0.1'
+
+    compile "org.grails.plugins:spring-security-rest:2.0.0.M2"
+
+    //spring security rest
+    compile "org.grails.plugins:spring-security-rest-gorm:2.0.0.M2"
+
 }
 
 bootRun {

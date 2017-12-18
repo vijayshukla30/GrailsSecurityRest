@@ -1,8 +1,11 @@
 package moniday
 
+import com.moniday.AuthenticationToken
 import com.moniday.User
 import com.moniday.command.UserCO
 import com.moniday.dto.PersonDTO
+import com.moniday.util.TokenGenerator
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(['permitAll'])
@@ -98,6 +101,24 @@ class PublicController {
         }
         println "/////////////////////8//////////////////////"
         render ""
+    }
+
+    def restRegister(UserCO userCO) {
+        AuthenticationToken authenticationToken
+        if (userCO.validate()) {
+            User user = accountService.saveUser(userCO)
+            if (user) {
+                springSecurityService.reauthenticate(userCO.username)
+                emailService.sendRegistrationMail(userCO.username)
+                authenticationToken = TokenGenerator.generateAuthenticationToken(userCO.username)
+                Map tokenMap = ["username": authenticationToken.username, "roles": user.getAuthorities()*.authority, "access_token": authenticationToken.tokenValue]
+                render tokenMap as JSON
+            } else {
+                render(status: 503, "Invalid User")
+            }
+        } else {
+            render(status: 400, "Invalid User Details")
+        }
     }
 
 }

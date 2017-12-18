@@ -145,7 +145,7 @@ class AppUtil {
             if (accountDTO?.isCardTransaction) {
                 Double accountMoney = calculateAmountOnAccount(accountDTO)
                 //if accountDTO already has some deductedMoney value then new value must be added to it
-                Double deductedMoney = Double.parseDouble(accountDTO.deductedMoney)
+                Double deductedMoney = accountDTO.deductedMoney as Double
                 deductedMoney = deductedMoney + accountMoney
                 accountDTO.deductedMoney = "$deductedMoney"
                 totalAmountSum += (deductedMoney)
@@ -211,11 +211,13 @@ class AppUtil {
                     println("approving for ${accountDTO.accountNumber}")
                     accountDeductedMoney = accountDTO.deductedMoney as Double
                     personDTO.deductedMoney = ((personDTO.deductedMoney as Double) - (accountDeductedMoney)) as String
+                    //this line can be removed
                     accountDTO.deductedMoney = "0"
                     println("${personDTO.deductedMoney} person money after deduction")
                     changeTransactionStatusToApproved(accountDTO)
                     DeductionDetailDTO deductionDetailDTO = getDeductionDetailDTO(accountDTO.accountNumber, "123456789", accountDeductedMoney)
-                    personDTO.deductionHistory.add(deductionDetailDTO)
+                    //TODO 1: new deductionDetailDTO must be added berfore already present deductionDetailDTO
+                    personDTO.deductionHistory.add(0, deductionDetailDTO)
                 }
             }
         } else {
@@ -228,7 +230,7 @@ class AppUtil {
                     accountDTO.deductedMoney = "0"
                     changeTransactionStatusToApproved(accountDTO)
                     DeductionDetailDTO deductionDetailDTO = getDeductionDetailDTO(accountDTO.accountNumber, "123456789", accountDeductedMoney)
-                    personDTO.deductionHistory.add(deductionDetailDTO)
+                    personDTO.deductionHistory.add(0, deductionDetailDTO)
                 }
             }
         }

@@ -33,7 +33,7 @@ class TransactionDTO {
         boolean equal = true
         if (obj instanceof TransactionDTO) {
             TransactionDTO transactionDTO = (TransactionDTO) obj
-            if ((transactionDTO.transactionDate != this.transactionDate) && (transactionDTO.description != this.description) && (transactionDTO.amount != this.amount) && (transactionDTO.isCardTransaction != this.isCardTransaction)) {
+            if ((transactionDTO.transactionDate != this.transactionDate) || (transactionDTO.description != this.description) || (transactionDTO.amount != this.amount) || (transactionDTO.isCardTransaction != this.isCardTransaction)) {
                 equal = false
             }
         }
