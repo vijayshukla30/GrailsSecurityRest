@@ -1,10 +1,16 @@
 package moniday
 
 import com.firebase.Bank
+import com.moniday.AdminSetting
+import com.moniday.AuthenticationToken
 import com.moniday.ScrapBankJob
 import com.moniday.User
 import com.moniday.command.AccountDetailCO
 import com.moniday.command.PersonalDetailCO
+import com.moniday.dto.DeductionDetailDTO
+import com.moniday.dto.PersonDTO
+import com.moniday.enums.Country
+import com.moniday.enums.Currency
 import com.moniday.firebase.FirebaseInitializer
 import com.moniday.util.AppUtil
 import grails.converters.JSON
@@ -16,8 +22,10 @@ import java.time.ZoneId
 
 class RestController {
 
-    static allowedMethods = [index: "GET", personalDetail: "GET", savePersonalDetail: "POST",
-                             banks: "GET", accountDetail: "POST", debitMendateDetail: "POST"]
+    static allowedMethods = [index         : "GET", personalDetail: "GET", savePersonalDetail: "POST",
+                             banks         : "GET", accountDetail: "POST", debitMendateDetail: "POST",
+                             saveBank      : "POST", adminSettings: "GET", updateAdminSettings: "POST",
+                             getScrapRecord: "POST", logout: "POST", getCountries: "GET", getCurrencies: "GET"]
 
     def springSecurityService
     def mangoPayService
@@ -71,6 +79,15 @@ class RestController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
+    def saveBank() {
+        def jsonObject = request.JSON
+        String bankName = jsonObject.bankName
+        String bankUrl = jsonObject.bankURL
+        FirebaseInitializer.saveBanks(bankName, bankUrl)
+        render(status: 200, "Bank Saved")
+    }
+
     @Secured(['ROLE_USER'])
     def saveAccountDetail(AccountDetailCO accountDetailCO) {
         User user = springSecurityService.currentUser as User
@@ -99,5 +116,80 @@ class RestController {
 
     @Secured(['ROLE_USER'])
     def saveDebitMendateDetail() {}
+
+    @Secured(['ROLE_ADMIN'])
+    def adminSettings() {
+        AdminSetting adminSetting = AdminSetting.get(1)
+        render adminSetting as JSON
+    }
+
+    @Secured(['ROLE_ADMIN'])
+    def updateAdminSettings(AdminSetting setting) {
+        AdminSetting adminSetting = AdminSetting.get(1)
+        bindData(adminSetting, setting)
+        adminSetting.save(flush: true)
+        render(status: 200, "Admin Setting updated")
+    }
+
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    def getScrapRecord() {
+        def jsonObject = request.JSON
+        String uniqueId = jsonObject.uniqueId
+        User user = User.findByUniqueId(uniqueId)
+        if (user) {
+            Map personalMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
+            PersonDTO personDTO = null
+            if (personalMap) {
+                personDTO = new PersonDTO(personalMap)
+            }
+            JSON.use('deep')
+            render(personDTO as JSON)
+        } else {
+            render(status: 503, "Invalid User")
+        }
+    }
+
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    def getDeductionHistory() {
+        def jsonObject = request.JSON
+        String uniqueId = jsonObject.uniqueId
+        User user = User.findByUniqueId(uniqueId)
+        if (user) {
+            Map personalMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
+            PersonDTO personDTO = null
+            if (personalMap) {
+                personDTO = new PersonDTO(personalMap)
+                List<DeductionDetailDTO> deductionDetailDTOS = personDTO.getDeductionHistory()
+                render(deductionDetailDTOS as JSON)
+            } else {
+                render(status: 503, "Invalid User")
+            }
+        } else {
+            render(status: 503, "Invalid User")
+        }
+    }
+
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    def logout() {
+        User user = springSecurityService.currentUser as User
+        if (user) {
+            def userName = user.username
+            def token = AuthenticationToken.findByUsername(userName)
+            token.delete()
+            render(status: 200, "Successfully logged out")
+        } else {
+            render(status: 503, "Invalid User")
+        }
+    }
+
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    def getCountries() {
+        render Country.list()*.key as JSON
+    }
+
+    @Secured(['ROLE_USER', 'ROLE_ADMIN'])
+    def getCurrencies() {
+        render Currency.list()*.key as JSON
+    }
 
 }
