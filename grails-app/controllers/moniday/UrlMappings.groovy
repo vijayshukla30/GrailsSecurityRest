@@ -33,6 +33,7 @@ class UrlMappings {
         "/api/logout"(controller: 'rest', action: 'logout')
         "/api/get/countries"(controller: 'rest', action: 'getCountries')
         "/api/get/currencies"(controller: 'rest', action: 'getCurrencies')
+        "/api/put/bankdetails"(controller: 'rest', action: 'saveAccountDetail')
 
         "500"(view: '/error')
         "404"(view: '/notFound')

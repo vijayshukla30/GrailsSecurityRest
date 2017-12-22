@@ -22,6 +22,8 @@ import java.time.ZoneId
 
 class RestController {
 
+    static responseFormats = ['json']
+
     static allowedMethods = [index         : "GET", personalDetail: "GET", savePersonalDetail: "POST",
                              banks         : "GET", accountDetail: "POST", debitMendateDetail: "POST",
                              saveBank      : "POST", adminSettings: "GET", updateAdminSettings: "POST",
@@ -45,8 +47,8 @@ class RestController {
     @Secured(['ROLE_USER'])
     def savePersonalDetail(PersonalDetailCO personalDetailCO) {
         User user = springSecurityService.currentUser as User
-        String[] dateValue = personalDetailCO.dateOfBirth.split("/")
-        LocalDate dobDate = LocalDate.of(dateValue[2] as int, AppUtil.getMonth(dateValue[1]), dateValue[0] as int)
+        String[] dateValue = personalDetailCO.dateOfBirth.split("-")
+        LocalDate dobDate = LocalDate.of(dateValue[0] as int, AppUtil.getMonth(dateValue[1]), dateValue[2] as int)
         LocalDate todayDate = LocalDate.now()
         Period period = Period.between(dobDate, todayDate)
         personalDetailCO.dateOfBirth = AppUtil.createBankDateString(Date.from(dobDate.atStartOfDay(ZoneId.of("Europe/Berlin")).toInstant()))
@@ -184,12 +186,50 @@ class RestController {
 
     @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def getCountries() {
-        render Country.list()*.key as JSON
+        List<Country> countries = Country.list()
+        Map response = [:]
+        for (country in countries) {
+//            println(country.key+" "+ Country.valueOf(country.key).toString())
+            response.put(Country.valueOf(country.key).toString(), country.key)
+        }
+//        println(response as JSON)
+        render response as JSON
     }
 
     @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def getCurrencies() {
-        render Currency.list()*.key as JSON
+        List<Currency> currencies = Currency.list()
+        Map response = [:]
+        for (currency in currencies) {
+            response.put(Currency.valueOf(currency.key).toString(), currency.key)
+        }
+        render response as JSON
+    }
+
+    def saveBankDetails(AccountDetailCO accountDetailCO) {
+        User user = springSecurityService.currentUser as User
+        if (user) {
+            List<Bank> banks = FirebaseInitializer.banks
+            String bankUrl = ""
+            banks.each {
+                if (params.bankNameId?.equals(it.bankName)) {
+                    accountDetailCO.bankNameFirebase = it.bankFirebaseId
+                    bankUrl = it.bankURL
+                }
+            }
+            if (accountDetailCO?.validate()) {
+                fireBaseService.saveAccountDetail(accountDetailCO, user?.firebaseId)
+                ScrapBankJob.triggerNow([username: user?.username])
+            } else {
+                accountDetailCO.errors.allErrors.each {
+                    println(it)
+                }
+                render(status: 503, "Account details are not valid")
+            }
+            render(status: 200, "success")
+        } else if (!user) {
+            render(status: 503, "Invalid User")
+        }
     }
 
 }
