@@ -23,6 +23,8 @@ import com.moniday.util.AppUtil
 import grails.core.GrailsApplication
 import grails.web.mapping.LinkGenerator
 
+import java.text.SimpleDateFormat
+
 class MangoPayService {
     static transactional = false
     GrailsApplication grailsApplication
@@ -65,7 +67,7 @@ class MangoPayService {
             userNatural.FirstName = personalDetailCO.firstName
             userNatural.LastName = personalDetailCO.lastName
             userNatural.Email = user.username
-            userNatural.Birthday = AppUtil.generateUnixTimeStampFromDate(personalDetailCO.dateOfBirth)
+            userNatural.Birthday = AppUtil.generateUnixTimeStampFromDate(new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z").parse(personalDetailCO.dateOfBirth))
             userNatural.Nationality = AppUtil.countryToCountryISO(personalDetailCO.nationality)
             userNatural.CountryOfResidence = AppUtil.countryToCountryISO(personalDetailCO.country)
             ApiUsers apiUsers = payApi.Users

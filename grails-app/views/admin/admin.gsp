@@ -88,7 +88,7 @@
     </g:if>
 
     <g:else>
-        <div class="alert alert-warning" role="alert">
+        <div class="alert alert-info" role="alert">
             No Users found
         </div>
     </g:else>
