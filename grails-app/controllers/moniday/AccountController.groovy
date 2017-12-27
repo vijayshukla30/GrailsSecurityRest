@@ -72,7 +72,7 @@ class AccountController {
             bindData(user, params)
             user.save(flush: true)
             FirebaseInitializer.savePersonalDetail(personalDetailCO, user?.firebaseId)
-            mangoPayService.createUser(user, personalDetailCO)
+            mangoPayService.createUser(user, personalDetailCO)  //from here data is saved to mysql
             mangoPayService.createWalletForUser(user)
             redirect(action: 'accountDetail', params: [uniqueId: params.uniqueId])
         } else if (!user) {
