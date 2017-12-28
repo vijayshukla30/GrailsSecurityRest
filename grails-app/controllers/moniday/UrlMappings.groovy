@@ -28,7 +28,7 @@ class UrlMappings {
         "/api/put/debitmendatedetail"(controller: 'rest', action: 'saveDebitMendateDetail')
         "/api/get/adminsetting"(controller: 'rest', action: 'adminSettings')
         "/api/put/adminsetting"(controller: 'rest', action: 'updateAdminSettings')
-        "/api/get/scrapdata"(controller: 'rest', action: 'getScrapRecord')
+        "/api/get/lendingpagedata"(controller: 'rest', action: 'getLendingPageRecord')
         "/api/get/deductionhistory"(controller: 'rest', action: 'getDeductionHistory')
         "/api/logout"(controller: 'rest', action: 'logout')
         "/api/get/countries"(controller: 'rest', action: 'getCountries')

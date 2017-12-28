@@ -9,10 +9,12 @@ import com.moniday.command.AccountDetailCO
 import com.moniday.command.PersonalDetailCO
 import com.moniday.dto.DeductionDetailDTO
 import com.moniday.dto.PersonDTO
+import com.moniday.dto.RestAccountDTO
 import com.moniday.enums.Country
 import com.moniday.enums.Currency
 import com.moniday.firebase.FirebaseInitializer
 import com.moniday.util.AppUtil
+import com.moniday.util.RestUtil
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
@@ -27,7 +29,7 @@ class RestController {
     static allowedMethods = [index         : "GET", personalDetail: "GET", savePersonalDetail: "POST",
                              banks         : "GET", accountDetail: "POST", debitMendateDetail: "POST",
                              saveBank      : "POST", adminSettings: "GET", updateAdminSettings: "POST",
-                             getScrapRecord: "POST", logout: "POST", getCountries: "GET", getCurrencies: "GET"]
+                             getLendingPageRecord: "GET", logout: "POST", getCountries: "GET", getCurrencies: "GET"]
 
     def springSecurityService
     def mangoPayService
@@ -134,18 +136,26 @@ class RestController {
     }
 
     @Secured(['ROLE_USER', 'ROLE_ADMIN'])
-    def getScrapRecord() {
-        def jsonObject = request.JSON
+    def getLendingPageRecord() {
+/*        def jsonObject = request.JSON
         String uniqueId = jsonObject.uniqueId
-        User user = User.findByUniqueId(uniqueId)
+        User user = User.findByUniqueId(uniqueId)*/
+        User user = springSecurityService.currentUser as User
+        RestAccountDTO restAccountDTO = new RestAccountDTO()
         if (user) {
             Map personalMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
             PersonDTO personDTO = null
             if (personalMap) {
+                Double investmentSum = 0
                 personDTO = new PersonDTO(personalMap)
+                restAccountDTO.accountValue = RestUtil.calculateAccountBalance(personDTO.accounts)
+                restAccountDTO.deductionDetailDTOList = personDTO.getDeductionHistory()
+                for (DeductionDetailDTO deductionDetailDTO : personDTO.getDeductionHistory()) {
+                    investmentSum += deductionDetailDTO.amount
+                }
+                restAccountDTO.thirtyDaysInvestments = investmentSum
             }
-            JSON.use('deep')
-            render(personDTO as JSON)
+            render(restAccountDTO as JSON)
         } else {
             render(status: 503, "Invalid User")
         }
@@ -153,9 +163,10 @@ class RestController {
 
     @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def getDeductionHistory() {
-        def jsonObject = request.JSON
+        /*def jsonObject = request.JSON
         String uniqueId = jsonObject.uniqueId
-        User user = User.findByUniqueId(uniqueId)
+        User user = User.findByUniqueId(uniqueId)*/
+        User user = springSecurityService.currentUser as User
         if (user) {
             Map personalMap = FirebaseInitializer.getUserScrap(user?.firebaseId)
             PersonDTO personDTO = null
