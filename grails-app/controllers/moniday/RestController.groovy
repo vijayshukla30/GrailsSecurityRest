@@ -198,10 +198,13 @@ class RestController {
     @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def getCountries() {
         List<Country> countries = Country.list()
-        Map response = [:]
+        List response = []
         for (country in countries) {
 //            println(country.key+" "+ Country.valueOf(country.key).toString())
-            response.put(Country.valueOf(country.key).toString(), country.key)
+            Map countryMap = [:]
+            countryMap.put("country",Country.valueOf(country.key).toString())
+            countryMap.put("code", country.key)
+            response.add(countryMap)
         }
 //        println(response as JSON)
         render response as JSON
@@ -210,9 +213,12 @@ class RestController {
     @Secured(['ROLE_USER', 'ROLE_ADMIN'])
     def getCurrencies() {
         List<Currency> currencies = Currency.list()
-        Map response = [:]
+        List response = []
         for (currency in currencies) {
-            response.put(Currency.valueOf(currency.key).toString(), currency.key)
+            Map currencyMap = [:]
+            currencyMap.put("currency",Currency.valueOf(currency.key).toString())
+            currencyMap.put("code", currency.key)
+            response.add(currencyMap)
         }
         render response as JSON
     }
